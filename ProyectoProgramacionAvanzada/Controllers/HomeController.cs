@@ -26,5 +26,12 @@ namespace ProyectoProgramacionAvanzada.Controllers
 
             return View();
         }
+
+        public ActionResult ForgotPassword()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
     }
 }
