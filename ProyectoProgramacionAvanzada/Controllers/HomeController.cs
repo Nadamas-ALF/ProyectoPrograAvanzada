@@ -29,7 +29,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
 
         public ActionResult ForgotPassword()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Recuperar Acceso a la cuenta.";
 
             return View();
         }
