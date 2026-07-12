@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "Principal";
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+}
+
+<div class="page-heading">
+
+    <div class="page-heading-copy">
+
+        <span class="page-icon">
+            <i class="bi bi-speedometer2"
+               aria-hidden="true"></i>
+        </span>
+
+        <div>
+            <p class="eyebrow mb-1">Resumen General</p>
+
+            <h1 class="h3 mb-1">
+                Panel Principal
+            </h1>
+
+            <p class="text-muted mb-0">
+                Consulta el estado general de productos, pedidos,
+                clientes y ventas.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="heading-actions">
+
+        <button class="btn btn-outline-secondary btn-sm"
+                type="button">
+
+            <i class="bi bi-download"
+               aria-hidden="true"></i>
+
+            Exportar
+        </button>
+
+        <button class="btn btn-primary btn-sm"
+                type="button">
+
+            <i class="bi bi-file-earmark-plus"
+               aria-hidden="true"></i>
+
+            Crear reporte
+        </button>
+
+    </div>
+</div>
+
+<section class="row g-3 mt-1"
+         aria-label="Indicadores principales">
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="metric-card metric-primary">
+
+            <div class="metric-top">
+                <span class="metric-label">Ventas</span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-currency-dollar"
+                       aria-hidden="true"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">₡0</div>
+
+            <div class="metric-meta">
+                <span>Ventas registradas</span>
+            </div>
+
+        </article>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="metric-card metric-success">
+
+            <div class="metric-top">
+                <span class="metric-label">Pedidos</span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-bag-check"
+                       aria-hidden="true"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">0</div>
+
+            <div class="metric-meta">
+                <span>Pedidos registrados</span>
+            </div>
+
+        </article>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="metric-card metric-warning">
+
+            <div class="metric-top">
+                <span class="metric-label">Clientes</span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-people"
+                       aria-hidden="true"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">0</div>
+
+            <div class="metric-meta">
+                <span>Clientes activos</span>
+            </div>
+
+        </article>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="metric-card metric-danger">
+
+            <div class="metric-top">
+                <span class="metric-label">Productos agotados</span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-exclamation-triangle"
+                       aria-hidden="true"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">0</div>
+
+            <div class="metric-meta">
+                <span>Requieren revisión</span>
+            </div>
+
+        </article>
+    </div>
+
+</section>
+
+<section class="row g-3 mt-1">
+
+    <div class="col-12 col-xl-8">
+
+        <article class="panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2 class="h5 mb-1 section-title">
+
+                        <i class="bi bi-graph-up-arrow"
+                           aria-hidden="true"></i>
+
+                        <span>Rendimiento de ventas</span>
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Resumen mensual de las ventas registradas.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="chart-bars"
+                 aria-label="Gráfico de ventas mensuales">
+
+                <div class="chart-column bar-42">
+                    <span></span>
+                    <small>Ene</small>
+                </div>
+
+                <div class="chart-column bar-58">
+                    <span></span>
+                    <small>Feb</small>
+                </div>
+
+                <div class="chart-column bar-51">
+                    <span></span>
+                    <small>Mar</small>
+                </div>
+
+                <div class="chart-column bar-72">
+                    <span></span>
+                    <small>Abr</small>
+                </div>
+
+                <div class="chart-column bar-66">
+                    <span></span>
+                    <small>May</small>
+                </div>
+
+                <div class="chart-column bar-83">
+                    <span></span>
+                    <small>Jun</small>
+                </div>
+
+            </div>
+
+        </article>
+    </div>
+
+    <div class="col-12 col-xl-4">
+
+        <article class="panel h-100">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2 class="h5 mb-1 section-title">
+
+                        <i class="bi bi-activity"
+                           aria-hidden="true"></i>
+
+                        <span>Actividad reciente</span>
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Últimas actualizaciones del sistema.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="activity-list">
+
+                <div class="activity-item">
+
+                    <span class="activity-dot bg-primary"></span>
+
+                    <div>
+                        <p class="mb-1 fw-semibold">
+                            Sin actividad reciente
+                        </p>
+
+                        <p class="text-muted small mb-0">
+                            Las acciones recientes aparecerán aquí.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+    </div>
+
+</section>
