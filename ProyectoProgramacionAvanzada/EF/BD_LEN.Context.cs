@@ -91,5 +91,207 @@ namespace ProyectoProgramacionAvanzada.EF
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RegistrarError", origenParameter, metodoParameter, mensajeErrorParameter, detalleErrorParameter, lineaErrorParameter, usuarioSistemaParameter, urlParameter, stackTraceParameter);
         }
+    
+        public virtual ObjectResult<SP_ActualizarDireccionUsuario_Result> SP_ActualizarDireccionUsuario(Nullable<int> idDireccion, Nullable<int> idUsuario, Nullable<int> idDistrito, string direccionExacta, string referencia, string telefonoContacto, string nombreDestinatario, Nullable<bool> esPrincipal)
+        {
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDistritoParameter = idDistrito.HasValue ?
+                new ObjectParameter("IdDistrito", idDistrito) :
+                new ObjectParameter("IdDistrito", typeof(int));
+    
+            var direccionExactaParameter = direccionExacta != null ?
+                new ObjectParameter("DireccionExacta", direccionExacta) :
+                new ObjectParameter("DireccionExacta", typeof(string));
+    
+            var referenciaParameter = referencia != null ?
+                new ObjectParameter("Referencia", referencia) :
+                new ObjectParameter("Referencia", typeof(string));
+    
+            var telefonoContactoParameter = telefonoContacto != null ?
+                new ObjectParameter("TelefonoContacto", telefonoContacto) :
+                new ObjectParameter("TelefonoContacto", typeof(string));
+    
+            var nombreDestinatarioParameter = nombreDestinatario != null ?
+                new ObjectParameter("NombreDestinatario", nombreDestinatario) :
+                new ObjectParameter("NombreDestinatario", typeof(string));
+    
+            var esPrincipalParameter = esPrincipal.HasValue ?
+                new ObjectParameter("EsPrincipal", esPrincipal) :
+                new ObjectParameter("EsPrincipal", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarDireccionUsuario_Result>("SP_ActualizarDireccionUsuario", idDireccionParameter, idUsuarioParameter, idDistritoParameter, direccionExactaParameter, referenciaParameter, telefonoContactoParameter, nombreDestinatarioParameter, esPrincipalParameter);
+        }
+    
+        public virtual ObjectResult<SP_ActualizarUsuario_Result> SP_ActualizarUsuario(Nullable<int> idUsuario, string nombre, string apellido, string cedula, string telefono, string email, Nullable<int> idRol, Nullable<int> idEstado)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var apellidoParameter = apellido != null ?
+                new ObjectParameter("Apellido", apellido) :
+                new ObjectParameter("Apellido", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var idRolParameter = idRol.HasValue ?
+                new ObjectParameter("IdRol", idRol) :
+                new ObjectParameter("IdRol", typeof(int));
+    
+            var idEstadoParameter = idEstado.HasValue ?
+                new ObjectParameter("IdEstado", idEstado) :
+                new ObjectParameter("IdEstado", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarUsuario_Result>("SP_ActualizarUsuario", idUsuarioParameter, nombreParameter, apellidoParameter, cedulaParameter, telefonoParameter, emailParameter, idRolParameter, idEstadoParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarCantonesPorProvincia_Result> SP_ConsultarCantonesPorProvincia(Nullable<int> idProvincia)
+        {
+            var idProvinciaParameter = idProvincia.HasValue ?
+                new ObjectParameter("IdProvincia", idProvincia) :
+                new ObjectParameter("IdProvincia", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarCantonesPorProvincia_Result>("SP_ConsultarCantonesPorProvincia", idProvinciaParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDireccionesUsuario_Result> SP_ConsultarDireccionesUsuario(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDireccionesUsuario_Result>("SP_ConsultarDireccionesUsuario", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDireccionPorId_Result> SP_ConsultarDireccionPorId(Nullable<int> idDireccion, Nullable<int> idUsuario)
+        {
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDireccionPorId_Result>("SP_ConsultarDireccionPorId", idDireccionParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDistritosPorCanton_Result> SP_ConsultarDistritosPorCanton(Nullable<int> idCanton)
+        {
+            var idCantonParameter = idCanton.HasValue ?
+                new ObjectParameter("IdCanton", idCanton) :
+                new ObjectParameter("IdCanton", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDistritosPorCanton_Result>("SP_ConsultarDistritosPorCanton", idCantonParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarEstados_Result> SP_ConsultarEstados()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstados_Result>("SP_ConsultarEstados");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarProvincias_Result> SP_ConsultarProvincias()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarProvincias_Result>("SP_ConsultarProvincias");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarRoles_Result> SP_ConsultarRoles()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarRoles_Result>("SP_ConsultarRoles");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarUsuarioPorId_Result> SP_ConsultarUsuarioPorId(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioPorId_Result>("SP_ConsultarUsuarioPorId", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_DesactivarDireccionUsuario_Result> SP_DesactivarDireccionUsuario(Nullable<int> idDireccion, Nullable<int> idUsuario)
+        {
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_DesactivarDireccionUsuario_Result>("SP_DesactivarDireccionUsuario", idDireccionParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_InsertarDireccionUsuario_Result> SP_InsertarDireccionUsuario(Nullable<int> idUsuario, Nullable<int> idDistrito, string direccionExacta, string referencia, string telefonoContacto, string nombreDestinatario, Nullable<bool> esPrincipal)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDistritoParameter = idDistrito.HasValue ?
+                new ObjectParameter("IdDistrito", idDistrito) :
+                new ObjectParameter("IdDistrito", typeof(int));
+    
+            var direccionExactaParameter = direccionExacta != null ?
+                new ObjectParameter("DireccionExacta", direccionExacta) :
+                new ObjectParameter("DireccionExacta", typeof(string));
+    
+            var referenciaParameter = referencia != null ?
+                new ObjectParameter("Referencia", referencia) :
+                new ObjectParameter("Referencia", typeof(string));
+    
+            var telefonoContactoParameter = telefonoContacto != null ?
+                new ObjectParameter("TelefonoContacto", telefonoContacto) :
+                new ObjectParameter("TelefonoContacto", typeof(string));
+    
+            var nombreDestinatarioParameter = nombreDestinatario != null ?
+                new ObjectParameter("NombreDestinatario", nombreDestinatario) :
+                new ObjectParameter("NombreDestinatario", typeof(string));
+    
+            var esPrincipalParameter = esPrincipal.HasValue ?
+                new ObjectParameter("EsPrincipal", esPrincipal) :
+                new ObjectParameter("EsPrincipal", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_InsertarDireccionUsuario_Result>("SP_InsertarDireccionUsuario", idUsuarioParameter, idDistritoParameter, direccionExactaParameter, referenciaParameter, telefonoContactoParameter, nombreDestinatarioParameter, esPrincipalParameter);
+        }
+    
+        public virtual ObjectResult<SP_RestablecerContrasennaUsuario_Result> SP_RestablecerContrasennaUsuario(Nullable<int> idUsuario, string contrasenna)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RestablecerContrasennaUsuario_Result>("SP_RestablecerContrasennaUsuario", idUsuarioParameter, contrasennaParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarEstadosUsuario_Result> SP_ConsultarEstadosUsuario()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstadosUsuario_Result>("SP_ConsultarEstadosUsuario");
+        }
     }
 }

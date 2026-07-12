@@ -519,8 +519,61 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="SP_ActualizarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDireccion" Type="int" Mode="In" />
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="IdDistrito" Type="int" Mode="In" />
+          <Parameter Name="DireccionExacta" Type="nvarchar" Mode="In" />
+          <Parameter Name="Referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="TelefonoContacto" Type="nvarchar" Mode="In" />
+          <Parameter Name="NombreDestinatario" Type="nvarchar" Mode="In" />
+          <Parameter Name="EsPrincipal" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="SP_ActualizarUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="Apellido" Type="nvarchar" Mode="In" />
+          <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
+          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdRol" Type="int" Mode="In" />
+          <Parameter Name="IdEstado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarCantonesPorProvincia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProvincia" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarDireccionesUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarDireccionPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDireccion" Type="int" Mode="In" />
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarDistritosPorCanton" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCanton" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarEstados" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_ConsultarEstadosUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_ConsultarProvincias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_ConsultarRoles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_ConsultarUsuarioInicioSesion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarUsuarioPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_DesactivarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDireccion" Type="int" Mode="In" />
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_InsertarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="IdDistrito" Type="int" Mode="In" />
+          <Parameter Name="DireccionExacta" Type="nvarchar" Mode="In" />
+          <Parameter Name="Referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="TelefonoContacto" Type="nvarchar" Mode="In" />
+          <Parameter Name="NombreDestinatario" Type="nvarchar" Mode="In" />
+          <Parameter Name="EsPrincipal" Type="bit" Mode="In" />
         </Function>
         <Function Name="SP_RegistrarError" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Origen" Type="nvarchar" Mode="In" />
@@ -531,6 +584,10 @@
           <Parameter Name="UsuarioSistema" Type="nvarchar" Mode="In" />
           <Parameter Name="Url" Type="nvarchar" Mode="In" />
           <Parameter Name="StackTrace" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_RestablecerContrasennaUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="Contrasenna" Type="nvarchar" Mode="In" />
         </Function>
         <EntityContainer Name="BD_LENModelStoreContainer">
           <EntitySet Name="TB_canton" EntityType="Self.TB_canton" Schema="dbo" store:Type="Tables" />
@@ -1372,6 +1429,63 @@
             <Parameter Name="Url" Mode="In" Type="String" />
             <Parameter Name="StackTrace" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="SP_ActualizarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_ActualizarDireccionUsuario_Result)">
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdDistrito" Mode="In" Type="Int32" />
+            <Parameter Name="DireccionExacta" Mode="In" Type="String" />
+            <Parameter Name="Referencia" Mode="In" Type="String" />
+            <Parameter Name="TelefonoContacto" Mode="In" Type="String" />
+            <Parameter Name="NombreDestinatario" Mode="In" Type="String" />
+            <Parameter Name="EsPrincipal" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ActualizarUsuario" ReturnType="Collection(BD_LENModel.SP_ActualizarUsuario_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="IdRol" Mode="In" Type="Int32" />
+            <Parameter Name="IdEstado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarCantonesPorProvincia" ReturnType="Collection(BD_LENModel.SP_ConsultarCantonesPorProvincia_Result)">
+          <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDireccionesUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionesUsuario_Result)">
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDireccionPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionPorId_Result)">
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDistritosPorCanton" ReturnType="Collection(BD_LENModel.SP_ConsultarDistritosPorCanton_Result)">
+          <Parameter Name="IdCanton" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarEstados" ReturnType="Collection(BD_LENModel.SP_ConsultarEstados_Result)" />
+          <FunctionImport Name="SP_ConsultarProvincias" ReturnType="Collection(BD_LENModel.SP_ConsultarProvincias_Result)" />
+          <FunctionImport Name="SP_ConsultarRoles" ReturnType="Collection(BD_LENModel.SP_ConsultarRoles_Result)" />
+          <FunctionImport Name="SP_ConsultarUsuarioPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioPorId_Result)">
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_DesactivarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_DesactivarDireccionUsuario_Result)">
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_InsertarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_InsertarDireccionUsuario_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdDistrito" Mode="In" Type="Int32" />
+            <Parameter Name="DireccionExacta" Mode="In" Type="String" />
+            <Parameter Name="Referencia" Mode="In" Type="String" />
+            <Parameter Name="TelefonoContacto" Mode="In" Type="String" />
+            <Parameter Name="NombreDestinatario" Mode="In" Type="String" />
+            <Parameter Name="EsPrincipal" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RestablecerContrasennaUsuario" ReturnType="Collection(BD_LENModel.SP_RestablecerContrasennaUsuario_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarEstadosUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarEstadosUsuario_Result)" />
         </EntityContainer>
         <ComplexType Name="SP_ConsultarUsuarioInicioSesion_Result">
           <Property Type="Int32" Name="IdUsuario" Nullable="false" />
@@ -1381,6 +1495,98 @@
           <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="255" />
           <Property Type="Int32" Name="IdRol" Nullable="false" />
           <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ActualizarDireccionUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="28" />
+        </ComplexType>
+        <ComplexType Name="SP_ActualizarUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="41" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarCantonesPorProvincia_Result">
+          <Property Type="Int32" Name="IdCanton" Nullable="false" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDireccionesUsuario_Result">
+          <Property Type="Int32" Name="IdDireccion" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdCanton" Nullable="false" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
+          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDireccionPorId_Result">
+          <Property Type="Int32" Name="IdDireccion" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdCanton" Nullable="false" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
+          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDistritosPorCanton_Result">
+          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarEstados_Result">
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarProvincias_Result">
+          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarRoles_Result">
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarUsuarioPorId_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Cedula" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SP_DesactivarDireccionUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="28" />
+        </ComplexType>
+        <ComplexType Name="SP_InsertarDireccionUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="40" />
+          <Property Type="Int32" Name="IdDireccion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_RestablecerContrasennaUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="26" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarEstadosUsuario_Result">
           <Property Type="Int32" Name="IdEstado" Nullable="false" />
           <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
         </ComplexType>
@@ -1614,6 +1820,154 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_RegistrarError" FunctionName="BD_LENModel.Store.SP_RegistrarError" />
+          <FunctionImportMapping FunctionImportName="SP_ActualizarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_ActualizarDireccionUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarDireccionUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ActualizarUsuario" FunctionName="BD_LENModel.Store.SP_ActualizarUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarCantonesPorProvincia" FunctionName="BD_LENModel.Store.SP_ConsultarCantonesPorProvincia">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCantonesPorProvincia_Result">
+                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDireccionesUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarDireccionesUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDireccionesUsuario_Result">
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
+                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDireccionPorId" FunctionName="BD_LENModel.Store.SP_ConsultarDireccionPorId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDireccionPorId_Result">
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
+                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDistritosPorCanton" FunctionName="BD_LENModel.Store.SP_ConsultarDistritosPorCanton">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDistritosPorCanton_Result">
+                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarEstados" FunctionName="BD_LENModel.Store.SP_ConsultarEstados">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstados_Result">
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarProvincias" FunctionName="BD_LENModel.Store.SP_ConsultarProvincias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarProvincias_Result">
+                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarRoles" FunctionName="BD_LENModel.Store.SP_ConsultarRoles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarRoles_Result">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioPorId" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioPorId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioPorId_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_DesactivarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_DesactivarDireccionUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_DesactivarDireccionUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_InsertarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_InsertarDireccionUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_InsertarDireccionUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_RestablecerContrasennaUsuario" FunctionName="BD_LENModel.Store.SP_RestablecerContrasennaUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_RestablecerContrasennaUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarEstadosUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarEstadosUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstadosUsuario_Result">
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

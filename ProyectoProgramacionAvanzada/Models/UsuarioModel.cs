@@ -22,28 +22,43 @@ namespace ProyectoProgramacionAvanzada.Models
         public string Apellido { get; set; }
 
         [StringLength(20)]
-        [Display(Name = "Cedula")]
+        [Display(Name = "Cédula")]
         public string Cedula { get; set; }
 
         [StringLength(20)]
-        [Display(Name = "Telefono")]
+        [Display(Name = "Teléfono")]
         public string Telefono { get; set; }
 
-        [Required(ErrorMessage = "El correo electronico es obligatorio.")]
+        [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
         [StringLength(150)]
-        [EmailAddress(ErrorMessage = "Ingrese un correo electronico valido.")]
-        [Display(Name = "Correo electronico")]
+        [EmailAddress(ErrorMessage = "Ingrese un correo electrónico válido.")]
+        [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "La contrasenna es obligatoria.")]
-        [StringLength(255)]
+        [StringLength(
+            255,
+            MinimumLength = 8,
+            ErrorMessage = "La contraseña debe tener al menos 8 caracteres."
+        )]
         [DataType(DataType.Password)]
-        [Display(Name = "Contrasenna")]
+        [Display(Name = "Nueva contraseña")]
         public string Contrasenna { get; set; }
+
+        [DataType(DataType.Password)]
+        [Compare(
+            "Contrasenna",
+            ErrorMessage = "Las contraseñas no coinciden."
+        )]
+        [Display(Name = "Confirmar contraseña")]
+        public string ConfirmarContrasenna { get; set; }
 
         public int IdRol { get; set; }
 
+        public string NombreRol { get; set; }
+
         public int IdEstado { get; set; }
+
+        public string NombreEstado { get; set; }
 
         public DateTime FechaRegistro { get; set; }
     }
