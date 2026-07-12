@@ -599,6 +599,495 @@ BEGIN
 END;
 GO
 
+  /* ============================================================
+  CONSLTAR USUARIO POR IDENTIFICADOR
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarUsuarioPorId
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        U.id_usuario AS IdUsuario,
+        U.nombre AS Nombre,
+        U.apellido AS Apellido,
+        U.cedula AS Cedula,
+        U.telefono AS Telefono,
+        U.email AS Email,
+        U.id_rol AS IdRol,
+        R.nombre_rol AS NombreRol,
+        U.id_estado AS IdEstado,
+        E.nombre_estado AS NombreEstado,
+        U.fecha_registro AS FechaRegistro
+    FROM dbo.TB_usuario AS U
+    INNER JOIN dbo.TB_rol AS R
+        ON R.id_rol = U.id_rol
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = U.id_estado
+    WHERE U.id_usuario = @IdUsuario;
+END;
+GO
+
+  /* ============================================================
+  ACTUALIZAR DATOS USUARIO
+   ============================================================ */
+
+   CREATE OR ALTER PROCEDURE dbo.SP_ActualizarUsuario
+    @IdUsuario INT,
+    @Nombre NVARCHAR(100),
+    @Apellido NVARCHAR(100),
+    @Cedula NVARCHAR(20) = NULL,
+    @Telefono NVARCHAR(20) = NULL,
+    @Email NVARCHAR(150),
+    @IdRol INT,
+    @IdEstado INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM dbo.TB_usuario
+        WHERE LOWER(LTRIM(RTRIM(email))) =
+              LOWER(LTRIM(RTRIM(@Email)))
+          AND id_usuario <> @IdUsuario
+    )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El correo electrónico ya está registrado.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF @Cedula IS NOT NULL
+       AND LTRIM(RTRIM(@Cedula)) <> ''
+       AND EXISTS
+       (
+           SELECT 1
+           FROM dbo.TB_usuario
+           WHERE cedula = LTRIM(RTRIM(@Cedula))
+             AND id_usuario <> @IdUsuario
+       )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'La cédula ya está registrada.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    UPDATE dbo.TB_usuario
+    SET
+        nombre = LTRIM(RTRIM(@Nombre)),
+        apellido = LTRIM(RTRIM(@Apellido)),
+        cedula = NULLIF(LTRIM(RTRIM(@Cedula)), ''),
+        telefono = NULLIF(LTRIM(RTRIM(@Telefono)), ''),
+        email = LOWER(LTRIM(RTRIM(@Email))),
+        id_rol = @IdRol,
+        id_estado = @IdEstado
+    WHERE id_usuario = @IdUsuario;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No se encontró el usuario.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'El usuario fue actualizado correctamente.' AS Mensaje;
+END;
+GO
+
+  /* ============================================================
+  RESTABLECER CONTRASEÑA
+   ============================================================ */
+   CREATE OR ALTER PROCEDURE dbo.SP_RestablecerContrasennaUsuario
+    @IdUsuario INT,
+    @Contrasenna NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE dbo.TB_usuario
+    SET contrasena = @Contrasenna
+    WHERE id_usuario = @IdUsuario;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No se encontró el usuario.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La contraseña fue restablecida correctamente.' AS Mensaje;
+END;
+GO
+
+   /* ============================================================
+   CONSULTAR DIRECCIONES
+   ============================================================ */
+   CREATE OR ALTER PROCEDURE dbo.SP_ConsultarDireccionesUsuario
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        DE.id_direccion AS IdDireccion,
+        DE.id_usuario AS IdUsuario,
+        P.id_provincia AS IdProvincia,
+        P.nombre_provincia AS NombreProvincia,
+        C.id_canton AS IdCanton,
+        C.nombre_canton AS NombreCanton,
+        D.id_distrito AS IdDistrito,
+        D.nombre_distrito AS NombreDistrito,
+        DE.direccion_exacta AS DireccionExacta,
+        DE.referencia AS Referencia,
+        DE.telefono_contacto AS TelefonoContacto,
+        DE.nombre_destinatario AS NombreDestinatario,
+        DE.es_principal AS EsPrincipal,
+        DE.id_estado AS IdEstado,
+        E.nombre_estado AS NombreEstado
+    FROM dbo.TB_direccion_envio AS DE
+    INNER JOIN dbo.TB_distrito AS D
+        ON D.id_distrito = DE.id_distrito
+    INNER JOIN dbo.TB_canton AS C
+        ON C.id_canton = D.id_canton
+    INNER JOIN dbo.TB_provincia AS P
+        ON P.id_provincia = C.id_provincia
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = DE.id_estado
+    WHERE DE.id_usuario = @IdUsuario
+    ORDER BY
+        DE.es_principal DESC,
+        DE.id_direccion DESC;
+END;
+GO
+
+   /* ============================================================
+   INSERTAR DIRECCIONES
+   ============================================================ */
+
+   CREATE OR ALTER PROCEDURE dbo.SP_InsertarDireccionUsuario
+    @IdUsuario INT,
+    @IdDistrito INT,
+    @DireccionExacta NVARCHAR(300),
+    @Referencia NVARCHAR(300) = NULL,
+    @TelefonoContacto NVARCHAR(20),
+    @NombreDestinatario NVARCHAR(150),
+    @EsPrincipal BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @IdEstadoActivo INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    BEGIN TRANSACTION;
+
+    IF @EsPrincipal = 1
+    BEGIN
+        UPDATE dbo.TB_direccion_envio
+        SET es_principal = 0
+        WHERE id_usuario = @IdUsuario;
+    END;
+
+    INSERT INTO dbo.TB_direccion_envio
+    (
+        id_usuario,
+        id_distrito,
+        direccion_exacta,
+        referencia,
+        telefono_contacto,
+        nombre_destinatario,
+        es_principal,
+        id_estado
+    )
+    VALUES
+    (
+        @IdUsuario,
+        @IdDistrito,
+        LTRIM(RTRIM(@DireccionExacta)),
+        NULLIF(LTRIM(RTRIM(@Referencia)), ''),
+        LTRIM(RTRIM(@TelefonoContacto)),
+        LTRIM(RTRIM(@NombreDestinatario)),
+        @EsPrincipal,
+        @IdEstadoActivo
+    );
+
+    DECLARE @IdDireccion INT = SCOPE_IDENTITY();
+
+    COMMIT TRANSACTION;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La dirección fue agregada correctamente.' AS Mensaje,
+        @IdDireccion AS IdDireccion;
+END;
+GO
+
+   /* ============================================================
+   CONSULTAR DIRECCION POR ID
+   ============================================================ */
+   CREATE OR ALTER PROCEDURE dbo.SP_ConsultarDireccionPorId
+    @IdDireccion INT,
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        DE.id_direccion AS IdDireccion,
+        DE.id_usuario AS IdUsuario,
+        P.id_provincia AS IdProvincia,
+        P.nombre_provincia AS NombreProvincia,
+        C.id_canton AS IdCanton,
+        C.nombre_canton AS NombreCanton,
+        D.id_distrito AS IdDistrito,
+        D.nombre_distrito AS NombreDistrito,
+        DE.direccion_exacta AS DireccionExacta,
+        DE.referencia AS Referencia,
+        DE.telefono_contacto AS TelefonoContacto,
+        DE.nombre_destinatario AS NombreDestinatario,
+        DE.es_principal AS EsPrincipal,
+        DE.id_estado AS IdEstado,
+        E.nombre_estado AS NombreEstado
+    FROM dbo.TB_direccion_envio AS DE
+    INNER JOIN dbo.TB_distrito AS D
+        ON D.id_distrito = DE.id_distrito
+    INNER JOIN dbo.TB_canton AS C
+        ON C.id_canton = D.id_canton
+    INNER JOIN dbo.TB_provincia AS P
+        ON P.id_provincia = C.id_provincia
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = DE.id_estado
+    WHERE DE.id_direccion = @IdDireccion
+      AND DE.id_usuario = @IdUsuario;
+END;
+GO
+
+   /* ============================================================
+   ACTUALIZAR DIRECCION
+   ============================================================ */
+   CREATE OR ALTER PROCEDURE dbo.SP_ActualizarDireccionUsuario
+    @IdDireccion INT,
+    @IdUsuario INT,
+    @IdDistrito INT,
+    @DireccionExacta NVARCHAR(300),
+    @Referencia NVARCHAR(300) = NULL,
+    @TelefonoContacto NVARCHAR(20),
+    @NombreDestinatario NVARCHAR(150),
+    @EsPrincipal BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRANSACTION;
+
+    IF @EsPrincipal = 1
+    BEGIN
+        UPDATE dbo.TB_direccion_envio
+        SET es_principal = 0
+        WHERE id_usuario = @IdUsuario
+          AND id_direccion <> @IdDireccion;
+    END;
+
+    UPDATE dbo.TB_direccion_envio
+    SET
+        id_distrito = @IdDistrito,
+        direccion_exacta = LTRIM(RTRIM(@DireccionExacta)),
+        referencia = NULLIF(LTRIM(RTRIM(@Referencia)), ''),
+        telefono_contacto = LTRIM(RTRIM(@TelefonoContacto)),
+        nombre_destinatario = LTRIM(RTRIM(@NombreDestinatario)),
+        es_principal = @EsPrincipal
+    WHERE id_direccion = @IdDireccion
+      AND id_usuario = @IdUsuario;
+
+    DECLARE @FilasAfectadas INT = @@ROWCOUNT;
+
+    COMMIT TRANSACTION;
+
+    IF @FilasAfectadas = 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No se encontró la dirección.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La dirección fue actualizada correctamente.' AS Mensaje;
+END;
+GO
+
+   /* ============================================================
+  DESACTIVAR DIRECCION
+   ============================================================ */
+   CREATE OR ALTER PROCEDURE dbo.SP_DesactivarDireccionUsuario
+    @IdDireccion INT,
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdEstadoInactivo INT;
+
+    SELECT @IdEstadoInactivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Inactivo';
+
+    UPDATE dbo.TB_direccion_envio
+    SET
+        id_estado = @IdEstadoInactivo,
+        es_principal = 0
+    WHERE id_direccion = @IdDireccion
+      AND id_usuario = @IdUsuario;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No se encontró la dirección.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La dirección fue desactivada correctamente.' AS Mensaje;
+END;
+GO
+
+   /* ============================================================
+CONSULTAR ROLES
+   ============================================================ */
+
+   CREATE OR ALTER PROCEDURE dbo.SP_ConsultarRoles
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id_rol AS IdRol,
+        nombre_rol AS NombreRol
+    FROM dbo.TB_rol
+    ORDER BY nombre_rol;
+END;
+GO
+
+   /* ============================================================
+CONSULTAR ESTADOS GENERAL
+   ============================================================ */
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarEstados
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id_estado AS IdEstado,
+        nombre_estado AS NombreEstado
+    FROM dbo.TB_estado
+    ORDER BY nombre_estado;
+END;
+GO
+
+   /* ============================================================
+CONSULTAR PROVINCIAS
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarProvincias
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id_provincia AS IdProvincia,
+        nombre_provincia AS NombreProvincia
+    FROM dbo.TB_provincia
+    ORDER BY nombre_provincia;
+END;
+GO
+
+   /* ============================================================
+CONSULTAR CANTONES POR PROVINCIA
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarCantonesPorProvincia
+    @IdProvincia INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id_canton AS IdCanton,
+        nombre_canton AS NombreCanton
+    FROM dbo.TB_canton
+    WHERE id_provincia = @IdProvincia
+    ORDER BY nombre_canton;
+END;
+GO
+
+   /* ============================================================
+CONSULTAR DISTRITOS POR CANTON
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarDistritosPorCanton
+    @IdCanton INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id_distrito AS IdDistrito,
+        nombre_distrito AS NombreDistrito
+    FROM dbo.TB_distrito
+    WHERE id_canton = @IdCanton
+    ORDER BY nombre_distrito;
+END;
+GO
+
+   /* ============================================================
+CONSULTAR ESTADOS DE USUARIO
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarEstadosUsuario
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id_estado AS IdEstado,
+        nombre_estado AS NombreEstado
+    FROM dbo.TB_estado
+    WHERE nombre_estado IN (N'Activo', N'Inactivo')
+    ORDER BY
+        CASE nombre_estado
+            WHEN N'Activo' THEN 1
+            WHEN N'Inactivo' THEN 2
+            ELSE 3
+        END;
+END;
+GO
+
    /* ============================================================
    USUARIO ADMINISTRADOR
    ============================================================ */
@@ -652,3 +1141,6 @@ INNER JOIN dbo.TB_rol R
 INNER JOIN dbo.TB_estado E
     ON E.id_estado = U.id_estado
 WHERE U.email = N'edgardoasolano@gmail.com';
+
+
+SELECT * FROM TB_direccion_envio

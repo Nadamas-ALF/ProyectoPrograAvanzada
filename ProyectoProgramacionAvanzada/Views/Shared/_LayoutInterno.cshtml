@@ -1,4 +1,47 @@
-﻿<!DOCTYPE html>
+﻿@using System
+
+@{
+    string NombreUsuario =
+        Convert.ToString(Session["NombreUsuario"]);
+
+    string NombreRol =
+        Convert.ToString(Session["NombreRol"]);
+
+    int IdUsuarioSesion = Session["IdUsuario"] != null
+        ? Convert.ToInt32(Session["IdUsuario"])
+        : 0;
+
+    if (string.IsNullOrWhiteSpace(NombreUsuario))
+    {
+        NombreUsuario = "Usuario";
+    }
+
+    if (string.IsNullOrWhiteSpace(NombreRol))
+    {
+        NombreRol = "Sesión activa";
+    }
+
+    string Iniciales = "US";
+
+    string[] PartesNombre = NombreUsuario.Split(
+        new[] { ' ' },
+        StringSplitOptions.RemoveEmptyEntries
+    );
+
+    if (PartesNombre.Length >= 2)
+    {
+        Iniciales =
+            PartesNombre[0].Substring(0, 1) +
+            PartesNombre[1].Substring(0, 1);
+    }
+    else if (PartesNombre.Length == 1)
+    {
+        Iniciales =
+            PartesNombre[0].Substring(0, 1);
+    }
+}
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
@@ -18,7 +61,7 @@
           href="@Url.Content("~/Content/bootstrap-icons/bootstrap-icons.css")">
 
     <link rel="stylesheet"
-          href="@Url.Content("~/Content/ExternalStyle.css")">
+          href="@Url.Content("~/Content/GeneralStyle.css?v=1")">
 
     @RenderSection("Estilos", required: false)
 </head>
@@ -46,11 +89,17 @@
                     </span>
 
                     <span class="brand-copy">
-                        <span class="brand-title">LEN</span>
+
+                        <span class="brand-title">
+                            LEN
+                        </span>
+
                         <span class="brand-subtitle">
                             Panel Administrativo
                         </span>
+
                     </span>
+
                 </a>
 
             </div>
@@ -65,7 +114,10 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Principal</span>
+                    <span class="nav-text">
+                        Principal
+                    </span>
+
                 </a>
 
                 <a class="nav-link"
@@ -76,7 +128,10 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Usuarios</span>
+                    <span class="nav-text">
+                        Usuarios
+                    </span>
+
                 </a>
 
                 <a class="nav-link"
@@ -87,7 +142,10 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Productos</span>
+                    <span class="nav-text">
+                        Productos
+                    </span>
+
                 </a>
 
                 <a class="nav-link"
@@ -98,7 +156,10 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Categorías</span>
+                    <span class="nav-text">
+                        Categorías
+                    </span>
+
                 </a>
 
                 <a class="nav-link"
@@ -109,7 +170,10 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Pedidos</span>
+                    <span class="nav-text">
+                        Pedidos
+                    </span>
+
                 </a>
 
                 <a class="nav-link"
@@ -120,7 +184,10 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Pagos</span>
+                    <span class="nav-text">
+                        Pagos
+                    </span>
+
                 </a>
 
                 <a class="nav-link"
@@ -131,62 +198,43 @@
                            aria-hidden="true"></i>
                     </span>
 
-                    <span class="nav-text">Facturas</span>
+                    <span class="nav-text">
+                        Facturas
+                    </span>
+
                 </a>
 
             </nav>
 
-            <div class="sidebar-user">
+            <a class="sidebar-user"
+               href="@Url.Action(
+                   "Detalle",
+                   "Usuario",
+                   new { IdUsuario = IdUsuarioSesion }
+               )">
 
                 <span class="profile-avatar avatar-md sidebar-user-avatar">
-                    @{
-                        string NombreSesion =
-                            Convert.ToString(Session["NombreUsuario"]);
-
-                        string Iniciales = "US";
-
-                        if (!string.IsNullOrWhiteSpace(NombreSesion))
-                        {
-                            string[] Partes =
-                                NombreSesion.Split(
-                                    new[] { ' ' },
-                                    StringSplitOptions.RemoveEmptyEntries
-                                );
-
-                            Iniciales = Partes.Length >= 2
-                                ? Partes[0].Substring(0, 1)
-                                    + Partes[1].Substring(0, 1)
-                                : Partes[0].Substring(0, 1);
-                        }
-                    }
-
                     @Iniciales.ToUpper()
                 </span>
 
                 <strong>
-                    @(
-                        string.IsNullOrWhiteSpace(NombreSesion)
-                            ? "Usuario"
-                            : NombreSesion
-                    )
+                    @NombreUsuario
                 </strong>
 
                 <small>
-                    @(
-                        Session["NombreRol"] == null
-                            ? "Sesión activa"
-                            : Session["NombreRol"].ToString()
-                    )
+                    @NombreRol
                 </small>
 
-            </div>
+            </a>
 
             <div class="sidebar-footer">
+
                 <span class="status-dot"></span>
 
                 <span class="sidebar-footer-text">
                     Sistema disponible
                 </span>
+
             </div>
 
         </aside>
@@ -207,6 +255,7 @@
                         <span></span>
                         <span></span>
                         <span></span>
+
                     </button>
 
                     <form class="d-none d-md-flex ms-3 flex-grow-1"
@@ -216,6 +265,7 @@
                                type="search"
                                placeholder="Buscar productos, pedidos o usuarios"
                                aria-label="Buscar">
+
                     </form>
 
                     <div class="navbar-actions ms-auto">
@@ -229,6 +279,7 @@
                             <i class="bi bi-moon-stars"
                                data-theme-icon
                                aria-hidden="true"></i>
+
                         </button>
 
                         <div class="dropdown">
@@ -243,6 +294,7 @@
 
                                 <i class="bi bi-bell"
                                    aria-hidden="true"></i>
+
                             </button>
 
                             <div class="dropdown-menu dropdown-menu-end notification-menu">
@@ -256,6 +308,7 @@
                                 </span>
 
                             </div>
+
                         </div>
 
                         <div class="dropdown">
@@ -270,28 +323,47 @@
                                 </span>
 
                                 <span class="profile-name d-none d-sm-inline">
-                                    @(
-                                        string.IsNullOrWhiteSpace(NombreSesion)
-                                            ? "Usuario"
-                                            : NombreSesion
-                                    )
+                                    @NombreUsuario
                                 </span>
+
                             </button>
 
                             <ul class="dropdown-menu dropdown-menu-end">
 
                                 <li>
+
                                     <a class="dropdown-item"
-                                       href="@Url.Action("Perfil", "Usuario")">
+                                       href="@Url.Action(
+                                           "Detalle",
+                                           "Usuario",
+                                           new { IdUsuario = IdUsuarioSesion }
+                                       )">
+
+                                        <i class="bi bi-person me-2"
+                                           aria-hidden="true"></i>
+
                                         Perfil
+
                                     </a>
+
                                 </li>
 
                                 <li>
+
                                     <a class="dropdown-item"
-                                       href="@Url.Action("Seguridad", "Usuario")">
+                                       href="@Url.Action(
+                                           "Detalle",
+                                           "Usuario",
+                                           new { IdUsuario = IdUsuarioSesion }
+                                       )#Seguridad">
+
+                                        <i class="bi bi-shield-lock me-2"
+                                           aria-hidden="true"></i>
+
                                         Seguridad
+
                                     </a>
+
                                 </li>
 
                                 <li>
@@ -299,17 +371,40 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
-                                       href="@Url.Action("CerrarSesion", "Home")">
-                                        Cerrar sesión
-                                    </a>
+
+                                    @using (Html.BeginForm(
+                                        "CerrarSesion",
+                                        "Home",
+                                        FormMethod.Post,
+                                        new
+                                        {
+                                            id = "FormularioCerrarSesion",
+                                            @class = "m-0"
+                                        }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="dropdown-item">
+
+                                            <i class="bi bi-box-arrow-right me-2"
+                                               aria-hidden="true"></i>
+
+                                            Cerrar sesión
+
+                                        </button>
+                                    }
+
                                 </li>
 
                             </ul>
+
                         </div>
 
                     </div>
+
                 </div>
+
             </nav>
 
             <main class="dashboard-content">
@@ -338,10 +433,12 @@
             </footer>
 
         </div>
+
     </div>
 
     <script src="@Url.Content("~/Scripts/bootstrap.bundle.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/main.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/main.js?v=1")"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

@@ -2,9 +2,6 @@
 using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ProyectoProgramacionAvanzada.Controllers
@@ -28,6 +25,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
             return View(new InicioSesionModel());
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(InicioSesionModel Modelo)
@@ -37,32 +36,52 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 return View(Modelo);
             }
 
-            using (var Servicio = new UsuarioService())
+            try
             {
-                SP_ConsultarUsuarioInicioSesion_Result Usuario =
-                    Servicio.ValidarCredenciales(Modelo);
-
-                if (Usuario == null)
+                using (var Servicio = new UsuarioService())
                 {
-                    ModelState.AddModelError(
-                        string.Empty,
-                        "El correo o la contraseña son incorrectos, o el usuario no esta activo."
-                    );
+                    SP_ConsultarUsuarioInicioSesion_Result Usuario =
+                        Servicio.ValidarCredenciales(Modelo);
 
-                    return View(Modelo);
+                    if (Usuario == null)
+                    {
+                        ModelState.AddModelError(
+                            string.Empty,
+                            "El correo o la contraseña son incorrectos, o el usuario no está activo."
+                        );
+
+                        return View(Modelo);
+                    }
+
+                    Session["IdUsuario"] = Usuario.IdUsuario;
+                    Session["NombreUsuario"] =
+                        Usuario.Nombre + " " + Usuario.Apellido;
+                    Session["IdRol"] = Usuario.IdRol;
+                    Session["NombreRol"] = Usuario.NombreRol;
+                    Session["IdEstado"] = Usuario.IdEstado;
+                    Session["NombreEstado"] = Usuario.NombreEstado;
+
+                    return RedirectToAction("Principal", "Home");
                 }
+            }
+            catch (Exception Excepcion)
+            {
+                RegistrarError(
+                    "HomeController",
+                    "Login",
+                    Excepcion,
+                    Modelo.Email
+                );
 
-                Session["IdUsuario"] = Usuario.IdUsuario;
-                Session["NombreUsuario"] =
-                    Usuario.Nombre + " " + Usuario.Apellido;
-                Session["IdRol"] = Usuario.IdRol;
-                Session["NombreRol"] = Usuario.NombreRol;
-                Session["IdEstado"] = Usuario.IdEstado;
-                Session["NombreEstado"] = Usuario.NombreEstado;
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Ocurrió un error al procesar el inicio de sesión. Intente nuevamente."
+                );
 
-                return RedirectToAction("Principal", "Home");
+                return View(Modelo);
             }
         }
+
 
 
         [HttpGet]
@@ -75,6 +94,19 @@ namespace ProyectoProgramacionAvanzada.Controllers
 
             return View();
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CerrarSesion()
+        {
+            Session.Clear();
+            Session.Abandon();
+
+            return RedirectToAction("Login", "Home");
+        }
+
+
 
         public ActionResult About()
         {
@@ -90,11 +122,43 @@ namespace ProyectoProgramacionAvanzada.Controllers
             return View();
         }
 
+
+
+        [HttpGet]
         public ActionResult ForgotPassword()
         {
-            ViewBag.Message = "Recuperar Acceso a la cuenta.";
+            ViewBag.Message = "Recuperar acceso a la cuenta.";
 
             return View();
+        }
+
+        private void RegistrarError(
+            string Origen,
+            string Metodo,
+            Exception Excepcion,
+            string UsuarioSistema)
+        {
+            try
+            {
+                string Url = Request.Url != null
+                    ? Request.Url.ToString()
+                    : null;
+
+                using (var ServicioError = new ErrorService())
+                {
+                    ServicioError.RegistrarError(
+                        Origen,
+                        Metodo,
+                        Excepcion,
+                        UsuarioSistema,
+                        Url
+                    );
+                }
+            }
+            catch
+            {
+
+            }
         }
     }
 }
