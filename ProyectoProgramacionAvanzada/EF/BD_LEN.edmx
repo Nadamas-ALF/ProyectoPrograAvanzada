@@ -1,0 +1,1640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TB_canton">
+          <Key>
+            <PropertyRef Name="id_canton" />
+          </Key>
+          <Property Name="id_canton" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_provincia" Type="int" Nullable="false" />
+          <Property Name="nombre_canton" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_carrito">
+          <Key>
+            <PropertyRef Name="id_carrito" />
+          </Key>
+          <Property Name="id_carrito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="fecha_creacion" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_categoria">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_categoria" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="255" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_detalle_carrito">
+          <Key>
+            <PropertyRef Name="id_detalle_carrito" />
+          </Key>
+          <Property Name="id_detalle_carrito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_carrito" Type="int" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_detalle_pedido">
+          <Key>
+            <PropertyRef Name="id_detalle_pedido" />
+          </Key>
+          <Property Name="id_detalle_pedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_pedido" Type="int" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="precio_unitario" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="subtotal_linea" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_direccion_envio">
+          <Key>
+            <PropertyRef Name="id_direccion" />
+          </Key>
+          <Property Name="id_direccion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="id_distrito" Type="int" Nullable="false" />
+          <Property Name="direccion_exacta" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="referencia" Type="nvarchar" MaxLength="300" />
+          <Property Name="telefono_contacto" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre_destinatario" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="es_principal" Type="bit" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_distrito">
+          <Key>
+            <PropertyRef Name="id_distrito" />
+          </Key>
+          <Property Name="id_distrito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_canton" Type="int" Nullable="false" />
+          <Property Name="nombre_distrito" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_error">
+          <Key>
+            <PropertyRef Name="id_error" />
+          </Key>
+          <Property Name="id_error" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_error" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="origen" Type="nvarchar" MaxLength="150" />
+          <Property Name="metodo" Type="nvarchar" MaxLength="150" />
+          <Property Name="mensaje_error" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="detalle_error" Type="nvarchar(max)" />
+          <Property Name="linea_error" Type="int" />
+          <Property Name="usuario_sistema" Type="nvarchar" MaxLength="150" />
+          <Property Name="url" Type="nvarchar" MaxLength="500" />
+          <Property Name="stack_trace" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="TB_estado">
+          <Key>
+            <PropertyRef Name="id_estado" />
+          </Key>
+          <Property Name="id_estado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_estado" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_factura">
+          <Key>
+            <PropertyRef Name="id_factura" />
+          </Key>
+          <Property Name="id_factura" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_pedido" Type="int" Nullable="false" />
+          <Property Name="numero_factura" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_factura" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="costo_envio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_imagen_producto">
+          <Key>
+            <PropertyRef Name="id_imagen" />
+          </Key>
+          <Property Name="id_imagen" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="ruta_imagen" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="es_principal" Type="bit" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_metodo_pago">
+          <Key>
+            <PropertyRef Name="id_metodo_pago" />
+          </Key>
+          <Property Name="id_metodo_pago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_metodo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_pago">
+          <Key>
+            <PropertyRef Name="id_pago" />
+          </Key>
+          <Property Name="id_pago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_pedido" Type="int" Nullable="false" />
+          <Property Name="id_metodo_pago" Type="int" Nullable="false" />
+          <Property Name="monto" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="fecha_pago" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="comprobante" Type="nvarchar" MaxLength="255" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_pedido">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_pedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="id_direccion" Type="int" Nullable="false" />
+          <Property Name="fecha_pedido" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="costo_envio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_producto">
+          <Key>
+            <PropertyRef Name="id_producto" />
+          </Key>
+          <Property Name="id_producto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_producto" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar(max)" />
+          <Property Name="precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="stock" Type="int" Nullable="false" />
+          <Property Name="es_pieza_unica" Type="bit" Nullable="false" />
+          <Property Name="destacado" Type="bit" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+          <Property Name="fecha_creacion" Type="datetime2" Precision="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_provincia">
+          <Key>
+            <PropertyRef Name="id_provincia" />
+          </Key>
+          <Property Name="id_provincia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_provincia" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_rol" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TB_usuario">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellido" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="cedula" Type="nvarchar" MaxLength="20" />
+          <Property Name="telefono" Type="nvarchar" MaxLength="20" />
+          <Property Name="email" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="contrasena" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="id_rol" Type="int" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+          <Property Name="fecha_registro" Type="datetime2" Precision="0" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_TB_canton_TB_provincia">
+          <End Role="TB_provincia" Type="Self.TB_provincia" Multiplicity="1" />
+          <End Role="TB_canton" Type="Self.TB_canton" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_provincia">
+              <PropertyRef Name="id_provincia" />
+            </Principal>
+            <Dependent Role="TB_canton">
+              <PropertyRef Name="id_provincia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_carrito_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_carrito" Type="Self.TB_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_carrito">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_carrito_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_carrito" Type="Self.TB_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_carrito">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_categoria_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_categoria" Type="Self.TB_categoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_categoria">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_carrito_TB_carrito">
+          <End Role="TB_carrito" Type="Self.TB_carrito" Multiplicity="1" />
+          <End Role="TB_detalle_carrito" Type="Self.TB_detalle_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_carrito">
+              <PropertyRef Name="id_carrito" />
+            </Principal>
+            <Dependent Role="TB_detalle_carrito">
+              <PropertyRef Name="id_carrito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_carrito_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_detalle_carrito" Type="Self.TB_detalle_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_detalle_carrito">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_pedido_TB_pedido">
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="1" />
+          <End Role="TB_detalle_pedido" Type="Self.TB_detalle_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TB_detalle_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_pedido_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_detalle_pedido" Type="Self.TB_detalle_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_detalle_pedido">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_direccion_envio_TB_distrito">
+          <End Role="TB_distrito" Type="Self.TB_distrito" Multiplicity="1" />
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_distrito">
+              <PropertyRef Name="id_distrito" />
+            </Principal>
+            <Dependent Role="TB_direccion_envio">
+              <PropertyRef Name="id_distrito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_direccion_envio_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_direccion_envio">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_direccion_envio_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_direccion_envio">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_distrito_TB_canton">
+          <End Role="TB_canton" Type="Self.TB_canton" Multiplicity="1" />
+          <End Role="TB_distrito" Type="Self.TB_distrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_canton">
+              <PropertyRef Name="id_canton" />
+            </Principal>
+            <Dependent Role="TB_distrito">
+              <PropertyRef Name="id_canton" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_factura_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_factura" Type="Self.TB_factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_factura">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_factura_TB_pedido">
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="1" />
+          <End Role="TB_factura" Type="Self.TB_factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TB_factura">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_imagen_producto_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_imagen_producto" Type="Self.TB_imagen_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_imagen_producto">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_imagen_producto_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_imagen_producto" Type="Self.TB_imagen_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_imagen_producto">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_metodo_pago_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_metodo_pago" Type="Self.TB_metodo_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_metodo_pago">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pago_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_pago" Type="Self.TB_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_pago">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pago_TB_metodo_pago">
+          <End Role="TB_metodo_pago" Type="Self.TB_metodo_pago" Multiplicity="1" />
+          <End Role="TB_pago" Type="Self.TB_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_metodo_pago">
+              <PropertyRef Name="id_metodo_pago" />
+            </Principal>
+            <Dependent Role="TB_pago">
+              <PropertyRef Name="id_metodo_pago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pago_TB_pedido">
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="1" />
+          <End Role="TB_pago" Type="Self.TB_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TB_pago">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pedido_TB_direccion_envio">
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="1" />
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_direccion_envio">
+              <PropertyRef Name="id_direccion" />
+            </Principal>
+            <Dependent Role="TB_pedido">
+              <PropertyRef Name="id_direccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pedido_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_pedido">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pedido_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_pedido">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_producto_TB_categoria">
+          <End Role="TB_categoria" Type="Self.TB_categoria" Multiplicity="1" />
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_categoria">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="TB_producto">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_producto_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_producto">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_usuario_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_usuario">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_usuario_TB_rol">
+          <End Role="TB_rol" Type="Self.TB_rol" Multiplicity="1" />
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="TB_usuario">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_ConsultarUsuarioInicioSesion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_RegistrarError" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Origen" Type="nvarchar" Mode="In" />
+          <Parameter Name="Metodo" Type="nvarchar" Mode="In" />
+          <Parameter Name="MensajeError" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="DetalleError" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="LineaError" Type="int" Mode="In" />
+          <Parameter Name="UsuarioSistema" Type="nvarchar" Mode="In" />
+          <Parameter Name="Url" Type="nvarchar" Mode="In" />
+          <Parameter Name="StackTrace" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="BD_LENModelStoreContainer">
+          <EntitySet Name="TB_canton" EntityType="Self.TB_canton" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_carrito" EntityType="Self.TB_carrito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_categoria" EntityType="Self.TB_categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_detalle_carrito" EntityType="Self.TB_detalle_carrito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_detalle_pedido" EntityType="Self.TB_detalle_pedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_direccion_envio" EntityType="Self.TB_direccion_envio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_distrito" EntityType="Self.TB_distrito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_error" EntityType="Self.TB_error" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_estado" EntityType="Self.TB_estado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_factura" EntityType="Self.TB_factura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_imagen_producto" EntityType="Self.TB_imagen_producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_metodo_pago" EntityType="Self.TB_metodo_pago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_pago" EntityType="Self.TB_pago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_pedido" EntityType="Self.TB_pedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_producto" EntityType="Self.TB_producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_provincia" EntityType="Self.TB_provincia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_rol" EntityType="Self.TB_rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_usuario" EntityType="Self.TB_usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TB_canton_TB_provincia" Association="Self.FK_TB_canton_TB_provincia">
+            <End Role="TB_provincia" EntitySet="TB_provincia" />
+            <End Role="TB_canton" EntitySet="TB_canton" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_carrito_TB_estado" Association="Self.FK_TB_carrito_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_carrito" EntitySet="TB_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_carrito_TB_usuario" Association="Self.FK_TB_carrito_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_carrito" EntitySet="TB_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_categoria_TB_estado" Association="Self.FK_TB_categoria_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_categoria" EntitySet="TB_categoria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_carrito_TB_carrito" Association="Self.FK_TB_detalle_carrito_TB_carrito">
+            <End Role="TB_carrito" EntitySet="TB_carrito" />
+            <End Role="TB_detalle_carrito" EntitySet="TB_detalle_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_carrito_TB_producto" Association="Self.FK_TB_detalle_carrito_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_detalle_carrito" EntitySet="TB_detalle_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_pedido_TB_pedido" Association="Self.FK_TB_detalle_pedido_TB_pedido">
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+            <End Role="TB_detalle_pedido" EntitySet="TB_detalle_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_pedido_TB_producto" Association="Self.FK_TB_detalle_pedido_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_detalle_pedido" EntitySet="TB_detalle_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_direccion_envio_TB_distrito" Association="Self.FK_TB_direccion_envio_TB_distrito">
+            <End Role="TB_distrito" EntitySet="TB_distrito" />
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_direccion_envio_TB_estado" Association="Self.FK_TB_direccion_envio_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_direccion_envio_TB_usuario" Association="Self.FK_TB_direccion_envio_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_distrito_TB_canton" Association="Self.FK_TB_distrito_TB_canton">
+            <End Role="TB_canton" EntitySet="TB_canton" />
+            <End Role="TB_distrito" EntitySet="TB_distrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_factura_TB_estado" Association="Self.FK_TB_factura_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_factura" EntitySet="TB_factura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_factura_TB_pedido" Association="Self.FK_TB_factura_TB_pedido">
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+            <End Role="TB_factura" EntitySet="TB_factura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_imagen_producto_TB_estado" Association="Self.FK_TB_imagen_producto_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_imagen_producto" EntitySet="TB_imagen_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_imagen_producto_TB_producto" Association="Self.FK_TB_imagen_producto_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_imagen_producto" EntitySet="TB_imagen_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_metodo_pago_TB_estado" Association="Self.FK_TB_metodo_pago_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_metodo_pago" EntitySet="TB_metodo_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pago_TB_estado" Association="Self.FK_TB_pago_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_pago" EntitySet="TB_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pago_TB_metodo_pago" Association="Self.FK_TB_pago_TB_metodo_pago">
+            <End Role="TB_metodo_pago" EntitySet="TB_metodo_pago" />
+            <End Role="TB_pago" EntitySet="TB_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pago_TB_pedido" Association="Self.FK_TB_pago_TB_pedido">
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+            <End Role="TB_pago" EntitySet="TB_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pedido_TB_direccion_envio" Association="Self.FK_TB_pedido_TB_direccion_envio">
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pedido_TB_estado" Association="Self.FK_TB_pedido_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pedido_TB_usuario" Association="Self.FK_TB_pedido_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_producto_TB_categoria" Association="Self.FK_TB_producto_TB_categoria">
+            <End Role="TB_categoria" EntitySet="TB_categoria" />
+            <End Role="TB_producto" EntitySet="TB_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_producto_TB_estado" Association="Self.FK_TB_producto_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_producto" EntitySet="TB_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_usuario_TB_estado" Association="Self.FK_TB_usuario_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_usuario_TB_rol" Association="Self.FK_TB_usuario_TB_rol">
+            <End Role="TB_rol" EntitySet="TB_rol" />
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BD_LENModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TB_canton">
+          <Key>
+            <PropertyRef Name="id_canton" />
+          </Key>
+          <Property Name="id_canton" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_provincia" Type="Int32" Nullable="false" />
+          <Property Name="nombre_canton" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TB_provincia" Relationship="Self.FK_TB_canton_TB_provincia" FromRole="TB_canton" ToRole="TB_provincia" />
+          <NavigationProperty Name="TB_distrito" Relationship="Self.FK_TB_distrito_TB_canton" FromRole="TB_canton" ToRole="TB_distrito" />
+        </EntityType>
+        <EntityType Name="TB_carrito">
+          <Key>
+            <PropertyRef Name="id_carrito" />
+          </Key>
+          <Property Name="id_carrito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="fecha_creacion" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_carrito_TB_estado" FromRole="TB_carrito" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_carrito_TB_usuario" FromRole="TB_carrito" ToRole="TB_usuario" />
+          <NavigationProperty Name="TB_detalle_carrito" Relationship="Self.FK_TB_detalle_carrito_TB_carrito" FromRole="TB_carrito" ToRole="TB_detalle_carrito" />
+        </EntityType>
+        <EntityType Name="TB_categoria">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_categoria" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_categoria_TB_estado" FromRole="TB_categoria" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_producto" Relationship="Self.FK_TB_producto_TB_categoria" FromRole="TB_categoria" ToRole="TB_producto" />
+        </EntityType>
+        <EntityType Name="TB_detalle_carrito">
+          <Key>
+            <PropertyRef Name="id_detalle_carrito" />
+          </Key>
+          <Property Name="id_detalle_carrito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_carrito" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_carrito" Relationship="Self.FK_TB_detalle_carrito_TB_carrito" FromRole="TB_detalle_carrito" ToRole="TB_carrito" />
+          <NavigationProperty Name="TB_producto" Relationship="Self.FK_TB_detalle_carrito_TB_producto" FromRole="TB_detalle_carrito" ToRole="TB_producto" />
+        </EntityType>
+        <EntityType Name="TB_detalle_pedido">
+          <Key>
+            <PropertyRef Name="id_detalle_pedido" />
+          </Key>
+          <Property Name="id_detalle_pedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_pedido" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="precio_unitario" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="subtotal_linea" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_detalle_pedido_TB_pedido" FromRole="TB_detalle_pedido" ToRole="TB_pedido" />
+          <NavigationProperty Name="TB_producto" Relationship="Self.FK_TB_detalle_pedido_TB_producto" FromRole="TB_detalle_pedido" ToRole="TB_producto" />
+        </EntityType>
+        <EntityType Name="TB_direccion_envio">
+          <Key>
+            <PropertyRef Name="id_direccion" />
+          </Key>
+          <Property Name="id_direccion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="id_distrito" Type="Int32" Nullable="false" />
+          <Property Name="direccion_exacta" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="referencia" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="telefono_contacto" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="nombre_destinatario" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="es_principal" Type="Boolean" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_distrito" Relationship="Self.FK_TB_direccion_envio_TB_distrito" FromRole="TB_direccion_envio" ToRole="TB_distrito" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_direccion_envio_TB_estado" FromRole="TB_direccion_envio" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_direccion_envio_TB_usuario" FromRole="TB_direccion_envio" ToRole="TB_usuario" />
+          <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_pedido_TB_direccion_envio" FromRole="TB_direccion_envio" ToRole="TB_pedido" />
+        </EntityType>
+        <EntityType Name="TB_distrito">
+          <Key>
+            <PropertyRef Name="id_distrito" />
+          </Key>
+          <Property Name="id_distrito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_canton" Type="Int32" Nullable="false" />
+          <Property Name="nombre_distrito" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TB_canton" Relationship="Self.FK_TB_distrito_TB_canton" FromRole="TB_distrito" ToRole="TB_canton" />
+          <NavigationProperty Name="TB_direccion_envio" Relationship="Self.FK_TB_direccion_envio_TB_distrito" FromRole="TB_distrito" ToRole="TB_direccion_envio" />
+        </EntityType>
+        <EntityType Name="TB_error">
+          <Key>
+            <PropertyRef Name="id_error" />
+          </Key>
+          <Property Name="id_error" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_error" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="origen" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="metodo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="mensaje_error" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="detalle_error" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="linea_error" Type="Int32" />
+          <Property Name="usuario_sistema" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="stack_trace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TB_estado">
+          <Key>
+            <PropertyRef Name="id_estado" />
+          </Key>
+          <Property Name="id_estado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TB_carrito" Relationship="Self.FK_TB_carrito_TB_estado" FromRole="TB_estado" ToRole="TB_carrito" />
+          <NavigationProperty Name="TB_categoria" Relationship="Self.FK_TB_categoria_TB_estado" FromRole="TB_estado" ToRole="TB_categoria" />
+          <NavigationProperty Name="TB_direccion_envio" Relationship="Self.FK_TB_direccion_envio_TB_estado" FromRole="TB_estado" ToRole="TB_direccion_envio" />
+          <NavigationProperty Name="TB_factura" Relationship="Self.FK_TB_factura_TB_estado" FromRole="TB_estado" ToRole="TB_factura" />
+          <NavigationProperty Name="TB_imagen_producto" Relationship="Self.FK_TB_imagen_producto_TB_estado" FromRole="TB_estado" ToRole="TB_imagen_producto" />
+          <NavigationProperty Name="TB_metodo_pago" Relationship="Self.FK_TB_metodo_pago_TB_estado" FromRole="TB_estado" ToRole="TB_metodo_pago" />
+          <NavigationProperty Name="TB_pago" Relationship="Self.FK_TB_pago_TB_estado" FromRole="TB_estado" ToRole="TB_pago" />
+          <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_pedido_TB_estado" FromRole="TB_estado" ToRole="TB_pedido" />
+          <NavigationProperty Name="TB_producto" Relationship="Self.FK_TB_producto_TB_estado" FromRole="TB_estado" ToRole="TB_producto" />
+          <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_usuario_TB_estado" FromRole="TB_estado" ToRole="TB_usuario" />
+        </EntityType>
+        <EntityType Name="TB_factura">
+          <Key>
+            <PropertyRef Name="id_factura" />
+          </Key>
+          <Property Name="id_factura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_pedido" Type="Int32" Nullable="false" />
+          <Property Name="numero_factura" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_factura" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="costo_envio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_factura_TB_estado" FromRole="TB_factura" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_factura_TB_pedido" FromRole="TB_factura" ToRole="TB_pedido" />
+        </EntityType>
+        <EntityType Name="TB_imagen_producto">
+          <Key>
+            <PropertyRef Name="id_imagen" />
+          </Key>
+          <Property Name="id_imagen" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="ruta_imagen" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="es_principal" Type="Boolean" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_imagen_producto_TB_estado" FromRole="TB_imagen_producto" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_producto" Relationship="Self.FK_TB_imagen_producto_TB_producto" FromRole="TB_imagen_producto" ToRole="TB_producto" />
+        </EntityType>
+        <EntityType Name="TB_metodo_pago">
+          <Key>
+            <PropertyRef Name="id_metodo_pago" />
+          </Key>
+          <Property Name="id_metodo_pago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_metodo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_metodo_pago_TB_estado" FromRole="TB_metodo_pago" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_pago" Relationship="Self.FK_TB_pago_TB_metodo_pago" FromRole="TB_metodo_pago" ToRole="TB_pago" />
+        </EntityType>
+        <EntityType Name="TB_pago">
+          <Key>
+            <PropertyRef Name="id_pago" />
+          </Key>
+          <Property Name="id_pago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_pedido" Type="Int32" Nullable="false" />
+          <Property Name="id_metodo_pago" Type="Int32" Nullable="false" />
+          <Property Name="monto" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="fecha_pago" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="comprobante" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_pago_TB_estado" FromRole="TB_pago" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_metodo_pago" Relationship="Self.FK_TB_pago_TB_metodo_pago" FromRole="TB_pago" ToRole="TB_metodo_pago" />
+          <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_pago_TB_pedido" FromRole="TB_pago" ToRole="TB_pedido" />
+        </EntityType>
+        <EntityType Name="TB_pedido">
+          <Key>
+            <PropertyRef Name="id_pedido" />
+          </Key>
+          <Property Name="id_pedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="id_direccion" Type="Int32" Nullable="false" />
+          <Property Name="fecha_pedido" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="costo_envio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_detalle_pedido" Relationship="Self.FK_TB_detalle_pedido_TB_pedido" FromRole="TB_pedido" ToRole="TB_detalle_pedido" />
+          <NavigationProperty Name="TB_direccion_envio" Relationship="Self.FK_TB_pedido_TB_direccion_envio" FromRole="TB_pedido" ToRole="TB_direccion_envio" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_pedido_TB_estado" FromRole="TB_pedido" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_factura" Relationship="Self.FK_TB_factura_TB_pedido" FromRole="TB_pedido" ToRole="TB_factura" />
+          <NavigationProperty Name="TB_pago" Relationship="Self.FK_TB_pago_TB_pedido" FromRole="TB_pedido" ToRole="TB_pago" />
+          <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_pedido_TB_usuario" FromRole="TB_pedido" ToRole="TB_usuario" />
+        </EntityType>
+        <EntityType Name="TB_producto">
+          <Key>
+            <PropertyRef Name="id_producto" />
+          </Key>
+          <Property Name="id_producto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_producto" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="stock" Type="Int32" Nullable="false" />
+          <Property Name="es_pieza_unica" Type="Boolean" Nullable="false" />
+          <Property Name="destacado" Type="Boolean" Nullable="false" />
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <Property Name="fecha_creacion" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="TB_categoria" Relationship="Self.FK_TB_producto_TB_categoria" FromRole="TB_producto" ToRole="TB_categoria" />
+          <NavigationProperty Name="TB_detalle_carrito" Relationship="Self.FK_TB_detalle_carrito_TB_producto" FromRole="TB_producto" ToRole="TB_detalle_carrito" />
+          <NavigationProperty Name="TB_detalle_pedido" Relationship="Self.FK_TB_detalle_pedido_TB_producto" FromRole="TB_producto" ToRole="TB_detalle_pedido" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_producto_TB_estado" FromRole="TB_producto" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_imagen_producto" Relationship="Self.FK_TB_imagen_producto_TB_producto" FromRole="TB_producto" ToRole="TB_imagen_producto" />
+        </EntityType>
+        <EntityType Name="TB_provincia">
+          <Key>
+            <PropertyRef Name="id_provincia" />
+          </Key>
+          <Property Name="id_provincia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_provincia" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TB_canton" Relationship="Self.FK_TB_canton_TB_provincia" FromRole="TB_provincia" ToRole="TB_canton" />
+        </EntityType>
+        <EntityType Name="TB_rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_rol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_usuario_TB_rol" FromRole="TB_rol" ToRole="TB_usuario" />
+        </EntityType>
+        <EntityType Name="TB_usuario">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cedula" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="contrasena" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_rol" Type="Int32" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="TB_carrito" Relationship="Self.FK_TB_carrito_TB_usuario" FromRole="TB_usuario" ToRole="TB_carrito" />
+          <NavigationProperty Name="TB_direccion_envio" Relationship="Self.FK_TB_direccion_envio_TB_usuario" FromRole="TB_usuario" ToRole="TB_direccion_envio" />
+          <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_usuario_TB_estado" FromRole="TB_usuario" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_pedido_TB_usuario" FromRole="TB_usuario" ToRole="TB_pedido" />
+          <NavigationProperty Name="TB_rol" Relationship="Self.FK_TB_usuario_TB_rol" FromRole="TB_usuario" ToRole="TB_rol" />
+        </EntityType>
+        <Association Name="FK_TB_canton_TB_provincia">
+          <End Role="TB_provincia" Type="Self.TB_provincia" Multiplicity="1" />
+          <End Role="TB_canton" Type="Self.TB_canton" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_provincia">
+              <PropertyRef Name="id_provincia" />
+            </Principal>
+            <Dependent Role="TB_canton">
+              <PropertyRef Name="id_provincia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_distrito_TB_canton">
+          <End Role="TB_canton" Type="Self.TB_canton" Multiplicity="1" />
+          <End Role="TB_distrito" Type="Self.TB_distrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_canton">
+              <PropertyRef Name="id_canton" />
+            </Principal>
+            <Dependent Role="TB_distrito">
+              <PropertyRef Name="id_canton" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_carrito_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_carrito" Type="Self.TB_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_carrito">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_carrito_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_carrito" Type="Self.TB_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_carrito">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_carrito_TB_carrito">
+          <End Role="TB_carrito" Type="Self.TB_carrito" Multiplicity="1" />
+          <End Role="TB_detalle_carrito" Type="Self.TB_detalle_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_carrito">
+              <PropertyRef Name="id_carrito" />
+            </Principal>
+            <Dependent Role="TB_detalle_carrito">
+              <PropertyRef Name="id_carrito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_categoria_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_categoria" Type="Self.TB_categoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_categoria">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_producto_TB_categoria">
+          <End Role="TB_categoria" Type="Self.TB_categoria" Multiplicity="1" />
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_categoria">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="TB_producto">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_carrito_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_detalle_carrito" Type="Self.TB_detalle_carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_detalle_carrito">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_pedido_TB_pedido">
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="1" />
+          <End Role="TB_detalle_pedido" Type="Self.TB_detalle_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TB_detalle_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_detalle_pedido_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_detalle_pedido" Type="Self.TB_detalle_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_detalle_pedido">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_direccion_envio_TB_distrito">
+          <End Role="TB_distrito" Type="Self.TB_distrito" Multiplicity="1" />
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_distrito">
+              <PropertyRef Name="id_distrito" />
+            </Principal>
+            <Dependent Role="TB_direccion_envio">
+              <PropertyRef Name="id_distrito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_direccion_envio_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_direccion_envio">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_direccion_envio_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_direccion_envio">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pedido_TB_direccion_envio">
+          <End Role="TB_direccion_envio" Type="Self.TB_direccion_envio" Multiplicity="1" />
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_direccion_envio">
+              <PropertyRef Name="id_direccion" />
+            </Principal>
+            <Dependent Role="TB_pedido">
+              <PropertyRef Name="id_direccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_factura_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_factura" Type="Self.TB_factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_factura">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_imagen_producto_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_imagen_producto" Type="Self.TB_imagen_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_imagen_producto">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_metodo_pago_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_metodo_pago" Type="Self.TB_metodo_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_metodo_pago">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pago_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_pago" Type="Self.TB_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_pago">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pedido_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_pedido">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_producto_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_producto">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_usuario_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_usuario">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_factura_TB_pedido">
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="1" />
+          <End Role="TB_factura" Type="Self.TB_factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TB_factura">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_imagen_producto_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_imagen_producto" Type="Self.TB_imagen_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_imagen_producto">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pago_TB_metodo_pago">
+          <End Role="TB_metodo_pago" Type="Self.TB_metodo_pago" Multiplicity="1" />
+          <End Role="TB_pago" Type="Self.TB_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_metodo_pago">
+              <PropertyRef Name="id_metodo_pago" />
+            </Principal>
+            <Dependent Role="TB_pago">
+              <PropertyRef Name="id_metodo_pago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pago_TB_pedido">
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="1" />
+          <End Role="TB_pago" Type="Self.TB_pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_pedido">
+              <PropertyRef Name="id_pedido" />
+            </Principal>
+            <Dependent Role="TB_pago">
+              <PropertyRef Name="id_pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_pedido_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_pedido" Type="Self.TB_pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_pedido">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_usuario_TB_rol">
+          <End Role="TB_rol" Type="Self.TB_rol" Multiplicity="1" />
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="TB_usuario">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BD_LENEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TB_canton" EntityType="Self.TB_canton" />
+          <EntitySet Name="TB_carrito" EntityType="Self.TB_carrito" />
+          <EntitySet Name="TB_categoria" EntityType="Self.TB_categoria" />
+          <EntitySet Name="TB_detalle_carrito" EntityType="Self.TB_detalle_carrito" />
+          <EntitySet Name="TB_detalle_pedido" EntityType="Self.TB_detalle_pedido" />
+          <EntitySet Name="TB_direccion_envio" EntityType="Self.TB_direccion_envio" />
+          <EntitySet Name="TB_distrito" EntityType="Self.TB_distrito" />
+          <EntitySet Name="TB_error" EntityType="Self.TB_error" />
+          <EntitySet Name="TB_estado" EntityType="Self.TB_estado" />
+          <EntitySet Name="TB_factura" EntityType="Self.TB_factura" />
+          <EntitySet Name="TB_imagen_producto" EntityType="Self.TB_imagen_producto" />
+          <EntitySet Name="TB_metodo_pago" EntityType="Self.TB_metodo_pago" />
+          <EntitySet Name="TB_pago" EntityType="Self.TB_pago" />
+          <EntitySet Name="TB_pedido" EntityType="Self.TB_pedido" />
+          <EntitySet Name="TB_producto" EntityType="Self.TB_producto" />
+          <EntitySet Name="TB_provincia" EntityType="Self.TB_provincia" />
+          <EntitySet Name="TB_rol" EntityType="Self.TB_rol" />
+          <EntitySet Name="TB_usuario" EntityType="Self.TB_usuario" />
+          <AssociationSet Name="FK_TB_canton_TB_provincia" Association="Self.FK_TB_canton_TB_provincia">
+            <End Role="TB_provincia" EntitySet="TB_provincia" />
+            <End Role="TB_canton" EntitySet="TB_canton" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_distrito_TB_canton" Association="Self.FK_TB_distrito_TB_canton">
+            <End Role="TB_canton" EntitySet="TB_canton" />
+            <End Role="TB_distrito" EntitySet="TB_distrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_carrito_TB_estado" Association="Self.FK_TB_carrito_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_carrito" EntitySet="TB_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_carrito_TB_usuario" Association="Self.FK_TB_carrito_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_carrito" EntitySet="TB_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_carrito_TB_carrito" Association="Self.FK_TB_detalle_carrito_TB_carrito">
+            <End Role="TB_carrito" EntitySet="TB_carrito" />
+            <End Role="TB_detalle_carrito" EntitySet="TB_detalle_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_categoria_TB_estado" Association="Self.FK_TB_categoria_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_categoria" EntitySet="TB_categoria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_producto_TB_categoria" Association="Self.FK_TB_producto_TB_categoria">
+            <End Role="TB_categoria" EntitySet="TB_categoria" />
+            <End Role="TB_producto" EntitySet="TB_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_carrito_TB_producto" Association="Self.FK_TB_detalle_carrito_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_detalle_carrito" EntitySet="TB_detalle_carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_pedido_TB_pedido" Association="Self.FK_TB_detalle_pedido_TB_pedido">
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+            <End Role="TB_detalle_pedido" EntitySet="TB_detalle_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_detalle_pedido_TB_producto" Association="Self.FK_TB_detalle_pedido_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_detalle_pedido" EntitySet="TB_detalle_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_direccion_envio_TB_distrito" Association="Self.FK_TB_direccion_envio_TB_distrito">
+            <End Role="TB_distrito" EntitySet="TB_distrito" />
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_direccion_envio_TB_estado" Association="Self.FK_TB_direccion_envio_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_direccion_envio_TB_usuario" Association="Self.FK_TB_direccion_envio_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pedido_TB_direccion_envio" Association="Self.FK_TB_pedido_TB_direccion_envio">
+            <End Role="TB_direccion_envio" EntitySet="TB_direccion_envio" />
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_factura_TB_estado" Association="Self.FK_TB_factura_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_factura" EntitySet="TB_factura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_imagen_producto_TB_estado" Association="Self.FK_TB_imagen_producto_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_imagen_producto" EntitySet="TB_imagen_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_metodo_pago_TB_estado" Association="Self.FK_TB_metodo_pago_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_metodo_pago" EntitySet="TB_metodo_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pago_TB_estado" Association="Self.FK_TB_pago_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_pago" EntitySet="TB_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pedido_TB_estado" Association="Self.FK_TB_pedido_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_producto_TB_estado" Association="Self.FK_TB_producto_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_producto" EntitySet="TB_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_usuario_TB_estado" Association="Self.FK_TB_usuario_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_factura_TB_pedido" Association="Self.FK_TB_factura_TB_pedido">
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+            <End Role="TB_factura" EntitySet="TB_factura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_imagen_producto_TB_producto" Association="Self.FK_TB_imagen_producto_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_imagen_producto" EntitySet="TB_imagen_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pago_TB_metodo_pago" Association="Self.FK_TB_pago_TB_metodo_pago">
+            <End Role="TB_metodo_pago" EntitySet="TB_metodo_pago" />
+            <End Role="TB_pago" EntitySet="TB_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pago_TB_pedido" Association="Self.FK_TB_pago_TB_pedido">
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+            <End Role="TB_pago" EntitySet="TB_pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_pedido_TB_usuario" Association="Self.FK_TB_pedido_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_pedido" EntitySet="TB_pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_usuario_TB_rol" Association="Self.FK_TB_usuario_TB_rol">
+            <End Role="TB_rol" EntitySet="TB_rol" />
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+          </AssociationSet>
+          <FunctionImport Name="SP_ConsultarUsuarioInicioSesion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result)">
+          <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RegistrarError">
+            <Parameter Name="Origen" Mode="In" Type="String" />
+            <Parameter Name="Metodo" Mode="In" Type="String" />
+            <Parameter Name="MensajeError" Mode="In" Type="String" />
+            <Parameter Name="DetalleError" Mode="In" Type="String" />
+            <Parameter Name="LineaError" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioSistema" Mode="In" Type="String" />
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="StackTrace" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SP_ConsultarUsuarioInicioSesion_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BD_LENModelStoreContainer" CdmEntityContainer="BD_LENEntities">
+          <EntitySetMapping Name="TB_canton">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_canton">
+              <MappingFragment StoreEntitySet="TB_canton">
+                <ScalarProperty Name="id_canton" ColumnName="id_canton" />
+                <ScalarProperty Name="id_provincia" ColumnName="id_provincia" />
+                <ScalarProperty Name="nombre_canton" ColumnName="nombre_canton" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_carrito">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_carrito">
+              <MappingFragment StoreEntitySet="TB_carrito">
+                <ScalarProperty Name="id_carrito" ColumnName="id_carrito" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="fecha_creacion" ColumnName="fecha_creacion" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_categoria">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_categoria">
+              <MappingFragment StoreEntitySet="TB_categoria">
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="nombre_categoria" ColumnName="nombre_categoria" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_detalle_carrito">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_detalle_carrito">
+              <MappingFragment StoreEntitySet="TB_detalle_carrito">
+                <ScalarProperty Name="id_detalle_carrito" ColumnName="id_detalle_carrito" />
+                <ScalarProperty Name="id_carrito" ColumnName="id_carrito" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_detalle_pedido">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_detalle_pedido">
+              <MappingFragment StoreEntitySet="TB_detalle_pedido">
+                <ScalarProperty Name="id_detalle_pedido" ColumnName="id_detalle_pedido" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="precio_unitario" ColumnName="precio_unitario" />
+                <ScalarProperty Name="subtotal_linea" ColumnName="subtotal_linea" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_direccion_envio">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_direccion_envio">
+              <MappingFragment StoreEntitySet="TB_direccion_envio">
+                <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="id_distrito" ColumnName="id_distrito" />
+                <ScalarProperty Name="direccion_exacta" ColumnName="direccion_exacta" />
+                <ScalarProperty Name="referencia" ColumnName="referencia" />
+                <ScalarProperty Name="telefono_contacto" ColumnName="telefono_contacto" />
+                <ScalarProperty Name="nombre_destinatario" ColumnName="nombre_destinatario" />
+                <ScalarProperty Name="es_principal" ColumnName="es_principal" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_distrito">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_distrito">
+              <MappingFragment StoreEntitySet="TB_distrito">
+                <ScalarProperty Name="id_distrito" ColumnName="id_distrito" />
+                <ScalarProperty Name="id_canton" ColumnName="id_canton" />
+                <ScalarProperty Name="nombre_distrito" ColumnName="nombre_distrito" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_error">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_error">
+              <MappingFragment StoreEntitySet="TB_error">
+                <ScalarProperty Name="id_error" ColumnName="id_error" />
+                <ScalarProperty Name="fecha_error" ColumnName="fecha_error" />
+                <ScalarProperty Name="origen" ColumnName="origen" />
+                <ScalarProperty Name="metodo" ColumnName="metodo" />
+                <ScalarProperty Name="mensaje_error" ColumnName="mensaje_error" />
+                <ScalarProperty Name="detalle_error" ColumnName="detalle_error" />
+                <ScalarProperty Name="linea_error" ColumnName="linea_error" />
+                <ScalarProperty Name="usuario_sistema" ColumnName="usuario_sistema" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="stack_trace" ColumnName="stack_trace" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_estado">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_estado">
+              <MappingFragment StoreEntitySet="TB_estado">
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+                <ScalarProperty Name="nombre_estado" ColumnName="nombre_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_factura">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_factura">
+              <MappingFragment StoreEntitySet="TB_factura">
+                <ScalarProperty Name="id_factura" ColumnName="id_factura" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="numero_factura" ColumnName="numero_factura" />
+                <ScalarProperty Name="fecha_factura" ColumnName="fecha_factura" />
+                <ScalarProperty Name="subtotal" ColumnName="subtotal" />
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_imagen_producto">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_imagen_producto">
+              <MappingFragment StoreEntitySet="TB_imagen_producto">
+                <ScalarProperty Name="id_imagen" ColumnName="id_imagen" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="ruta_imagen" ColumnName="ruta_imagen" />
+                <ScalarProperty Name="es_principal" ColumnName="es_principal" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_metodo_pago">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_metodo_pago">
+              <MappingFragment StoreEntitySet="TB_metodo_pago">
+                <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
+                <ScalarProperty Name="nombre_metodo" ColumnName="nombre_metodo" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_pago">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_pago">
+              <MappingFragment StoreEntitySet="TB_pago">
+                <ScalarProperty Name="id_pago" ColumnName="id_pago" />
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="id_metodo_pago" ColumnName="id_metodo_pago" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="fecha_pago" ColumnName="fecha_pago" />
+                <ScalarProperty Name="comprobante" ColumnName="comprobante" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_pedido">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_pedido">
+              <MappingFragment StoreEntitySet="TB_pedido">
+                <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
+                <ScalarProperty Name="fecha_pedido" ColumnName="fecha_pedido" />
+                <ScalarProperty Name="subtotal" ColumnName="subtotal" />
+                <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_producto">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_producto">
+              <MappingFragment StoreEntitySet="TB_producto">
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="nombre_producto" ColumnName="nombre_producto" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="es_pieza_unica" ColumnName="es_pieza_unica" />
+                <ScalarProperty Name="destacado" ColumnName="destacado" />
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+                <ScalarProperty Name="fecha_creacion" ColumnName="fecha_creacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_provincia">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_provincia">
+              <MappingFragment StoreEntitySet="TB_provincia">
+                <ScalarProperty Name="id_provincia" ColumnName="id_provincia" />
+                <ScalarProperty Name="nombre_provincia" ColumnName="nombre_provincia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_rol">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_rol">
+              <MappingFragment StoreEntitySet="TB_rol">
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="nombre_rol" ColumnName="nombre_rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_usuario">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_usuario">
+              <MappingFragment StoreEntitySet="TB_usuario">
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="cedula" ColumnName="cedula" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioInicioSesion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioInicioSesion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_RegistrarError" FunctionName="BD_LENModel.Store.SP_RegistrarError" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
