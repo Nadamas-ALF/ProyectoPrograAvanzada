@@ -22,7 +22,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         {
             if (Session["IdUsuario"] != null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Principal", "Home");
             }
 
             return View(new InicioSesionModel());
@@ -60,10 +60,21 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 Session["IdEstado"] = Usuario.IdEstado;
                 Session["NombreEstado"] = Usuario.NombreEstado;
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Principal", "Home");
             }
         }
 
+
+        [HttpGet]
+        public ActionResult Principal()
+        {
+            if (Session["IdUsuario"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            return View();
+        }
 
         public ActionResult About()
         {

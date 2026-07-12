@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Acceso al sistema LEN">
+
+    <title>@ViewBag.Title | LEN</title>
+
+    <link rel="stylesheet"
+          href="@Url.Content("~/Content/bootstrap.min.css")">
+
+    <link rel="stylesheet"
+          href="@Url.Content("~/Content/bootstrap-icons/bootstrap-icons.css")">
+
+    <link rel="stylesheet"
+          href="@Url.Content("~/Content/ExternalStyle.css")">
+
+    @RenderSection("Estilos", required: false)
+</head>
+
+<body class="auth-body">
+
+    <button class="icon-button theme-toggle auth-theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-label="Cambiar tema"
+            title="Cambiar tema">
+
+        <i class="bi bi-moon-stars"
+           data-theme-icon
+           aria-hidden="true"></i>
+    </button>
+
+    <main class="auth-page">
+        @RenderBody()
+    </main>
+
+    <script src="@Url.Content("~/Scripts/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/main.js")"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
