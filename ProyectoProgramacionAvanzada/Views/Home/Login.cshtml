@@ -1,0 +1,122 @@
+﻿@model ProyectoProgramacionAvanzada.Models.InicioSesionModel
+
+@{
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel Principal de authentication">
+    <title>Login | LEN</title>
+
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/Content/ExternalStyle.css">
+</head>
+
+<body class="auth-body">
+    <button class="icon-button theme-toggle auth-theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme" title="Switch color theme">
+        <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
+    </button>
+    <main class="auth-page">
+        <section class="auth-card">
+            <a class="auth-brand" href="index.html"><span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span><span><strong>Panel de Administración</strong><small>Gestiona productos y pedidos desde un solo lugar.</small></span></a>
+
+            @using (Html.BeginForm("Login", "Home", FormMethod.Post, new
+            {
+                @class = "needs-validation",
+                novalidate = "novalidate"
+            }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="mb-4">
+                    <p class="eyebrow mb-3">Acceso Seguro</p>
+                    <h1 class="h3 mb-1">Inicio de Sesion</h1>
+                </div>
+
+                if (ViewData.ModelState[string.Empty] != null &&
+                ViewData.ModelState[string.Empty].Errors.Count > 0)
+                {
+                    @Html.ValidationSummary(
+                                      true,
+                                      "",
+                                      new { @class = "alert alert-danger" }
+                                  )
+                }
+
+                <div class="mb-3">
+                    @Html.LabelFor(
+                                                      Modelo => Modelo.Email,
+                                                      new { @class = "form-label" }
+                                                  )
+
+                    @Html.TextBoxFor(
+                                                      Modelo => Modelo.Email,
+                                                      new
+                                                      {
+                                                          @class = "form-control",
+                                                          type = "email",
+                                                          autocomplete = "email",
+                                                          placeholder = "correo@ejemplo.com"
+                                                      }
+                                                  )
+
+                    @Html.ValidationMessageFor(
+                                                      Modelo => Modelo.Email,
+                                                      "",
+                                                      new { @class = "text-danger" }
+                                                  )
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between">
+                        @Html.LabelFor(
+                                                          Modelo => Modelo.Contrasenna,
+                                                          "Contraseña",
+                                                          new { @class = "form-label" }
+                                                      )
+
+                        <a class="small fw-semibold"
+                           href="@Url.Action("ForgotPassword", "Home")">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+
+                    @Html.PasswordFor(
+                                                      Modelo => Modelo.Contrasenna,
+                                                      new
+                                                      {
+                                                          @class = "form-control",
+                                                          autocomplete = "current-password"
+                                                      }
+                                                  )
+
+                    @Html.ValidationMessageFor(
+                                                      Modelo => Modelo.Contrasenna,
+                                                      "",
+                                                      new { @class = "text-danger" }
+                                                  )
+                </div>
+
+                <button class="btn btn-primary w-100"
+                        type="submit">
+                    <i class="bi bi-box-arrow-in-right"
+                       aria-hidden="true"></i>
+
+                    Iniciar Sesión
+                </button>
+            }
+
+            <div class="auth-footer">No tiene una cuenta? <a href="register.html">Registrarse</a></div>
+        </section>
+    </main>
+
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+</body>
+</html>

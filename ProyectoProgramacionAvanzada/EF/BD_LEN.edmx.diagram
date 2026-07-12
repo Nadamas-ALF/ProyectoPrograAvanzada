@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5a51b5dd79a54750af83fd926f6ba3f8" Name="Diagram1">
+        <EntityTypeShape EntityType="BD_LENModel.TB_canton" Width="1.5" PointX="1.5" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_carrito" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_categoria" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_detalle_carrito" Width="1.5" PointX="10.5" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_detalle_pedido" Width="1.5" PointX="12.5" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_direccion_envio" Width="1.5" PointX="6" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_distrito" Width="1.5" PointX="3.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_error" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_estado" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_factura" Width="1.5" PointX="13.5" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_imagen_producto" Width="1.5" PointX="7.5" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_metodo_pago" Width="1.5" PointX="3" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_pago" Width="1.5" PointX="12.5" PointY="18.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_pedido" Width="1.5" PointX="10.25" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_producto" Width="1.5" PointX="5.25" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_provincia" Width="1.5" PointX="1.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_rol" Width="1.5" PointX="5.75" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_LENModel.TB_usuario" Width="1.5" PointX="8" PointY="12.875" IsExpanded="true" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_canton_TB_provincia" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_distrito_TB_canton" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_carrito_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_carrito_TB_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_detalle_carrito_TB_carrito" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_categoria_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_producto_TB_categoria" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_detalle_carrito_TB_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_detalle_pedido_TB_pedido" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_detalle_pedido_TB_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_direccion_envio_TB_distrito" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_direccion_envio_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_direccion_envio_TB_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_pedido_TB_direccion_envio" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_factura_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_imagen_producto_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_metodo_pago_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_pago_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_pedido_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_producto_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_usuario_TB_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_factura_TB_pedido" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_imagen_producto_TB_producto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_pago_TB_metodo_pago" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_pago_TB_pedido" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_pedido_TB_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_LENModel.FK_TB_usuario_TB_rol" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

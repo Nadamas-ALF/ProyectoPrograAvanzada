@@ -122,7 +122,7 @@
     </div>
 
     @*header------------------------------------------------*@
-<header id="header" class="site-header text-black">
+    <header id="header" class="site-header text-black">
 
         <div class="header-top border-bottom py-2">
             <div class="container-lg">
@@ -161,7 +161,7 @@
                     </div>
 
 
-                   
+
                     <div class="col d-none d-md-block">
                         <p class="text-center text-black m-0">
                             <strong>Oferta especial</strong>: Envío gratis en compras mayores a $100
@@ -177,7 +177,7 @@
                                 <a href="#">Carrito</a>
                             </li>
                             <li>
-                                <a href="#">Iniciar sesión</a>
+                                <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
                             </li>
                         </ul>
                     </div>
@@ -248,12 +248,12 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="index.html">Blog</a>
-                                    </li>                                 
+                                    </li>
                                     <li>
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#modallong" class="dropdown-item">Carrito</a>
                                     </li>
                                     <li>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modallogin" class="dropdown-item">Iniciar sesión</a>
+                                        <a href="@Url.Action("Login", "Home")" class="dropdown-item">Iniciar sesión</a>
                                     </li>
                                 </ul>
                             </li>
@@ -264,7 +264,7 @@
                 <div class="user-items ps-0 ps-md-5">
                     <ul class="d-flex justify-content-end list-unstyled align-item-center m-0">
                         <li class="pe-3">
-                            <a href="login" data-bs-toggle="modal" data-bs-target="#modallogin" class="border-0">
+                            <a href="@Url.Action("Login", "Home")" class="border-0" aria-label="Iniciar sesión">
                                 <svg class="user" width="24" height="24">
                                     <use xlink:href="#user"></use>
                                 </svg>
@@ -289,14 +289,14 @@
             </div>
         </nav>
 
-</header>
+    </header>
 
 
     @RenderBody()
 
 
     @*Footer --------------------------------------------*@
-<footer id="footer" class="py-5 border-top">
+    <footer id="footer" class="py-5 border-top">
         <div class="container-lg">
             <div class="row">
                 <div class="col-lg-2 pb-3">
@@ -327,7 +327,7 @@
                         </ul>
                     </div>
                 </div>
-   
+
 
                 <div class="col-lg-2 pb-3">
                     <div class="footer-menu">
@@ -343,7 +343,7 @@
                                 <a href="#">Más vendidos</a>
                             </li>
                             <li class="pb-2">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modallogin">Iniciar sesión</a>
+                                <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
                             </li>
                             <li class="pb-2">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modallong">Carrito</a>
@@ -378,7 +378,7 @@
                 </div>
             </div>
         </div>
-</footer>
+    </footer>
     <script src="~/Scripts/jquery-1.11.0.min.js"></script>
     <script src="~/Scripts/plugins.js"></script>
     <script src="~/Scripts/script.js"></script>
