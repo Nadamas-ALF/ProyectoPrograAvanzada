@@ -106,6 +106,106 @@ namespace ProyectoProgramacionAvanzada.Controllers
             return RedirectToAction("Login", "Home");
         }
 
+        [HttpGet]
+        public ActionResult Registro()
+        {
+            if (Session["IdUsuario"] != null)
+            {
+                return RedirectToAction("Principal");
+            }
+
+            return View(new UsuarioModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Registro(UsuarioModel Modelo)
+        {
+            ModelState.Remove("IdRol");
+            ModelState.Remove("IdEstado");
+            ModelState.Remove("FechaRegistro");
+            ModelState.Remove("NombreRol");
+            ModelState.Remove("NombreEstado");
+
+            if (string.IsNullOrWhiteSpace(Modelo.Contrasenna))
+            {
+                ModelState.AddModelError(
+                    "Contrasenna",
+                    "La contraseña es obligatoria."
+                );
+            }
+
+            if (string.IsNullOrWhiteSpace(Modelo.ConfirmarContrasenna))
+            {
+                ModelState.AddModelError(
+                    "ConfirmarContrasenna",
+                    "Debe confirmar la contraseña."
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(Modelo.Contrasenna) &&
+                Modelo.Contrasenna.Length < 8)
+            {
+                ModelState.AddModelError(
+                    "Contrasenna",
+                    "La contraseña debe tener al menos 8 caracteres."
+                );
+            }
+
+            if (!string.Equals(
+                Modelo.Contrasenna,
+                Modelo.ConfirmarContrasenna,
+                StringComparison.Ordinal))
+            {
+                ModelState.AddModelError(
+                    "ConfirmarContrasenna",
+                    "Las contraseñas no coinciden."
+                );
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(Modelo);
+            }
+
+            try
+            {
+                using (var Servicio = new UsuarioService())
+                {
+                    string Mensaje =
+                        Servicio.RegistrarUsuario(Modelo);
+
+                    TempData["MensajeExito"] = Mensaje;
+                }
+
+                return RedirectToAction("Login");
+            }
+            catch (InvalidOperationException Excepcion)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    Excepcion.Message
+                );
+
+                return View(Modelo);
+            }
+            catch (Exception Excepcion)
+            {
+                RegistrarError(
+                    "HomeController",
+                    "Registro",
+                    Excepcion,
+                    Modelo.Email
+                );
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "No fue posible crear la cuenta. Intente nuevamente."
+                );
+
+                return View(Modelo);
+            }
+        }
 
 
         public ActionResult About()
@@ -127,10 +227,145 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [HttpGet]
         public ActionResult ForgotPassword()
         {
-            ViewBag.Message = "Recuperar acceso a la cuenta.";
+            if (Session["IdUsuario"] != null)
+            {
+                return RedirectToAction("Principal");
+            }
 
-            return View();
+            return View(new UsuarioModel());
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(UsuarioModel Modelo)
+        {
+            ModelState.Clear();
+
+            if (string.IsNullOrWhiteSpace(Modelo.Email))
+            {
+                ModelState.AddModelError(
+                    "Email",
+                    "El correo electrónico es obligatorio."
+                );
+
+                return View(Modelo);
+            }
+
+            if (!new System.ComponentModel.DataAnnotations
+                .EmailAddressAttribute()
+                .IsValid(Modelo.Email))
+            {
+                ModelState.AddModelError(
+                    "Email",
+                    "Ingrese un correo electrónico válido."
+                );
+
+                return View(Modelo);
+            }
+
+            try
+            {
+                using (var Servicio = new UsuarioService())
+                {
+                    SP_ConsultarUsuarioRecuperacion_Result Usuario =
+                        Servicio.ConsultarUsuarioRecuperacion(
+                            Modelo.Email
+                        );
+
+                    /*
+                     * Se muestra el mismo mensaje exista o no el correo.
+                     * Esto evita revelar qué correos están registrados.
+                     */
+                    if (Usuario != null)
+                    {
+                        string ContrasennaTemporal =
+                            Servicio.GenerarContrasennaTemporal();
+
+                        int VigenciaMinutos = int.Parse(
+                            System.Configuration
+                                .ConfigurationManager
+                                .AppSettings["VigenciaMinutos"]
+                        );
+
+                        DateTime Vigencia =
+                            DateTime.Now.AddMinutes(
+                                VigenciaMinutos
+                            );
+
+                        Servicio.ActualizarContrasennaTemporal(
+                            Usuario.IdUsuario,
+                            ContrasennaTemporal,
+                            Vigencia
+                        );
+
+                        string RutaHtml = System.IO.Path.Combine(
+                            AppDomain.CurrentDomain.BaseDirectory,
+                            "Content",
+                            "Correos",
+                            "RecuperacionContrasenna.html"
+                        );
+
+                        string Contenido =
+                            System.IO.File.ReadAllText(
+                                RutaHtml
+                            );
+
+                        Contenido = Contenido.Replace(
+                            "{{NOMBRE}}",
+                            Usuario.Nombre
+                        );
+
+                        Contenido = Contenido.Replace(
+                            "{{PASSWORD}}",
+                            ContrasennaTemporal
+                        );
+
+                        Contenido = Contenido.Replace(
+                            "{{MINUTOS}}",
+                            VigenciaMinutos.ToString()
+                        );
+
+                        Contenido = Contenido.Replace(
+                            "{{ANNO}}",
+                            DateTime.Now.Year.ToString()
+                        );
+
+                        var ServicioCorreo =
+                            new CorreoService();
+
+                        ServicioCorreo.EnviarCorreo(
+                            Usuario.Email,
+                            "Recuperación de acceso - LEN",
+                            Contenido
+                        );
+                    }
+                }
+
+                TempData["MensajeExito"] =
+                    "Si el correo está asociado a una cuenta activa, " +
+                    "recibirás las instrucciones de recuperación.";
+
+                return RedirectToAction("Login");
+            }
+            catch (Exception Excepcion)
+            {
+                RegistrarError(
+                    "HomeController",
+                    "ForgotPassword",
+                    Excepcion,
+                    Modelo.Email
+                );
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "No fue posible procesar la recuperación. " +
+                    "Intente nuevamente."
+                );
+
+                return View(Modelo);
+            }
+        }
+
 
         private void RegistrarError(
             string Origen,

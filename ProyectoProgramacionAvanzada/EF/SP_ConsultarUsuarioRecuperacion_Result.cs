@@ -11,18 +11,11 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_ConsultarUsuarioInicioSesion_Result
+    public partial class SP_ConsultarUsuarioRecuperacion_Result
     {
         public int IdUsuario { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Email { get; set; }
-        public string Contrasenna { get; set; }
-        public int IdRol { get; set; }
-        public string NombreRol { get; set; }
-        public int IdEstado { get; set; }
-        public string NombreEstado { get; set; }
-        public bool TieneContrasennaTemporal { get; set; }
-        public Nullable<System.DateTime> VigenciaContrasennaTemporal { get; set; }
     }
 }

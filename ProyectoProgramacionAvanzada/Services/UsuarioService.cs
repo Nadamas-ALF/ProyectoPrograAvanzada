@@ -18,7 +18,7 @@ namespace ProyectoProgramacionAvanzada.Services
         }
 
         public SP_ConsultarUsuarioInicioSesion_Result ValidarCredenciales(
-            InicioSesionModel Modelo)
+        InicioSesionModel Modelo)
         {
             string EmailNormalizado = Modelo.Email.Trim();
 
@@ -37,6 +37,16 @@ namespace ProyectoProgramacionAvanzada.Services
                 StringComparison.OrdinalIgnoreCase))
             {
                 return null;
+            }
+
+            // Validar que la contraseña temporal no esté vencida
+           if (Usuario.TieneContrasennaTemporal == true)
+            {
+                if (!Usuario.VigenciaContrasennaTemporal.HasValue ||
+                    Usuario.VigenciaContrasennaTemporal.Value < DateTime.Now)
+                {
+                    return null;
+                }
             }
 
             bool ContrasennaValida = BCrypt.Net.BCrypt.Verify(
@@ -311,6 +321,123 @@ namespace ProyectoProgramacionAvanzada.Services
                 .ToList();
         }
 
+
+        public string RegistrarUsuario(UsuarioModel Modelo)
+        {
+            string HashContrasenna =
+                BCrypt.Net.BCrypt.HashPassword(Modelo.Contrasenna);
+
+            SP_RegistrarUsuario_Result Resultado = Contexto
+                .SP_RegistrarUsuario(
+                    Modelo.Nombre,
+                    Modelo.Apellido,
+                    Modelo.Cedula,
+                    Modelo.Telefono,
+                    Modelo.Email,
+                    HashContrasenna
+                )
+                .FirstOrDefault();
+
+            if (Resultado == null)
+            {
+                return "No fue posible registrar el usuario.";
+            }
+
+            if (Resultado.Exitoso != true)
+            {
+                throw new InvalidOperationException(
+                    Resultado.Mensaje
+                );
+            }
+
+            return Resultado.Mensaje;
+        }
+
+        public SP_ConsultarUsuarioRecuperacion_Result
+    ConsultarUsuarioRecuperacion(string Email)
+        {
+            string EmailNormalizado =
+                Email.Trim().ToLower();
+
+            return Contexto
+                .SP_ConsultarUsuarioRecuperacion(
+                    EmailNormalizado
+                )
+                .FirstOrDefault();
+        }
+
+
+        public string ActualizarContrasennaTemporal(
+    int IdUsuario,
+    string ContrasennaTemporal,
+    DateTime Vigencia)
+        {
+            string HashContrasenna =
+                BCrypt.Net.BCrypt.HashPassword(
+                    ContrasennaTemporal
+                );
+
+            SP_ActualizarContrasennaTemporal_Result Resultado =
+                Contexto
+                    .SP_ActualizarContrasennaTemporal(
+                        IdUsuario,
+                        HashContrasenna,
+                        Vigencia
+                    )
+                    .FirstOrDefault();
+
+            if (Resultado == null)
+            {
+                throw new InvalidOperationException(
+                    "No fue posible generar la contraseña temporal."
+                );
+            }
+
+            if (Resultado.Exitoso != true)
+            {
+                throw new InvalidOperationException(
+                    Resultado.Mensaje
+                );
+            }
+
+            return Resultado.Mensaje;
+        }
+
+
+        public string GenerarContrasennaTemporal()
+        {
+            const string Caracteres =
+                "ABCDEFGHJKLMNPQRSTUVWXYZ" +
+                "abcdefghijkmnopqrstuvwxyz" +
+                "23456789" +
+                "!@$%";
+
+            byte[] Valores = new byte[10];
+
+            using (
+                var Generador =
+                    System.Security.Cryptography
+                        .RandomNumberGenerator.Create()
+            )
+            {
+                Generador.GetBytes(Valores);
+            }
+
+            char[] Resultado = new char[Valores.Length];
+
+            for (int Indice = 0;
+                 Indice < Valores.Length;
+                 Indice++)
+            {
+                Resultado[Indice] =
+                    Caracteres[
+                        Valores[Indice] %
+                        Caracteres.Length
+                    ];
+            }
+
+            return new string(Resultado);
+        }
         public void Dispose()
         {
             Contexto.Dispose();

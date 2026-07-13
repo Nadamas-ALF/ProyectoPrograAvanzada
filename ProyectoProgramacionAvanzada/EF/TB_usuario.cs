@@ -32,6 +32,8 @@ namespace ProyectoProgramacionAvanzada.EF
         public int id_rol { get; set; }
         public int id_estado { get; set; }
         public System.DateTime fecha_registro { get; set; }
+        public bool tiene_contrasenna_temporal { get; set; }
+        public Nullable<System.DateTime> vigencia_contrasenna_temporal { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TB_carrito> TB_carrito { get; set; }
