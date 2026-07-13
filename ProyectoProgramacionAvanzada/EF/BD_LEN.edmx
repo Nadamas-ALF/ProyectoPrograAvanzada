@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="TB_canton">
           <Key>
             <PropertyRef Name="id_canton" />
@@ -194,6 +194,8 @@
           <Property Name="id_rol" Type="int" Nullable="false" />
           <Property Name="id_estado" Type="int" Nullable="false" />
           <Property Name="fecha_registro" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="tiene_contrasenna_temporal" Type="bit" Nullable="false" />
+          <Property Name="vigencia_contrasenna_temporal" Type="datetime2" Precision="0" />
         </EntityType>
         <Association Name="FK_TB_canton_TB_provincia">
           <End Role="TB_provincia" Type="Self.TB_provincia" Multiplicity="1" />
@@ -519,6 +521,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="SP_ActualizarContrasennaTemporal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="Contrasenna" Type="nvarchar" Mode="In" />
+          <Parameter Name="VigenciaContrasennaTemporal" Type="datetime2" Mode="In" />
+        </Function>
         <Function Name="SP_ActualizarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdDireccion" Type="int" Mode="In" />
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -562,6 +569,9 @@
         <Function Name="SP_ConsultarUsuarioPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_ConsultarUsuarioRecuperacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="SP_DesactivarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdDireccion" Type="int" Mode="In" />
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -584,6 +594,14 @@
           <Parameter Name="UsuarioSistema" Type="nvarchar" Mode="In" />
           <Parameter Name="Url" Type="nvarchar" Mode="In" />
           <Parameter Name="StackTrace" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_RegistrarUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="Apellido" Type="nvarchar" Mode="In" />
+          <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
+          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="Contrasenna" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_RestablecerContrasennaUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -717,7 +735,8 @@
             <End Role="TB_usuario" EntitySet="TB_usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BD_LENModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -959,6 +978,8 @@
           <Property Name="id_rol" Type="Int32" Nullable="false" />
           <Property Name="id_estado" Type="Int32" Nullable="false" />
           <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="tiene_contrasenna_temporal" Type="Boolean" Nullable="false" />
+          <Property Name="vigencia_contrasenna_temporal" Type="DateTime" Precision="0" />
           <NavigationProperty Name="TB_carrito" Relationship="Self.FK_TB_carrito_TB_usuario" FromRole="TB_usuario" ToRole="TB_carrito" />
           <NavigationProperty Name="TB_direccion_envio" Relationship="Self.FK_TB_direccion_envio_TB_usuario" FromRole="TB_usuario" ToRole="TB_direccion_envio" />
           <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_usuario_TB_estado" FromRole="TB_usuario" ToRole="TB_estado" />
@@ -1416,18 +1437,10 @@
             <End Role="TB_rol" EntitySet="TB_rol" />
             <End Role="TB_usuario" EntitySet="TB_usuario" />
           </AssociationSet>
-          <FunctionImport Name="SP_ConsultarUsuarioInicioSesion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result)">
-          <Parameter Name="Email" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SP_RegistrarError">
-            <Parameter Name="Origen" Mode="In" Type="String" />
-            <Parameter Name="Metodo" Mode="In" Type="String" />
-            <Parameter Name="MensajeError" Mode="In" Type="String" />
-            <Parameter Name="DetalleError" Mode="In" Type="String" />
-            <Parameter Name="LineaError" Mode="In" Type="Int32" />
-            <Parameter Name="UsuarioSistema" Mode="In" Type="String" />
-            <Parameter Name="Url" Mode="In" Type="String" />
-            <Parameter Name="StackTrace" Mode="In" Type="String" />
+          <FunctionImport Name="SP_ActualizarContrasennaTemporal" ReturnType="Collection(BD_LENModel.SP_ActualizarContrasennaTemporal_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+            <Parameter Name="VigenciaContrasennaTemporal" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ActualizarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_ActualizarDireccionUsuario_Result)">
             <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
@@ -1450,23 +1463,30 @@
             <Parameter Name="IdEstado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarCantonesPorProvincia" ReturnType="Collection(BD_LENModel.SP_ConsultarCantonesPorProvincia_Result)">
-          <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
+            <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarDireccionesUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionesUsuario_Result)">
-          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarDireccionPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionPorId_Result)">
             <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarDistritosPorCanton" ReturnType="Collection(BD_LENModel.SP_ConsultarDistritosPorCanton_Result)">
-          <Parameter Name="IdCanton" Mode="In" Type="Int32" />
+            <Parameter Name="IdCanton" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarEstados" ReturnType="Collection(BD_LENModel.SP_ConsultarEstados_Result)" />
+          <FunctionImport Name="SP_ConsultarEstadosUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarEstadosUsuario_Result)" />
           <FunctionImport Name="SP_ConsultarProvincias" ReturnType="Collection(BD_LENModel.SP_ConsultarProvincias_Result)" />
           <FunctionImport Name="SP_ConsultarRoles" ReturnType="Collection(BD_LENModel.SP_ConsultarRoles_Result)" />
+          <FunctionImport Name="SP_ConsultarUsuarioInicioSesion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result)">
+            <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="SP_ConsultarUsuarioPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioPorId_Result)">
-          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarUsuarioRecuperacion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result)">
+            <Parameter Name="Email" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_DesactivarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_DesactivarDireccionUsuario_Result)">
             <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
@@ -1481,22 +1501,32 @@
             <Parameter Name="NombreDestinatario" Mode="In" Type="String" />
             <Parameter Name="EsPrincipal" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="SP_RegistrarError">
+            <Parameter Name="Origen" Mode="In" Type="String" />
+            <Parameter Name="Metodo" Mode="In" Type="String" />
+            <Parameter Name="MensajeError" Mode="In" Type="String" />
+            <Parameter Name="DetalleError" Mode="In" Type="String" />
+            <Parameter Name="LineaError" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioSistema" Mode="In" Type="String" />
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="StackTrace" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RegistrarUsuario" ReturnType="Collection(BD_LENModel.SP_RegistrarUsuario_Result)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="SP_RestablecerContrasennaUsuario" ReturnType="Collection(BD_LENModel.SP_RestablecerContrasennaUsuario_Result)">
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
             <Parameter Name="Contrasenna" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="SP_ConsultarEstadosUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarEstadosUsuario_Result)" />
         </EntityContainer>
-        <ComplexType Name="SP_ConsultarUsuarioInicioSesion_Result">
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="IdRol" Nullable="false" />
-          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        <ComplexType Name="SP_ActualizarContrasennaTemporal_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="40" />
         </ComplexType>
         <ComplexType Name="SP_ActualizarDireccionUsuario_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
@@ -1552,6 +1582,10 @@
           <Property Type="Int32" Name="IdEstado" Nullable="false" />
           <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="SP_ConsultarEstadosUsuario_Result">
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
         <ComplexType Name="SP_ConsultarProvincias_Result">
           <Property Type="Int32" Name="IdProvincia" Nullable="false" />
           <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
@@ -1559,6 +1593,19 @@
         <ComplexType Name="SP_ConsultarRoles_Result">
           <Property Type="Int32" Name="IdRol" Nullable="false" />
           <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarUsuarioInicioSesion_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="TieneContrasennaTemporal" Nullable="false" />
+          <Property Type="DateTime" Name="VigenciaContrasennaTemporal" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_ConsultarUsuarioPorId_Result">
           <Property Type="Int32" Name="IdUsuario" Nullable="false" />
@@ -1573,6 +1620,12 @@
           <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
           <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="SP_ConsultarUsuarioRecuperacion_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+        </ComplexType>
         <ComplexType Name="SP_DesactivarDireccionUsuario_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="28" />
@@ -1582,13 +1635,14 @@
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="40" />
           <Property Type="Int32" Name="IdDireccion" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="SP_RegistrarUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="SP_RestablecerContrasennaUsuario_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="26" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarEstadosUsuario_Result">
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1801,25 +1855,19 @@
                 <ScalarProperty Name="id_rol" ColumnName="id_rol" />
                 <ScalarProperty Name="id_estado" ColumnName="id_estado" />
                 <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="tiene_contrasenna_temporal" ColumnName="tiene_contrasenna_temporal" />
+                <ScalarProperty Name="vigencia_contrasenna_temporal" ColumnName="vigencia_contrasenna_temporal" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioInicioSesion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioInicioSesion">
+          <FunctionImportMapping FunctionImportName="SP_ActualizarContrasennaTemporal" FunctionName="BD_LENModel.Store.SP_ActualizarContrasennaTemporal">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
-                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarContrasennaTemporal_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_RegistrarError" FunctionName="BD_LENModel.Store.SP_RegistrarError" />
           <FunctionImportMapping FunctionImportName="SP_ActualizarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_ActualizarDireccionUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarDireccionUsuario_Result">
@@ -1902,6 +1950,14 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarEstadosUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarEstadosUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstadosUsuario_Result">
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_ConsultarProvincias" FunctionName="BD_LENModel.Store.SP_ConsultarProvincias">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarProvincias_Result">
@@ -1915,6 +1971,23 @@
               <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarRoles_Result">
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
                 <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioInicioSesion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioInicioSesion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="TieneContrasennaTemporal" ColumnName="TieneContrasennaTemporal" />
+                <ScalarProperty Name="VigenciaContrasennaTemporal" ColumnName="VigenciaContrasennaTemporal" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1935,6 +2008,16 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioRecuperacion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioRecuperacion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_DesactivarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_DesactivarDireccionUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_DesactivarDireccionUsuario_Result">
@@ -1952,19 +2035,21 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_RegistrarError" FunctionName="BD_LENModel.Store.SP_RegistrarError" />
+          <FunctionImportMapping FunctionImportName="SP_RegistrarUsuario" FunctionName="BD_LENModel.Store.SP_RegistrarUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_RegistrarUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_RestablecerContrasennaUsuario" FunctionName="BD_LENModel.Store.SP_RestablecerContrasennaUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_RestablecerContrasennaUsuario_Result">
                 <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarEstadosUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarEstadosUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstadosUsuario_Result">
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

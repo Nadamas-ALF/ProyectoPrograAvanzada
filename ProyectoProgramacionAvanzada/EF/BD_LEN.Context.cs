@@ -46,50 +46,21 @@ namespace ProyectoProgramacionAvanzada.EF
         public virtual DbSet<TB_rol> TB_rol { get; set; }
         public virtual DbSet<TB_usuario> TB_usuario { get; set; }
     
-        public virtual ObjectResult<SP_ConsultarUsuarioInicioSesion_Result> SP_ConsultarUsuarioInicioSesion(string email)
+        public virtual ObjectResult<SP_ActualizarContrasennaTemporal_Result> SP_ActualizarContrasennaTemporal(Nullable<int> idUsuario, string contrasenna, Nullable<System.DateTime> vigenciaContrasennaTemporal)
         {
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioInicioSesion_Result>("SP_ConsultarUsuarioInicioSesion", emailParameter);
-        }
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
     
-        public virtual int SP_RegistrarError(string origen, string metodo, string mensajeError, string detalleError, Nullable<int> lineaError, string usuarioSistema, string url, string stackTrace)
-        {
-            var origenParameter = origen != null ?
-                new ObjectParameter("Origen", origen) :
-                new ObjectParameter("Origen", typeof(string));
+            var vigenciaContrasennaTemporalParameter = vigenciaContrasennaTemporal.HasValue ?
+                new ObjectParameter("VigenciaContrasennaTemporal", vigenciaContrasennaTemporal) :
+                new ObjectParameter("VigenciaContrasennaTemporal", typeof(System.DateTime));
     
-            var metodoParameter = metodo != null ?
-                new ObjectParameter("Metodo", metodo) :
-                new ObjectParameter("Metodo", typeof(string));
-    
-            var mensajeErrorParameter = mensajeError != null ?
-                new ObjectParameter("MensajeError", mensajeError) :
-                new ObjectParameter("MensajeError", typeof(string));
-    
-            var detalleErrorParameter = detalleError != null ?
-                new ObjectParameter("DetalleError", detalleError) :
-                new ObjectParameter("DetalleError", typeof(string));
-    
-            var lineaErrorParameter = lineaError.HasValue ?
-                new ObjectParameter("LineaError", lineaError) :
-                new ObjectParameter("LineaError", typeof(int));
-    
-            var usuarioSistemaParameter = usuarioSistema != null ?
-                new ObjectParameter("UsuarioSistema", usuarioSistema) :
-                new ObjectParameter("UsuarioSistema", typeof(string));
-    
-            var urlParameter = url != null ?
-                new ObjectParameter("Url", url) :
-                new ObjectParameter("Url", typeof(string));
-    
-            var stackTraceParameter = stackTrace != null ?
-                new ObjectParameter("StackTrace", stackTrace) :
-                new ObjectParameter("StackTrace", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RegistrarError", origenParameter, metodoParameter, mensajeErrorParameter, detalleErrorParameter, lineaErrorParameter, usuarioSistemaParameter, urlParameter, stackTraceParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarContrasennaTemporal_Result>("SP_ActualizarContrasennaTemporal", idUsuarioParameter, contrasennaParameter, vigenciaContrasennaTemporalParameter);
         }
     
         public virtual ObjectResult<SP_ActualizarDireccionUsuario_Result> SP_ActualizarDireccionUsuario(Nullable<int> idDireccion, Nullable<int> idUsuario, Nullable<int> idDistrito, string direccionExacta, string referencia, string telefonoContacto, string nombreDestinatario, Nullable<bool> esPrincipal)
@@ -211,6 +182,11 @@ namespace ProyectoProgramacionAvanzada.EF
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstados_Result>("SP_ConsultarEstados");
         }
     
+        public virtual ObjectResult<SP_ConsultarEstadosUsuario_Result> SP_ConsultarEstadosUsuario()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstadosUsuario_Result>("SP_ConsultarEstadosUsuario");
+        }
+    
         public virtual ObjectResult<SP_ConsultarProvincias_Result> SP_ConsultarProvincias()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarProvincias_Result>("SP_ConsultarProvincias");
@@ -221,6 +197,15 @@ namespace ProyectoProgramacionAvanzada.EF
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarRoles_Result>("SP_ConsultarRoles");
         }
     
+        public virtual ObjectResult<SP_ConsultarUsuarioInicioSesion_Result> SP_ConsultarUsuarioInicioSesion(string email)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioInicioSesion_Result>("SP_ConsultarUsuarioInicioSesion", emailParameter);
+        }
+    
         public virtual ObjectResult<SP_ConsultarUsuarioPorId_Result> SP_ConsultarUsuarioPorId(Nullable<int> idUsuario)
         {
             var idUsuarioParameter = idUsuario.HasValue ?
@@ -228,6 +213,15 @@ namespace ProyectoProgramacionAvanzada.EF
                 new ObjectParameter("IdUsuario", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioPorId_Result>("SP_ConsultarUsuarioPorId", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarUsuarioRecuperacion_Result> SP_ConsultarUsuarioRecuperacion(string email)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioRecuperacion_Result>("SP_ConsultarUsuarioRecuperacion", emailParameter);
         }
     
         public virtual ObjectResult<SP_DesactivarDireccionUsuario_Result> SP_DesactivarDireccionUsuario(Nullable<int> idDireccion, Nullable<int> idUsuario)
@@ -276,6 +270,72 @@ namespace ProyectoProgramacionAvanzada.EF
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_InsertarDireccionUsuario_Result>("SP_InsertarDireccionUsuario", idUsuarioParameter, idDistritoParameter, direccionExactaParameter, referenciaParameter, telefonoContactoParameter, nombreDestinatarioParameter, esPrincipalParameter);
         }
     
+        public virtual int SP_RegistrarError(string origen, string metodo, string mensajeError, string detalleError, Nullable<int> lineaError, string usuarioSistema, string url, string stackTrace)
+        {
+            var origenParameter = origen != null ?
+                new ObjectParameter("Origen", origen) :
+                new ObjectParameter("Origen", typeof(string));
+    
+            var metodoParameter = metodo != null ?
+                new ObjectParameter("Metodo", metodo) :
+                new ObjectParameter("Metodo", typeof(string));
+    
+            var mensajeErrorParameter = mensajeError != null ?
+                new ObjectParameter("MensajeError", mensajeError) :
+                new ObjectParameter("MensajeError", typeof(string));
+    
+            var detalleErrorParameter = detalleError != null ?
+                new ObjectParameter("DetalleError", detalleError) :
+                new ObjectParameter("DetalleError", typeof(string));
+    
+            var lineaErrorParameter = lineaError.HasValue ?
+                new ObjectParameter("LineaError", lineaError) :
+                new ObjectParameter("LineaError", typeof(int));
+    
+            var usuarioSistemaParameter = usuarioSistema != null ?
+                new ObjectParameter("UsuarioSistema", usuarioSistema) :
+                new ObjectParameter("UsuarioSistema", typeof(string));
+    
+            var urlParameter = url != null ?
+                new ObjectParameter("Url", url) :
+                new ObjectParameter("Url", typeof(string));
+    
+            var stackTraceParameter = stackTrace != null ?
+                new ObjectParameter("StackTrace", stackTrace) :
+                new ObjectParameter("StackTrace", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RegistrarError", origenParameter, metodoParameter, mensajeErrorParameter, detalleErrorParameter, lineaErrorParameter, usuarioSistemaParameter, urlParameter, stackTraceParameter);
+        }
+    
+        public virtual ObjectResult<SP_RegistrarUsuario_Result> SP_RegistrarUsuario(string nombre, string apellido, string cedula, string telefono, string email, string contrasenna)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var apellidoParameter = apellido != null ?
+                new ObjectParameter("Apellido", apellido) :
+                new ObjectParameter("Apellido", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RegistrarUsuario_Result>("SP_RegistrarUsuario", nombreParameter, apellidoParameter, cedulaParameter, telefonoParameter, emailParameter, contrasennaParameter);
+        }
+    
         public virtual ObjectResult<SP_RestablecerContrasennaUsuario_Result> SP_RestablecerContrasennaUsuario(Nullable<int> idUsuario, string contrasenna)
         {
             var idUsuarioParameter = idUsuario.HasValue ?
@@ -287,11 +347,6 @@ namespace ProyectoProgramacionAvanzada.EF
                 new ObjectParameter("Contrasenna", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RestablecerContrasennaUsuario_Result>("SP_RestablecerContrasennaUsuario", idUsuarioParameter, contrasennaParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarEstadosUsuario_Result> SP_ConsultarEstadosUsuario()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstadosUsuario_Result>("SP_ConsultarEstadosUsuario");
         }
     }
 }

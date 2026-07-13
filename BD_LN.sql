@@ -547,13 +547,24 @@ BEGIN
         U.id_rol AS IdRol,
         R.nombre_rol AS NombreRol,
         U.id_estado AS IdEstado,
-        E.nombre_estado AS NombreEstado
+        E.nombre_estado AS NombreEstado,
+
+        U.tiene_contrasenna_temporal
+            AS TieneContrasennaTemporal,
+
+        U.vigencia_contrasenna_temporal
+            AS VigenciaContrasennaTemporal
+
     FROM dbo.TB_usuario AS U
+
     INNER JOIN dbo.TB_rol AS R
         ON R.id_rol = U.id_rol
+
     INNER JOIN dbo.TB_estado AS E
         ON E.id_estado = U.id_estado
-    WHERE U.email = LTRIM(RTRIM(@Email));
+
+    WHERE LOWER(LTRIM(RTRIM(U.email))) =
+          LOWER(LTRIM(RTRIM(@Email)));
 END;
 GO
 
@@ -1088,6 +1099,211 @@ BEGIN
 END;
 GO
 
+
+   /* ============================================================
+SP REGISTRAR USUARIO
+   ============================================================ */
+
+
+CREATE OR ALTER PROCEDURE dbo.SP_RegistrarUsuario
+    @Nombre NVARCHAR(100),
+    @Apellido NVARCHAR(100),
+    @Cedula NVARCHAR(20) = NULL,
+    @Telefono NVARCHAR(20) = NULL,
+    @Email NVARCHAR(150),
+    @Contrasenna NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @IdRolCliente INT;
+    DECLARE @IdEstadoActivo INT;
+
+    SET @Nombre = LTRIM(RTRIM(@Nombre));
+    SET @Apellido = LTRIM(RTRIM(@Apellido));
+    SET @Cedula = NULLIF(LTRIM(RTRIM(@Cedula)), '');
+    SET @Telefono = NULLIF(LTRIM(RTRIM(@Telefono)), '');
+    SET @Email = LOWER(LTRIM(RTRIM(@Email)));
+
+    SELECT @IdRolCliente = id_rol
+    FROM dbo.TB_rol
+    WHERE nombre_rol = N'Cliente';
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    IF @IdRolCliente IS NULL
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No se encontró el rol Cliente.' AS Mensaje,
+            CAST(NULL AS INT) AS IdUsuario;
+
+        RETURN;
+    END;
+
+    IF @IdEstadoActivo IS NULL
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No se encontró el estado Activo.' AS Mensaje,
+            CAST(NULL AS INT) AS IdUsuario;
+
+        RETURN;
+    END;
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM dbo.TB_usuario
+        WHERE LOWER(email) = @Email
+    )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El correo electrónico ya está registrado.' AS Mensaje,
+            CAST(NULL AS INT) AS IdUsuario;
+
+        RETURN;
+    END;
+
+    IF @Cedula IS NOT NULL
+       AND EXISTS
+       (
+           SELECT 1
+           FROM dbo.TB_usuario
+           WHERE cedula = @Cedula
+       )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'La cédula ya está registrada.' AS Mensaje,
+            CAST(NULL AS INT) AS IdUsuario;
+
+        RETURN;
+    END;
+
+    INSERT INTO dbo.TB_usuario
+    (
+        nombre,
+        apellido,
+        cedula,
+        telefono,
+        email,
+        contrasena,
+        id_rol,
+        id_estado
+    )
+    VALUES
+    (
+        @Nombre,
+        @Apellido,
+        @Cedula,
+        @Telefono,
+        @Email,
+        @Contrasenna,
+        @IdRolCliente,
+        @IdEstadoActivo
+    );
+
+    DECLARE @IdUsuario INT = SCOPE_IDENTITY();
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La cuenta fue creada correctamente.' AS Mensaje,
+        @IdUsuario AS IdUsuario;
+END;
+GO
+
+   /* ============================================================
+    CONSULTAR USUARIO RECUPERACION
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarUsuarioRecuperacion
+    @Email NVARCHAR(150)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SET @Email = LOWER(LTRIM(RTRIM(@Email)));
+
+    SELECT
+        U.id_usuario AS IdUsuario,
+        U.nombre AS Nombre,
+        U.apellido AS Apellido,
+        U.email AS Email
+    FROM dbo.TB_usuario AS U
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = U.id_estado
+    WHERE LOWER(U.email) = @Email
+      AND E.nombre_estado = N'Activo';
+END;
+GO
+
+
+   /* ============================================================
+    GUARDAR CONTRASENA TEMPORAL
+   ============================================================ */
+
+   CREATE OR ALTER PROCEDURE dbo.SP_ActualizarContrasennaTemporal
+    @IdUsuario INT,
+    @Contrasenna NVARCHAR(255),
+    @VigenciaContrasennaTemporal DATETIME2(0)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE dbo.TB_usuario
+    SET
+        contrasena = @Contrasenna,
+        tiene_contrasenna_temporal = 1,
+        vigencia_contrasenna_temporal =
+            @VigenciaContrasennaTemporal
+    WHERE id_usuario = @IdUsuario;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No fue posible actualizar la contraseña.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La contraseña temporal fue generada.' AS Mensaje;
+END;
+GO
+
+   /* ============================================================
+    CONTRASENA TEMPORAL
+   ============================================================ */
+
+IF COL_LENGTH(
+    'dbo.TB_usuario',
+    'tiene_contrasenna_temporal'
+) IS NULL
+BEGIN
+    ALTER TABLE dbo.TB_usuario
+    ADD tiene_contrasenna_temporal BIT NOT NULL
+        CONSTRAINT DF_TB_usuario_contrasenna_temporal
+        DEFAULT 0;
+END;
+GO
+
+IF COL_LENGTH(
+    'dbo.TB_usuario',
+    'vigencia_contrasenna_temporal'
+) IS NULL
+BEGIN
+    ALTER TABLE dbo.TB_usuario
+    ADD vigencia_contrasenna_temporal DATETIME2(0) NULL;
+END;
+GO
+
    /* ============================================================
    USUARIO ADMINISTRADOR
    ============================================================ */
@@ -1142,5 +1358,3 @@ INNER JOIN dbo.TB_estado E
     ON E.id_estado = U.id_estado
 WHERE U.email = N'edgardoasolano@gmail.com';
 
-
-SELECT * FROM TB_direccion_envio
