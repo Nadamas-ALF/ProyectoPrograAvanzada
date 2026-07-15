@@ -13,7 +13,7 @@ USE BD_LEN;
 GO
 
 /* ============================================================
-   TABLAS CATÁLOGO
+   TABLAS CATï¿½LOGO
    ============================================================ */
 
 CREATE TABLE dbo.TB_rol
@@ -71,7 +71,7 @@ WHERE cedula IS NOT NULL;
 GO
 
 /* ============================================================
-   UBICACIÓN COSTA RICA
+   UBICACIï¿½N COSTA RICA
    ============================================================ */
 
 CREATE TABLE dbo.TB_provincia
@@ -392,8 +392,8 @@ GO
 
 /* ============================================================
    TABLA DE ERRORES
-   Esta tabla no tiene relación con ninguna otra.
-   Se puede usar dentro de TRY/CATCH desde la aplicación.
+   Esta tabla no tiene relaciï¿½n con ninguna otra.
+   Se puede usar dentro de TRY/CATCH desde la aplicaciï¿½n.
    ============================================================ */
 
 CREATE TABLE dbo.TB_error
@@ -459,13 +459,13 @@ SELECT N'Entregado'
 WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_estado WHERE nombre_estado = N'Entregado');
 
 INSERT INTO dbo.TB_estado (nombre_estado)
-SELECT N'En preparación'
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_estado WHERE nombre_estado = N'En preparación');
+SELECT N'En preparaciï¿½n'
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_estado WHERE nombre_estado = N'En preparaciï¿½n');
 GO
 
 INSERT INTO dbo.TB_provincia (nombre_provincia)
-SELECT N'San José'
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'San José');
+SELECT N'San Josï¿½'
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'San Josï¿½');
 
 INSERT INTO dbo.TB_provincia (nombre_provincia)
 SELECT N'Alajuela'
@@ -488,8 +488,8 @@ SELECT N'Puntarenas'
 WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'Puntarenas');
 
 INSERT INTO dbo.TB_provincia (nombre_provincia)
-SELECT N'Limón'
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'Limón');
+SELECT N'Limï¿½n'
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'Limï¿½n');
 GO
 
 DECLARE @IdEstadoActivo INT;
@@ -498,8 +498,8 @@ FROM dbo.TB_estado
 WHERE nombre_estado = N'Activo';
 
 INSERT INTO dbo.TB_metodo_pago (nombre_metodo, id_estado)
-SELECT N'SINPE Móvil', @IdEstadoActivo
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_metodo_pago WHERE nombre_metodo = N'SINPE Móvil');
+SELECT N'SINPE Mï¿½vil', @IdEstadoActivo
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_metodo_pago WHERE nombre_metodo = N'SINPE Mï¿½vil');
 
 INSERT INTO dbo.TB_metodo_pago (nombre_metodo, id_estado)
 SELECT N'Transferencia bancaria', @IdEstadoActivo
@@ -526,6 +526,26 @@ GO
 
    SELECT * FROM TB_usuario;
 
+
+   /* ============================================================
+   Carrito
+   COLUMNAS DE CONTRASEï¿½A TEMPORAL (adelantadas)
+   ============================================================ */
+
+IF COL_LENGTH('dbo.TB_usuario', 'tiene_contrasenna_temporal') IS NULL
+BEGIN
+    ALTER TABLE dbo.TB_usuario
+    ADD tiene_contrasenna_temporal BIT NOT NULL
+        CONSTRAINT DF_TB_usuario_contrasenna_temporal DEFAULT 0;
+END;
+GO
+
+IF COL_LENGTH('dbo.TB_usuario', 'vigencia_contrasenna_temporal') IS NULL
+BEGIN
+    ALTER TABLE dbo.TB_usuario
+    ADD vigencia_contrasenna_temporal DATETIME2(0) NULL;
+END;
+GO
 
    /* ============================================================
    PROCEDIMIENTO ALMACENADO INICIO DE SESION
@@ -669,7 +689,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El correo electrónico ya está registrado.' AS Mensaje;
+            N'El correo electrï¿½nico ya estï¿½ registrado.' AS Mensaje;
 
         RETURN;
     END;
@@ -686,7 +706,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'La cédula ya está registrada.' AS Mensaje;
+            N'La cï¿½dula ya estï¿½ registrada.' AS Mensaje;
 
         RETURN;
     END;
@@ -706,7 +726,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontró el usuario.' AS Mensaje;
+            N'No se encontrï¿½ el usuario.' AS Mensaje;
 
         RETURN;
     END;
@@ -718,7 +738,7 @@ END;
 GO
 
   /* ============================================================
-  RESTABLECER CONTRASEÑA
+  RESTABLECER CONTRASEï¿½A
    ============================================================ */
    CREATE OR ALTER PROCEDURE dbo.SP_RestablecerContrasennaUsuario
     @IdUsuario INT,
@@ -735,14 +755,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontró el usuario.' AS Mensaje;
+            N'No se encontrï¿½ el usuario.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La contraseña fue restablecida correctamente.' AS Mensaje;
+        N'La contraseï¿½a fue restablecida correctamente.' AS Mensaje;
 END;
 GO
 
@@ -848,7 +868,7 @@ BEGIN
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La dirección fue agregada correctamente.' AS Mensaje,
+        N'La direcciï¿½n fue agregada correctamente.' AS Mensaje,
         @IdDireccion AS IdDireccion;
 END;
 GO
@@ -939,14 +959,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontró la dirección.' AS Mensaje;
+            N'No se encontrï¿½ la direcciï¿½n.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La dirección fue actualizada correctamente.' AS Mensaje;
+        N'La direcciï¿½n fue actualizada correctamente.' AS Mensaje;
 END;
 GO
 
@@ -977,14 +997,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontró la dirección.' AS Mensaje;
+            N'No se encontrï¿½ la direcciï¿½n.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La dirección fue desactivada correctamente.' AS Mensaje;
+        N'La direcciï¿½n fue desactivada correctamente.' AS Mensaje;
 END;
 GO
 
@@ -1138,7 +1158,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontró el rol Cliente.' AS Mensaje,
+            N'No se encontrï¿½ el rol Cliente.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1148,7 +1168,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontró el estado Activo.' AS Mensaje,
+            N'No se encontrï¿½ el estado Activo.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1163,7 +1183,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El correo electrónico ya está registrado.' AS Mensaje,
+            N'El correo electrï¿½nico ya estï¿½ registrado.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1179,7 +1199,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'La cédula ya está registrada.' AS Mensaje,
+            N'La cï¿½dula ya estï¿½ registrada.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1267,14 +1287,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No fue posible actualizar la contraseña.' AS Mensaje;
+            N'No fue posible actualizar la contraseï¿½a.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La contraseña temporal fue generada.' AS Mensaje;
+        N'La contraseï¿½a temporal fue generada.' AS Mensaje;
 END;
 GO
 
@@ -1358,3 +1378,1026 @@ INNER JOIN dbo.TB_estado E
     ON E.id_estado = U.id_estado
 WHERE U.email = N'edgardoasolano@gmail.com';
 
+GO
+
+   /* ============================================================
+   Inserts iniciales 
+   ============================================================ */
+
+INSERT INTO dbo.TB_canton (id_provincia, nombre_canton)
+SELECT P.id_provincia, C.nombre_canton
+FROM (VALUES
+    (N'San Josï¿½', N'San Josï¿½'),
+    (N'San Josï¿½', N'Escazï¿½'),
+    (N'San Josï¿½', N'Desamparados'),
+    (N'Alajuela', N'Alajuela'),
+    (N'Alajuela', N'Grecia'),
+    (N'Cartago', N'Cartago'),
+    (N'Cartago', N'La Uniï¿½n'),
+    (N'Heredia', N'Heredia'),
+    (N'Heredia', N'San Rafael'),
+    (N'Guanacaste', N'Liberia'),
+    (N'Puntarenas', N'Puntarenas'),
+    (N'Limï¿½n', N'Limï¿½n')
+) AS C (nombre_provincia, nombre_canton)
+INNER JOIN dbo.TB_provincia AS P
+    ON P.nombre_provincia = C.nombre_provincia
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.TB_canton AS X
+    WHERE X.id_provincia = P.id_provincia
+      AND X.nombre_canton = C.nombre_canton
+);
+GO
+
+INSERT INTO dbo.TB_distrito (id_canton, nombre_distrito)
+SELECT CA.id_canton, D.nombre_distrito
+FROM (VALUES
+    (N'San Josï¿½', N'San Josï¿½', N'Carmen'),
+    (N'San Josï¿½', N'San Josï¿½', N'Merced'),
+    (N'San Josï¿½', N'San Josï¿½', N'Hospital'),
+    (N'San Josï¿½', N'Escazï¿½', N'Escazï¿½'),
+    (N'San Josï¿½', N'Escazï¿½', N'San Antonio'),
+    (N'San Josï¿½', N'Escazï¿½', N'San Rafael'),
+    (N'San Josï¿½', N'Desamparados', N'Desamparados'),
+    (N'San Josï¿½', N'Desamparados', N'San Miguel'),
+    (N'Alajuela', N'Alajuela', N'Alajuela'),
+    (N'Alajuela', N'Alajuela', N'San Josï¿½'),
+    (N'Alajuela', N'Alajuela', N'Carrizal'),
+    (N'Alajuela', N'Grecia', N'Grecia'),
+    (N'Alajuela', N'Grecia', N'San Isidro'),
+    (N'Cartago', N'Cartago', N'Oriental'),
+    (N'Cartago', N'Cartago', N'Occidental'),
+    (N'Cartago', N'Cartago', N'Carmen'),
+    (N'Cartago', N'La Uniï¿½n', N'Tres Rï¿½os'),
+    (N'Cartago', N'La Uniï¿½n', N'San Diego'),
+    (N'Heredia', N'Heredia', N'Heredia'),
+    (N'Heredia', N'Heredia', N'Mercedes'),
+    (N'Heredia', N'Heredia', N'San Francisco'),
+    (N'Heredia', N'San Rafael', N'San Rafael'),
+    (N'Heredia', N'San Rafael', N'San Josecito'),
+    (N'Guanacaste', N'Liberia', N'Liberia'),
+    (N'Guanacaste', N'Liberia', N'Caï¿½as Dulces'),
+    (N'Puntarenas', N'Puntarenas', N'Puntarenas'),
+    (N'Puntarenas', N'Puntarenas', N'Chacarita'),
+    (N'Limï¿½n', N'Limï¿½n', N'Limï¿½n'),
+    (N'Limï¿½n', N'Limï¿½n', N'Valle La Estrella')
+) AS D (nombre_provincia, nombre_canton, nombre_distrito)
+INNER JOIN dbo.TB_provincia AS P
+    ON P.nombre_provincia = D.nombre_provincia
+INNER JOIN dbo.TB_canton AS CA
+    ON CA.id_provincia = P.id_provincia
+   AND CA.nombre_canton = D.nombre_canton
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.TB_distrito AS X
+    WHERE X.id_canton = CA.id_canton
+      AND X.nombre_distrito = D.nombre_distrito
+);
+GO
+
+
+   /* ============================================================
+    Carrito
+   OBTENER O CREAR CARRITO ACTIVO (RF-04)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ObtenerOCrearCarritoActivo
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @IdEstadoActivo INT;
+    DECLARE @IdCarrito INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    BEGIN TRANSACTION;
+
+    SELECT TOP (1) @IdCarrito = id_carrito
+    FROM dbo.TB_carrito WITH (UPDLOCK, HOLDLOCK)
+    WHERE id_usuario = @IdUsuario
+      AND id_estado = @IdEstadoActivo
+    ORDER BY id_carrito;
+
+    IF @IdCarrito IS NULL
+    BEGIN
+        INSERT INTO dbo.TB_carrito (id_usuario, id_estado)
+        VALUES (@IdUsuario, @IdEstadoActivo);
+
+        SET @IdCarrito = SCOPE_IDENTITY();
+    END;
+
+    COMMIT TRANSACTION;
+
+    SELECT @IdCarrito AS IdCarrito;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   AGREGAR PRODUCTO AL CARRITO (RF-04)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_AgregarProductoCarrito
+    @IdUsuario INT,
+    @IdProducto INT,
+    @Cantidad INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF @Cantidad IS NULL OR @Cantidad <= 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'La cantidad debe ser mayor que cero.' AS Mensaje,
+            CAST(NULL AS INT) AS CantidadItems;
+        RETURN;
+    END;
+
+    DECLARE @IdEstadoActivo INT;
+    DECLARE @IdEstadoDisponible INT;
+    DECLARE @Stock INT;
+    DECLARE @IdCarrito INT;
+    DECLARE @CantidadActual INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    SELECT @IdEstadoDisponible = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Disponible';
+
+    SELECT @Stock = stock
+    FROM dbo.TB_producto
+    WHERE id_producto = @IdProducto
+      AND id_estado = @IdEstadoDisponible;
+
+    IF @Stock IS NULL
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El producto no estï¿½ disponible.' AS Mensaje,
+            CAST(NULL AS INT) AS CantidadItems;
+        RETURN;
+    END;
+
+    BEGIN TRANSACTION;
+
+    SELECT TOP (1) @IdCarrito = id_carrito
+    FROM dbo.TB_carrito WITH (UPDLOCK, HOLDLOCK)
+    WHERE id_usuario = @IdUsuario
+      AND id_estado = @IdEstadoActivo
+    ORDER BY id_carrito;
+
+    IF @IdCarrito IS NULL
+    BEGIN
+        INSERT INTO dbo.TB_carrito (id_usuario, id_estado)
+        VALUES (@IdUsuario, @IdEstadoActivo);
+
+        SET @IdCarrito = SCOPE_IDENTITY();
+    END;
+
+    SELECT @CantidadActual = cantidad
+    FROM dbo.TB_detalle_carrito
+    WHERE id_carrito = @IdCarrito
+      AND id_producto = @IdProducto;
+
+    IF ISNULL(@CantidadActual, 0) + @Cantidad > @Stock
+    BEGIN
+        ROLLBACK TRANSACTION;
+
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No hay stock suficiente. Disponible: '
+                + CAST(@Stock - ISNULL(@CantidadActual, 0) AS NVARCHAR(10))
+                + N' unidad(es).' AS Mensaje,
+            CAST(NULL AS INT) AS CantidadItems;
+        RETURN;
+    END;
+
+    IF @CantidadActual IS NULL
+    BEGIN
+        INSERT INTO dbo.TB_detalle_carrito (id_carrito, id_producto, cantidad)
+        VALUES (@IdCarrito, @IdProducto, @Cantidad);
+    END
+    ELSE
+    BEGIN
+        UPDATE dbo.TB_detalle_carrito
+        SET cantidad = cantidad + @Cantidad
+        WHERE id_carrito = @IdCarrito
+          AND id_producto = @IdProducto;
+    END;
+
+    COMMIT TRANSACTION;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'El producto fue agregado al carrito.' AS Mensaje,
+        (
+            SELECT ISNULL(SUM(cantidad), 0)
+            FROM dbo.TB_detalle_carrito
+            WHERE id_carrito = @IdCarrito
+        ) AS CantidadItems;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   ACTUALIZAR CANTIDAD EN EL CARRITO (RF-04)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ActualizarCantidadCarrito
+    @IdUsuario INT,
+    @IdProducto INT,
+    @Cantidad INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdEstadoActivo INT;
+    DECLARE @IdEstadoDisponible INT;
+    DECLARE @IdCarrito INT;
+    DECLARE @Stock INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    SELECT @IdEstadoDisponible = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Disponible';
+
+    SELECT TOP (1) @IdCarrito = id_carrito
+    FROM dbo.TB_carrito
+    WHERE id_usuario = @IdUsuario
+      AND id_estado = @IdEstadoActivo
+    ORDER BY id_carrito;
+
+    IF @IdCarrito IS NULL
+       OR NOT EXISTS
+       (
+           SELECT 1
+           FROM dbo.TB_detalle_carrito
+           WHERE id_carrito = @IdCarrito
+             AND id_producto = @IdProducto
+       )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El producto no estï¿½ en el carrito.' AS Mensaje;
+        RETURN;
+    END;
+
+    IF @Cantidad IS NULL OR @Cantidad <= 0
+    BEGIN
+        DELETE FROM dbo.TB_detalle_carrito
+        WHERE id_carrito = @IdCarrito
+          AND id_producto = @IdProducto;
+
+        SELECT
+            CAST(1 AS BIT) AS Exitoso,
+            N'El producto fue eliminado del carrito.' AS Mensaje;
+        RETURN;
+    END;
+
+    SELECT @Stock = stock
+    FROM dbo.TB_producto
+    WHERE id_producto = @IdProducto
+      AND id_estado = @IdEstadoDisponible;
+
+    IF @Stock IS NULL
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El producto no estï¿½ disponible.' AS Mensaje;
+        RETURN;
+    END;
+
+    IF @Cantidad > @Stock
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No hay stock suficiente. Disponible: '
+                + CAST(@Stock AS NVARCHAR(10))
+                + N' unidad(es).' AS Mensaje;
+        RETURN;
+    END;
+
+    UPDATE dbo.TB_detalle_carrito
+    SET cantidad = @Cantidad
+    WHERE id_carrito = @IdCarrito
+      AND id_producto = @IdProducto;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'La cantidad fue actualizada.' AS Mensaje;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_EliminarProductoCarrito
+    @IdUsuario INT,
+    @IdProducto INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdEstadoActivo INT;
+    DECLARE @IdCarrito INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    SELECT TOP (1) @IdCarrito = id_carrito
+    FROM dbo.TB_carrito
+    WHERE id_usuario = @IdUsuario
+      AND id_estado = @IdEstadoActivo
+    ORDER BY id_carrito;
+
+    DELETE FROM dbo.TB_detalle_carrito
+    WHERE id_carrito = @IdCarrito
+      AND id_producto = @IdProducto;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El producto no estï¿½ en el carrito.' AS Mensaje;
+        RETURN;
+    END;
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'El producto fue eliminado del carrito.' AS Mensaje;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   CONSULTAR CARRITO (RF-04)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarCarrito
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdEstadoActivo INT;
+    DECLARE @IdEstadoDisponible INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    SELECT @IdEstadoDisponible = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Disponible';
+
+    SELECT
+        C.id_carrito AS IdCarrito,
+        P.id_producto AS IdProducto,
+        P.nombre_producto AS NombreProducto,
+        IMG.ruta_imagen AS RutaImagen,
+        P.precio AS PrecioUnitario,
+        DC.cantidad AS Cantidad,
+        CONVERT(DECIMAL(10,2), P.precio * DC.cantidad) AS SubtotalLinea,
+        P.stock AS StockDisponible,
+        P.es_pieza_unica AS EsPiezaUnica,
+        CAST(CASE
+                WHEN P.id_estado = @IdEstadoDisponible
+                     AND P.stock >= DC.cantidad THEN 1
+                ELSE 0
+             END AS BIT) AS Disponible
+    FROM dbo.TB_carrito AS C
+    INNER JOIN dbo.TB_detalle_carrito AS DC
+        ON DC.id_carrito = C.id_carrito
+    INNER JOIN dbo.TB_producto AS P
+        ON P.id_producto = DC.id_producto
+    LEFT JOIN dbo.TB_imagen_producto AS IMG
+        ON IMG.id_producto = P.id_producto
+       AND IMG.es_principal = 1
+    WHERE C.id_usuario = @IdUsuario
+      AND C.id_estado = @IdEstadoActivo
+    ORDER BY P.nombre_producto;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   CONSULTAR RESUMEN DE CHECKOUT (RF-05)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarResumenCheckout
+    @IdUsuario INT,
+    @IdDireccion INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdEstadoActivo INT;
+    DECLARE @IdEstadoDisponible INT;
+
+    SELECT @IdEstadoActivo = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Activo';
+
+    SELECT @IdEstadoDisponible = id_estado
+    FROM dbo.TB_estado
+    WHERE nombre_estado = N'Disponible';
+
+    SELECT
+        C.id_carrito AS IdCarrito,
+        P.id_producto AS IdProducto,
+        P.nombre_producto AS NombreProducto,
+        IMG.ruta_imagen AS RutaImagen,
+        P.precio AS PrecioUnitario,
+        DC.cantidad AS Cantidad,
+        CONVERT(DECIMAL(10,2), P.precio * DC.cantidad) AS SubtotalLinea,
+        P.stock AS StockDisponible,
+        CAST(CASE
+                WHEN P.id_estado = @IdEstadoDisponible
+                     AND P.stock >= DC.cantidad THEN 1
+                ELSE 0
+             END AS BIT) AS Disponible
+    FROM dbo.TB_carrito AS C
+    INNER JOIN dbo.TB_detalle_carrito AS DC
+        ON DC.id_carrito = C.id_carrito
+    INNER JOIN dbo.TB_producto AS P
+        ON P.id_producto = DC.id_producto
+    LEFT JOIN dbo.TB_imagen_producto AS IMG
+        ON IMG.id_producto = P.id_producto
+       AND IMG.es_principal = 1
+    WHERE C.id_usuario = @IdUsuario
+      AND C.id_estado = @IdEstadoActivo
+      AND EXISTS
+      (
+          SELECT 1
+          FROM dbo.TB_direccion_envio AS DE
+          WHERE DE.id_direccion = @IdDireccion
+            AND DE.id_usuario = @IdUsuario
+            AND DE.id_estado = @IdEstadoActivo
+      )
+    ORDER BY P.nombre_producto;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   CONSULTAR Mï¿½TODOS DE PAGO ACTIVOS (RF-05)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarMetodosPago
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        MP.id_metodo_pago AS IdMetodoPago,
+        MP.nombre_metodo AS NombreMetodo
+    FROM dbo.TB_metodo_pago AS MP
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = MP.id_estado
+    WHERE E.nombre_estado = N'Activo'
+    ORDER BY MP.nombre_metodo;
+END;
+GO
+
+   /* ============================================================
+    Carrito
+   CONFIRMAR COMPRA (RF-05 + RF-08)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConfirmarCompra
+    @IdUsuario INT,
+    @IdDireccion INT,
+    @IdMetodoPago INT,
+    @CostoEnvio DECIMAL(10,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRY
+        IF @CostoEnvio IS NULL OR @CostoEnvio < 0
+        BEGIN
+            SELECT
+                CAST(0 AS BIT) AS Exitoso,
+                N'El costo de envï¿½o no es vï¿½lido.' AS Mensaje,
+                CAST(NULL AS INT) AS IdPedido,
+                CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
+            RETURN;
+        END;
+
+        DECLARE @IdEstadoActivo INT;
+        DECLARE @IdEstadoDisponible INT;
+        DECLARE @IdEstadoPagado INT;
+
+        SELECT @IdEstadoActivo = id_estado
+        FROM dbo.TB_estado
+        WHERE nombre_estado = N'Activo';
+
+        SELECT @IdEstadoDisponible = id_estado
+        FROM dbo.TB_estado
+        WHERE nombre_estado = N'Disponible';
+
+        SELECT @IdEstadoPagado = id_estado
+        FROM dbo.TB_estado
+        WHERE nombre_estado = N'Pagado';
+
+        IF NOT EXISTS
+        (
+            SELECT 1
+            FROM dbo.TB_direccion_envio
+            WHERE id_direccion = @IdDireccion
+              AND id_usuario = @IdUsuario
+              AND id_estado = @IdEstadoActivo
+        )
+        BEGIN
+            SELECT
+                CAST(0 AS BIT) AS Exitoso,
+                N'La direcciï¿½n seleccionada no es vï¿½lida.' AS Mensaje,
+                CAST(NULL AS INT) AS IdPedido,
+                CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
+            RETURN;
+        END;
+
+        IF NOT EXISTS
+        (
+            SELECT 1
+            FROM dbo.TB_metodo_pago
+            WHERE id_metodo_pago = @IdMetodoPago
+              AND id_estado = @IdEstadoActivo
+        )
+        BEGIN
+            SELECT
+                CAST(0 AS BIT) AS Exitoso,
+                N'El mï¿½todo de pago seleccionado no es vï¿½lido.' AS Mensaje,
+                CAST(NULL AS INT) AS IdPedido,
+                CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
+            RETURN;
+        END;
+
+        DECLARE @IdCarrito INT;
+
+        SELECT TOP (1) @IdCarrito = id_carrito
+        FROM dbo.TB_carrito
+        WHERE id_usuario = @IdUsuario
+          AND id_estado = @IdEstadoActivo
+        ORDER BY id_carrito;
+
+        IF @IdCarrito IS NULL
+           OR NOT EXISTS
+           (
+               SELECT 1
+               FROM dbo.TB_detalle_carrito
+               WHERE id_carrito = @IdCarrito
+           )
+        BEGIN
+            SELECT
+                CAST(0 AS BIT) AS Exitoso,
+                N'El carrito estï¿½ vacï¿½o.' AS Mensaje,
+                CAST(NULL AS INT) AS IdPedido,
+                CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
+            RETURN;
+        END;
+
+        BEGIN TRANSACTION;
+
+        /* Bloqueo de las filas de producto del carrito y
+           revalidaciï¿½n final de stock y disponibilidad. */
+        DECLARE @Faltantes INT;
+
+        SELECT @Faltantes = COUNT(*)
+        FROM dbo.TB_detalle_carrito AS DC
+        INNER JOIN dbo.TB_producto AS P WITH (UPDLOCK, ROWLOCK, HOLDLOCK)
+            ON P.id_producto = DC.id_producto
+        WHERE DC.id_carrito = @IdCarrito
+          AND (P.stock < DC.cantidad OR P.id_estado <> @IdEstadoDisponible);
+
+        IF @Faltantes > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+
+            SELECT
+                CAST(0 AS BIT) AS Exitoso,
+                N'Algunos productos ya no cuentan con stock suficiente. Por favor revise su carrito.' AS Mensaje,
+                CAST(NULL AS INT) AS IdPedido,
+                CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
+            RETURN;
+        END;
+
+        DECLARE @Subtotal DECIMAL(10,2);
+
+        SELECT @Subtotal = CONVERT(DECIMAL(10,2), SUM(P.precio * DC.cantidad))
+        FROM dbo.TB_detalle_carrito AS DC
+        INNER JOIN dbo.TB_producto AS P
+            ON P.id_producto = DC.id_producto
+        WHERE DC.id_carrito = @IdCarrito;
+
+        DECLARE @Total DECIMAL(10,2) = @Subtotal + @CostoEnvio;
+
+        INSERT INTO dbo.TB_pedido
+        (
+            id_usuario,
+            id_direccion,
+            subtotal,
+            costo_envio,
+            total,
+            id_estado
+        )
+        VALUES
+        (
+            @IdUsuario,
+            @IdDireccion,
+            @Subtotal,
+            @CostoEnvio,
+            @Total,
+            @IdEstadoPagado
+        );
+
+        DECLARE @IdPedido INT = SCOPE_IDENTITY();
+
+        INSERT INTO dbo.TB_detalle_pedido
+        (
+            id_pedido,
+            id_producto,
+            cantidad,
+            precio_unitario,
+            subtotal_linea
+        )
+        SELECT
+            @IdPedido,
+            DC.id_producto,
+            DC.cantidad,
+            P.precio,
+            CONVERT(DECIMAL(10,2), P.precio * DC.cantidad)
+        FROM dbo.TB_detalle_carrito AS DC
+        INNER JOIN dbo.TB_producto AS P
+            ON P.id_producto = DC.id_producto
+        WHERE DC.id_carrito = @IdCarrito;
+
+        UPDATE P
+        SET P.stock = P.stock - DC.cantidad
+        FROM dbo.TB_producto AS P
+        INNER JOIN dbo.TB_detalle_carrito AS DC
+            ON DC.id_producto = P.id_producto
+        WHERE DC.id_carrito = @IdCarrito;
+
+        DECLARE @NumeroFactura NVARCHAR(50) =
+            N'FAC-' + RIGHT(N'000000' + CAST(@IdPedido AS NVARCHAR(10)), 6);
+
+        /* Pago simulado: comprobante generado por el sistema. */
+        INSERT INTO dbo.TB_pago
+        (
+            id_pedido,
+            id_metodo_pago,
+            monto,
+            comprobante,
+            id_estado
+        )
+        VALUES
+        (
+            @IdPedido,
+            @IdMetodoPago,
+            @Total,
+            N'SIM-' + RIGHT(N'000000' + CAST(@IdPedido AS NVARCHAR(10)), 6),
+            @IdEstadoPagado
+        );
+
+        INSERT INTO dbo.TB_factura
+        (
+            id_pedido,
+            numero_factura,
+            subtotal,
+            costo_envio,
+            total,
+            id_estado
+        )
+        VALUES
+        (
+            @IdPedido,
+            @NumeroFactura,
+            @Subtotal,
+            @CostoEnvio,
+            @Total,
+            @IdEstadoPagado
+        );
+
+        /* El carrito queda vacï¿½o pero activo para reutilizarse. */
+        DELETE FROM dbo.TB_detalle_carrito
+        WHERE id_carrito = @IdCarrito;
+
+        COMMIT TRANSACTION;
+
+        SELECT
+            CAST(1 AS BIT) AS Exitoso,
+            N'La compra fue registrada correctamente.' AS Mensaje,
+            @IdPedido AS IdPedido,
+            @NumeroFactura AS NumeroFactura;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @MensajeError NVARCHAR(MAX) = ERROR_MESSAGE();
+        DECLARE @LineaError INT = ERROR_LINE();
+
+        EXEC dbo.SP_RegistrarError
+            @Origen = N'Base de datos',
+            @Metodo = N'SP_ConfirmarCompra',
+            @MensajeError = @MensajeError,
+            @LineaError = @LineaError;
+
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'No fue posible completar la compra. Por favor intente de nuevo.' AS Mensaje,
+            CAST(NULL AS INT) AS IdPedido,
+            CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
+    END CATCH;
+END;
+GO
+
+   /* ============================================================
+    Carrito
+   CONSULTAR CONFIRMACIï¿½N DE PEDIDO (RF-08)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarConfirmacionPedido
+    @IdPedido INT,
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        PE.id_pedido AS IdPedido,
+        F.numero_factura AS NumeroFactura,
+        PE.fecha_pedido AS FechaPedido,
+        PE.subtotal AS Subtotal,
+        PE.costo_envio AS CostoEnvio,
+        PE.total AS Total,
+        E.nombre_estado AS NombreEstado,
+        CASE E.nombre_estado
+            WHEN N'Pagado' THEN N'Comprada'
+            WHEN N'En preparaciï¿½n' THEN N'En camino'
+            WHEN N'Entregado' THEN N'Recibido'
+            ELSE E.nombre_estado
+        END AS EstadoVisible,
+        MP.nombre_metodo AS NombreMetodoPago,
+        DE.nombre_destinatario AS NombreDestinatario,
+        DE.direccion_exacta AS DireccionExacta,
+        DI.nombre_distrito AS NombreDistrito,
+        CA.nombre_canton AS NombreCanton,
+        PR.nombre_provincia AS NombreProvincia,
+        P.id_producto AS IdProducto,
+        P.nombre_producto AS NombreProducto,
+        DP.cantidad AS Cantidad,
+        DP.precio_unitario AS PrecioUnitario,
+        DP.subtotal_linea AS SubtotalLinea,
+        IMG.ruta_imagen AS RutaImagen
+    FROM dbo.TB_pedido AS PE
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = PE.id_estado
+    INNER JOIN dbo.TB_detalle_pedido AS DP
+        ON DP.id_pedido = PE.id_pedido
+    INNER JOIN dbo.TB_producto AS P
+        ON P.id_producto = DP.id_producto
+    INNER JOIN dbo.TB_direccion_envio AS DE
+        ON DE.id_direccion = PE.id_direccion
+    INNER JOIN dbo.TB_distrito AS DI
+        ON DI.id_distrito = DE.id_distrito
+    INNER JOIN dbo.TB_canton AS CA
+        ON CA.id_canton = DI.id_canton
+    INNER JOIN dbo.TB_provincia AS PR
+        ON PR.id_provincia = CA.id_provincia
+    LEFT JOIN dbo.TB_factura AS F
+        ON F.id_pedido = PE.id_pedido
+    LEFT JOIN dbo.TB_pago AS PG
+        ON PG.id_pedido = PE.id_pedido
+    LEFT JOIN dbo.TB_metodo_pago AS MP
+        ON MP.id_metodo_pago = PG.id_metodo_pago
+    LEFT JOIN dbo.TB_imagen_producto AS IMG
+        ON IMG.id_producto = P.id_producto
+       AND IMG.es_principal = 1
+    WHERE PE.id_pedido = @IdPedido
+      AND PE.id_usuario = @IdUsuario
+    ORDER BY P.nombre_producto;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   CONSULTAR HISTORIAL DE PEDIDOS (RF-09)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarHistorialPedidos
+    @IdUsuario INT,
+    @Pagina INT,
+    @TamanoPagina INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @Pagina IS NULL OR @Pagina < 1
+    BEGIN
+        SET @Pagina = 1;
+    END;
+
+    IF @TamanoPagina IS NULL OR @TamanoPagina < 1
+    BEGIN
+        SET @TamanoPagina = 10;
+    END;
+
+    SELECT
+        PE.id_pedido AS IdPedido,
+        F.numero_factura AS NumeroFactura,
+        PE.fecha_pedido AS FechaPedido,
+        PE.total AS Total,
+        E.nombre_estado AS NombreEstado,
+        CASE E.nombre_estado
+            WHEN N'Pagado' THEN N'Comprada'
+            WHEN N'En preparaciï¿½n' THEN N'En camino'
+            WHEN N'Entregado' THEN N'Recibido'
+            ELSE E.nombre_estado
+        END AS EstadoVisible,
+        (
+            SELECT ISNULL(SUM(DP.cantidad), 0)
+            FROM dbo.TB_detalle_pedido AS DP
+            WHERE DP.id_pedido = PE.id_pedido
+        ) AS CantidadProductos,
+        COUNT(*) OVER () AS TotalFilas
+    FROM dbo.TB_pedido AS PE
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = PE.id_estado
+    LEFT JOIN dbo.TB_factura AS F
+        ON F.id_pedido = PE.id_pedido
+    WHERE PE.id_usuario = @IdUsuario
+    ORDER BY PE.fecha_pedido DESC, PE.id_pedido DESC
+    OFFSET (@Pagina - 1) * @TamanoPagina ROWS
+    FETCH NEXT @TamanoPagina ROWS ONLY;
+END;
+GO
+
+   /* ============================================================
+    Carrito
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarDetallePedido
+    @IdPedido INT,
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        PE.id_pedido AS IdPedido,
+        F.numero_factura AS NumeroFactura,
+        PE.fecha_pedido AS FechaPedido,
+        PE.subtotal AS Subtotal,
+        PE.costo_envio AS CostoEnvio,
+        PE.total AS Total,
+        E.nombre_estado AS NombreEstado,
+        CASE E.nombre_estado
+            WHEN N'Pagado' THEN N'Comprada'
+            WHEN N'En preparaciï¿½n' THEN N'En camino'
+            WHEN N'Entregado' THEN N'Recibido'
+            ELSE E.nombre_estado
+        END AS EstadoVisible,
+        PG.fecha_pago AS FechaPago,
+        MP.nombre_metodo AS NombreMetodoPago,
+        EP.nombre_estado AS EstadoPago,
+        DE.nombre_destinatario AS NombreDestinatario,
+        DE.telefono_contacto AS TelefonoContacto,
+        DE.direccion_exacta AS DireccionExacta,
+        DE.referencia AS Referencia,
+        DI.nombre_distrito AS NombreDistrito,
+        CA.nombre_canton AS NombreCanton,
+        PR.nombre_provincia AS NombreProvincia,
+        P.id_producto AS IdProducto,
+        P.nombre_producto AS NombreProducto,
+        DP.cantidad AS Cantidad,
+        DP.precio_unitario AS PrecioUnitario,
+        DP.subtotal_linea AS SubtotalLinea,
+        IMG.ruta_imagen AS RutaImagen
+    FROM dbo.TB_pedido AS PE
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = PE.id_estado
+    INNER JOIN dbo.TB_detalle_pedido AS DP
+        ON DP.id_pedido = PE.id_pedido
+    INNER JOIN dbo.TB_producto AS P
+        ON P.id_producto = DP.id_producto
+    INNER JOIN dbo.TB_direccion_envio AS DE
+        ON DE.id_direccion = PE.id_direccion
+    INNER JOIN dbo.TB_distrito AS DI
+        ON DI.id_distrito = DE.id_distrito
+    INNER JOIN dbo.TB_canton AS CA
+        ON CA.id_canton = DI.id_canton
+    INNER JOIN dbo.TB_provincia AS PR
+        ON PR.id_provincia = CA.id_provincia
+    LEFT JOIN dbo.TB_factura AS F
+        ON F.id_pedido = PE.id_pedido
+    LEFT JOIN dbo.TB_pago AS PG
+        ON PG.id_pedido = PE.id_pedido
+    LEFT JOIN dbo.TB_metodo_pago AS MP
+        ON MP.id_metodo_pago = PG.id_metodo_pago
+    LEFT JOIN dbo.TB_estado AS EP
+        ON EP.id_estado = PG.id_estado
+    LEFT JOIN dbo.TB_imagen_producto AS IMG
+        ON IMG.id_producto = P.id_producto
+       AND IMG.es_principal = 1
+    WHERE PE.id_pedido = @IdPedido
+      AND PE.id_usuario = @IdUsuario
+    ORDER BY P.nombre_producto;
+END;
+GO
+
+   /* ============================================================
+   Carrito
+   DATOS DE PRUEBA DEL Mï¿½DULO CARRITO/CHECKOUT
+   ============================================================ */
+
+DECLARE @IdEstadoActivo INT;
+DECLARE @IdEstadoDisponible INT;
+DECLARE @IdEstadoAgotado INT;
+
+SELECT @IdEstadoActivo = id_estado FROM dbo.TB_estado WHERE nombre_estado = N'Activo';
+SELECT @IdEstadoDisponible = id_estado FROM dbo.TB_estado WHERE nombre_estado = N'Disponible';
+SELECT @IdEstadoAgotado = id_estado FROM dbo.TB_estado WHERE nombre_estado = N'Agotado';
+
+INSERT INTO dbo.TB_categoria (nombre_categoria, descripcion, id_estado)
+SELECT C.nombre_categoria, C.descripcion, @IdEstadoActivo
+FROM (VALUES
+    (N'Collares', N'Collares artesanales'),
+    (N'Pulseras', N'Pulseras artesanales'),
+    (N'Llaveros', N'Llaveros artesanales')
+) AS C (nombre_categoria, descripcion)
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.TB_categoria AS X
+    WHERE X.nombre_categoria = C.nombre_categoria
+);
+
+INSERT INTO dbo.TB_producto
+(nombre_producto, descripcion, precio, stock, es_pieza_unica, destacado, id_categoria, id_estado)
+SELECT
+    P.nombre_producto,
+    P.descripcion,
+    P.precio,
+    P.stock,
+    P.es_pieza_unica,
+    P.destacado,
+    CAT.id_categoria,
+    CASE WHEN P.agotado = 1 THEN @IdEstadoAgotado ELSE @IdEstadoDisponible END
+FROM (VALUES
+    (N'Collar Bello',      N'Collar artesanal con dije',        CAST(8500.00 AS DECIMAL(10,2)), 10, 0, 1, N'Collares', 0),
+    (N'Collar Pato',       N'Collar artesanal con dije de pato', CAST(7000.00 AS DECIMAL(10,2)),  5, 0, 0, N'Collares', 0),
+    (N'Pulsera de Perlas', N'Pulsera de perlas hecha a mano',    CAST(5500.00 AS DECIMAL(10,2)),  8, 0, 1, N'Pulseras', 0),
+    (N'Pulsera Clï¿½sica',   N'Pulsera artesanal pieza ï¿½nica',     CAST(4500.00 AS DECIMAL(10,2)),  1, 1, 0, N'Pulseras', 0),
+    (N'Llavero Flor',      N'Llavero artesanal con flor',        CAST(2500.00 AS DECIMAL(10,2)),  0, 0, 0, N'Llaveros', 1)
+) AS P (nombre_producto, descripcion, precio, stock, es_pieza_unica, destacado, nombre_categoria, agotado)
+INNER JOIN dbo.TB_categoria AS CAT
+    ON CAT.nombre_categoria = P.nombre_categoria
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.TB_producto AS X
+    WHERE X.nombre_producto = P.nombre_producto
+);
+
+INSERT INTO dbo.TB_imagen_producto (id_producto, ruta_imagen, es_principal, id_estado)
+SELECT PROD.id_producto, I.ruta_imagen, 1, @IdEstadoActivo
+FROM (VALUES
+    (N'Collar Bello',      N'Content/Images/collarbello.jpeg'),
+    (N'Collar Pato',       N'Content/Images/collarpato.jpeg'),
+    (N'Pulsera de Perlas', N'Content/Images/perlas.jpeg'),
+    (N'Pulsera Clï¿½sica',   N'Content/Images/pulsera.jpeg'),
+    (N'Llavero Flor',      N'Content/Images/llaveroflor.jpeg')
+) AS I (nombre_producto, ruta_imagen)
+INNER JOIN dbo.TB_producto AS PROD
+    ON PROD.nombre_producto = I.nombre_producto
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.TB_imagen_producto AS X
+    WHERE X.id_producto = PROD.id_producto
+      AND X.es_principal = 1
+);
+GO

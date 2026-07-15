@@ -174,11 +174,31 @@
                                 <a href="#">Contacto</a>
                             </li>
                             <li>
-                                <a href="#">Carrito</a>
+                                <a href="@Url.Action("Index", "Carrito")">Carrito</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
+                                <a href="@Url.Action("Historial", "Pedido")">Mis pedidos</a>
                             </li>
+                            @if (Session["IdUsuario"] == null)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="fw-bold">
+                                    Hola, @Session["NombreUsuario"]
+                                </li>
+                                <li>
+                                    <form action="@Url.Action("CerrarSesion", "Home")" method="post" class="d-inline m-0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-link p-0 border-0 align-baseline text-decoration-none">
+                                            Cerrar sesión
+                                        </button>
+                                    </form>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -250,7 +270,7 @@
                                         <a class="dropdown-item" href="index.html">Blog</a>
                                     </li>
                                     <li>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modallong" class="dropdown-item">Carrito</a>
+                                        <a href="@Url.Action("Index", "Carrito")" class="dropdown-item">Carrito</a>
                                     </li>
                                     <li>
                                         <a href="@Url.Action("Login", "Home")" class="dropdown-item">Iniciar sesión</a>
@@ -264,14 +284,16 @@
                 <div class="user-items ps-0 ps-md-5">
                     <ul class="d-flex justify-content-end list-unstyled align-item-center m-0">
                         <li class="pe-3">
-                            <a href="@Url.Action("Login", "Home")" class="border-0" aria-label="Iniciar sesión">
+                            <a href="@(Session["IdUsuario"] == null ? Url.Action("Login", "Home") : Url.Action("Detalle", "Usuario"))"
+                               class="border-0"
+                               aria-label="@(Session["IdUsuario"] == null ? "Iniciar sesión" : "Mi perfil")">
                                 <svg class="user" width="24" height="24">
                                     <use xlink:href="#user"></use>
                                 </svg>
                             </a>
                         </li>
                         <li class="pe-3">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modallong" class="border-0">
+                            <a href="@Url.Action("Index", "Carrito")" class="border-0" aria-label="Ver carrito">
                                 <svg class="shopping-cart" width="24" height="24">
                                     <use xlink:href="#shopping-cart"></use>
                                 </svg>
@@ -346,7 +368,10 @@
                                 <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
                             </li>
                             <li class="pb-2">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modallong">Carrito</a>
+                                <a href="@Url.Action("Index", "Carrito")">Carrito</a>
+                            </li>
+                            <li class="pb-2">
+                                <a href="@Url.Action("Historial", "Pedido")">Mis pedidos</a>
                             </li>
                         </ul>
                     </div>
@@ -382,6 +407,7 @@
     <script src="~/Scripts/jquery-1.11.0.min.js"></script>
     <script src="~/Scripts/plugins.js"></script>
     <script src="~/Scripts/script.js"></script>
+    @RenderSection("Scripts", required: false)
 
 </body>
 

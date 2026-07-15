@@ -348,5 +348,152 @@ namespace ProyectoProgramacionAvanzada.EF
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RestablecerContrasennaUsuario_Result>("SP_RestablecerContrasennaUsuario", idUsuarioParameter, contrasennaParameter);
         }
+    
+        public virtual ObjectResult<SP_ActualizarCantidadCarrito_Result> SP_ActualizarCantidadCarrito(Nullable<int> idUsuario, Nullable<int> idProducto, Nullable<int> cantidad)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("Cantidad", cantidad) :
+                new ObjectParameter("Cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarCantidadCarrito_Result>("SP_ActualizarCantidadCarrito", idUsuarioParameter, idProductoParameter, cantidadParameter);
+        }
+    
+        public virtual ObjectResult<SP_AgregarProductoCarrito_Result> SP_AgregarProductoCarrito(Nullable<int> idUsuario, Nullable<int> idProducto, Nullable<int> cantidad)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("Cantidad", cantidad) :
+                new ObjectParameter("Cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_AgregarProductoCarrito_Result>("SP_AgregarProductoCarrito", idUsuarioParameter, idProductoParameter, cantidadParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConfirmarCompra_Result> SP_ConfirmarCompra(Nullable<int> idUsuario, Nullable<int> idDireccion, Nullable<int> idMetodoPago, Nullable<decimal> costoEnvio)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idMetodoPagoParameter = idMetodoPago.HasValue ?
+                new ObjectParameter("IdMetodoPago", idMetodoPago) :
+                new ObjectParameter("IdMetodoPago", typeof(int));
+    
+            var costoEnvioParameter = costoEnvio.HasValue ?
+                new ObjectParameter("CostoEnvio", costoEnvio) :
+                new ObjectParameter("CostoEnvio", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConfirmarCompra_Result>("SP_ConfirmarCompra", idUsuarioParameter, idDireccionParameter, idMetodoPagoParameter, costoEnvioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarCarrito_Result> SP_ConsultarCarrito(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarCarrito_Result>("SP_ConsultarCarrito", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarConfirmacionPedido_Result> SP_ConsultarConfirmacionPedido(Nullable<int> idPedido, Nullable<int> idUsuario)
+        {
+            var idPedidoParameter = idPedido.HasValue ?
+                new ObjectParameter("IdPedido", idPedido) :
+                new ObjectParameter("IdPedido", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarConfirmacionPedido_Result>("SP_ConsultarConfirmacionPedido", idPedidoParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDetallePedido_Result> SP_ConsultarDetallePedido(Nullable<int> idPedido, Nullable<int> idUsuario)
+        {
+            var idPedidoParameter = idPedido.HasValue ?
+                new ObjectParameter("IdPedido", idPedido) :
+                new ObjectParameter("IdPedido", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDetallePedido_Result>("SP_ConsultarDetallePedido", idPedidoParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarMetodosPago_Result> SP_ConsultarMetodosPago()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarMetodosPago_Result>("SP_ConsultarMetodosPago");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarResumenCheckout_Result> SP_ConsultarResumenCheckout(Nullable<int> idUsuario, Nullable<int> idDireccion)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarResumenCheckout_Result>("SP_ConsultarResumenCheckout", idUsuarioParameter, idDireccionParameter);
+        }
+    
+        public virtual ObjectResult<SP_EliminarProductoCarrito_Result> SP_EliminarProductoCarrito(Nullable<int> idUsuario, Nullable<int> idProducto)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_EliminarProductoCarrito_Result>("SP_EliminarProductoCarrito", idUsuarioParameter, idProductoParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_ObtenerOCrearCarritoActivo(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_ObtenerOCrearCarritoActivo", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarHistorialPedidos_Result> SP_ConsultarHistorialPedidos(Nullable<int> idUsuario, Nullable<int> pagina, Nullable<int> tamanoPagina)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var paginaParameter = pagina.HasValue ?
+                new ObjectParameter("Pagina", pagina) :
+                new ObjectParameter("Pagina", typeof(int));
+    
+            var tamanoPaginaParameter = tamanoPagina.HasValue ?
+                new ObjectParameter("TamanoPagina", tamanoPagina) :
+                new ObjectParameter("TamanoPagina", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarHistorialPedidos_Result>("SP_ConsultarHistorialPedidos", idUsuarioParameter, paginaParameter, tamanoPaginaParameter);
+        }
     }
 }

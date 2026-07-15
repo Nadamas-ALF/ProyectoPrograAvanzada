@@ -1,0 +1,156 @@
+﻿@model ProyectoProgramacionAvanzada.Models.CarritoViewModel
+
+@{
+    ViewBag.Title = "Mi carrito | LEN";
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Mi carrito</h1>
+                <p class="text-muted m-0">
+                    Revise sus productos antes de continuar con el pago.
+                </p>
+            </div>
+        </div>
+
+        @Html.AntiForgeryToken()
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        <div id="alerta-carrito" class="alert d-none" role="alert"></div>
+
+        @if (Model.EstaVacio)
+        {
+            <div class="text-center py-5 border rounded">
+                <h2 class="h4 pb-2">Su carrito está vacío</h2>
+                <p class="text-muted">
+                    Agregue productos desde el catálogo para comenzar su compra.
+                </p>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-dark px-4">
+                    Ver productos
+                </a>
+            </div>
+        }
+        else
+        {
+            <div id="carrito-contenedor"
+                 data-url-actualizar="@Url.Action("ActualizarCantidad", "Carrito")"
+                 data-url-eliminar="@Url.Action("Eliminar", "Carrito")">
+
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Producto</th>
+                                <th scope="col" class="text-end">Precio</th>
+                                <th scope="col" class="text-center" style="width: 140px;">Cantidad</th>
+                                <th scope="col" class="text-end">Subtotal</th>
+                                <th scope="col" class="text-end"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Linea in Model.Lineas)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Linea.RutaImagen) ? "Content/Images/logo.jpeg" : Linea.RutaImagen))"
+                                                 alt="@Linea.NombreProducto"
+                                                 width="64" height="64"
+                                                 class="rounded object-fit-cover"
+                                                 style="max-width: 100%;">
+                                            <div>
+                                                <p class="fw-bold m-0">@Linea.NombreProducto</p>
+                                                @if (!Linea.Disponible)
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        Stock insuficiente (disponible: @Linea.StockDisponible)
+                                                    </span>
+                                                }
+                                                else if (Linea.EsPiezaUnica)
+                                                {
+                                                    <span class="badge bg-dark">Pieza única</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        @string.Format("₡{0:N2}", Linea.PrecioUnitario)
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number"
+                                               class="form-control form-control-sm text-center js-cantidad"
+                                               value="@Linea.Cantidad"
+                                               min="0"
+                                               max="@Linea.StockDisponible"
+                                               data-idproducto="@Linea.IdProducto"
+                                               data-cantidadoriginal="@Linea.Cantidad"
+                                               aria-label="Cantidad de @Linea.NombreProducto">
+                                    </td>
+                                    <td class="text-end fw-bold">
+                                        @string.Format("₡{0:N2}", Linea.SubtotalLinea)
+                                    </td>
+                                    <td class="text-end">
+                                        <button type="button"
+                                                class="btn btn-outline-danger btn-sm js-eliminar"
+                                                data-idproducto="@Linea.IdProducto"
+                                                data-nombre="@Linea.NombreProducto">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row justify-content-end mt-4">
+                    <div class="col-md-5 col-lg-4">
+                        <div class="border rounded p-4">
+                            <div class="d-flex justify-content-between pb-2">
+                                <span>Subtotal (@Model.CantidadItems artículos)</span>
+                                <span class="fw-bold">
+                                    @string.Format("₡{0:N2}", Model.Subtotal)
+                                </span>
+                            </div>
+                            <p class="text-muted small">
+                                El costo de envío se muestra en el checkout.
+                            </p>
+
+                            @if (Model.TieneLineasNoDisponibles)
+                            {
+                                <div class="alert alert-warning small" role="alert">
+                                    Ajuste las cantidades de los productos sin stock
+                                    suficiente para poder continuar.
+                                </div>
+                            }
+
+                            <a href="@Url.Action("Index", "Checkout")"
+                               class="btn btn-dark w-100 @(Model.TieneLineasNoDisponibles ? "disabled" : "")">
+                                Proceder al pago
+                            </a>
+
+                            <a href="@Url.Action("Index", "Home")"
+                               class="btn btn-outline-dark w-100 mt-2">
+                                Seguir comprando
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/carrito.js")"></script>
+}

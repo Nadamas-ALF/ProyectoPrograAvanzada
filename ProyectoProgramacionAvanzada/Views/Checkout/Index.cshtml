@@ -1,0 +1,156 @@
+﻿@model ProyectoProgramacionAvanzada.Models.CheckoutViewModel
+
+@{
+    ViewBag.Title = "Checkout | LEN";
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Finalizar compra</h1>
+                <p class="text-muted m-0">
+                    Confirme su dirección, método de pago y el resumen del pedido.
+                </p>
+            </div>
+        </div>
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        <div id="alerta-checkout" class="alert alert-warning d-none" role="alert"></div>
+
+        @using (Html.BeginForm("Confirmar", "Checkout", FormMethod.Post, new { id = "form-checkout" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row g-4">
+
+                <div class="col-lg-7">
+
+                    <div class="border rounded p-4 mb-4">
+                        <h2 class="h5 fw-bold pb-2">Dirección de envío</h2>
+
+                        @if (!Model.TieneDirecciones)
+                        {
+                            <div class="alert alert-warning m-0" role="alert">
+                                No tiene direcciones registradas.
+                                Agregue una dirección desde
+                                <a href="@Url.Action("Detalle", "Usuario")" class="fw-bold">su perfil</a>
+                                para poder completar la compra.
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var Direccion in Model.Direcciones)
+                            {
+                                <div class="form-check border rounded p-3 ps-5 mb-2">
+                                    <input class="form-check-input js-direccion"
+                                           type="radio"
+                                           name="IdDireccionSeleccionada"
+                                           id="direccion-@Direccion.IdDireccion"
+                                           value="@Direccion.IdDireccion"
+                                           @(Direccion.IdDireccion == Model.IdDireccionSeleccionada ? "checked" : "")>
+                                    <label class="form-check-label d-block" for="direccion-@Direccion.IdDireccion">
+                                        <span class="fw-bold">
+                                            @Direccion.NombreDestinatario
+                                        </span>
+                                        @if (Direccion.EsPrincipal)
+                                        {
+                                            <span class="badge bg-dark ms-1">Principal</span>
+                                        }
+                                        <br>
+                                        @Direccion.DireccionExacta<br>
+                                        <span class="text-muted">
+                                            @Direccion.NombreDistrito, @Direccion.NombreCanton, @Direccion.NombreProvincia
+                                            · Tel: @Direccion.TelefonoContacto
+                                        </span>
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="border rounded p-4">
+                        <h2 class="h5 fw-bold pb-2">Método de pago</h2>
+                        <p class="text-muted small">
+                            El pago es simulado para efectos del proyecto:
+                            no se realiza ningún cobro real.
+                        </p>
+
+                        @Html.DropDownList(
+                            "IdMetodoPagoSeleccionado",
+                            Model.MetodosPago,
+                            "Seleccione un método de pago",
+                            new { @class = "form-select", id = "metodo-pago" }
+                        )
+                    </div>
+
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="border rounded p-4">
+                        <h2 class="h5 fw-bold pb-3">Resumen del pedido</h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle">
+                                <tbody>
+                                    @foreach (var Linea in Model.Lineas)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Linea.NombreProducto
+                                                <span class="text-muted">× @Linea.Cantidad</span>
+                                            </td>
+                                            <td class="text-end">
+                                                @string.Format("₡{0:N2}", Linea.SubtotalLinea)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between">
+                            <span>Subtotal</span>
+                            <span>@string.Format("₡{0:N2}", Model.Subtotal)</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Costo de envío</span>
+                            <span>@string.Format("₡{0:N2}", Model.CostoEnvio)</span>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold fs-5 pt-2">
+                            <span>Total</span>
+                            <span>@string.Format("₡{0:N2}", Model.Total)</span>
+                        </div>
+
+                        <button type="submit"
+                                id="btn-confirmar"
+                                class="btn btn-dark w-100 mt-4"
+                                @(Model.TieneDirecciones ? "" : "disabled")>
+                            Confirmar compra
+                        </button>
+
+                        <a href="@Url.Action("Index", "Carrito")"
+                           class="btn btn-outline-dark w-100 mt-2">
+                            Volver al carrito
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/checkout.js")"></script>
+}

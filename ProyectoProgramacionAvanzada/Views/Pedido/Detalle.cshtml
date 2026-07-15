@@ -1,0 +1,140 @@
+﻿@model ProyectoProgramacionAvanzada.Models.DetallePedidoViewModel
+
+@{
+    ViewBag.Title = "Detalle del pedido | LEN";
+
+    var ClaseEstado = "bg-light text-dark";
+
+    switch (Model.EstadoVisible)
+    {
+        case "Comprada":
+            ClaseEstado = "bg-success";
+            break;
+        case "En camino":
+            ClaseEstado = "bg-warning text-dark";
+            break;
+        case "Recibido":
+            ClaseEstado = "bg-secondary";
+            break;
+    }
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4 align-items-center">
+            <div class="col">
+                <h1 class="display-6 fw-bold">
+                    Pedido @Model.NumeroFactura
+                </h1>
+                <p class="text-muted m-0">
+                    Realizado el @Model.FechaPedido.ToString("dd/MM/yyyy hh:mm tt")
+                </p>
+            </div>
+            <div class="col-auto">
+                <span class="badge fs-6 @ClaseEstado">@Model.EstadoVisible</span>
+            </div>
+        </div>
+
+        <div class="row g-4 pb-4">
+            <div class="col-md-6">
+                <div class="border rounded p-4 h-100">
+                    <h2 class="h6 fw-bold pb-2">Dirección de envío</h2>
+                    <p class="m-0">
+                        <span class="fw-bold">@Model.NombreDestinatario</span><br>
+                        @Model.DireccionExacta<br>
+                        <span class="text-muted">
+                            @Model.NombreDistrito, @Model.NombreCanton, @Model.NombreProvincia
+                        </span><br>
+                        <span class="text-muted">Tel: @Model.TelefonoContacto</span>
+                        @if (!string.IsNullOrEmpty(Model.Referencia))
+                        {
+                            <br><span class="text-muted">Referencia: @Model.Referencia</span>
+                        }
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border rounded p-4 h-100">
+                    <h2 class="h6 fw-bold pb-2">Pago</h2>
+                    <p class="m-0">
+                        Método: <span class="fw-bold">@Model.NombreMetodoPago</span><br>
+                        @if (Model.FechaPago.HasValue)
+                        {
+                            <span class="text-muted">
+                                Fecha de pago: @Model.FechaPago.Value.ToString("dd/MM/yyyy hh:mm tt")
+                            </span>
+                            <br>
+                        }
+                        Estado del pago:
+                        <span class="badge bg-success">@Model.EstadoPago</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border rounded p-4 mb-4">
+            <h2 class="h5 fw-bold pb-2">Productos</h2>
+
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Producto</th>
+                            <th scope="col" class="text-center">Cantidad</th>
+                            <th scope="col" class="text-end">Precio</th>
+                            <th scope="col" class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Linea in Model.Lineas)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Linea.RutaImagen) ? "Content/Images/logo.jpeg" : Linea.RutaImagen))"
+                                             alt="@Linea.NombreProducto"
+                                             width="48" height="48"
+                                             class="rounded object-fit-cover">
+                                        <span>@Linea.NombreProducto</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">@Linea.Cantidad</td>
+                                <td class="text-end">
+                                    @string.Format("₡{0:N2}", Linea.PrecioUnitario)
+                                </td>
+                                <td class="text-end">
+                                    @string.Format("₡{0:N2}", Linea.SubtotalLinea)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <div class="row justify-content-end">
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex justify-content-between">
+                        <span>Subtotal</span>
+                        <span>@string.Format("₡{0:N2}", Model.Subtotal)</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Costo de envío</span>
+                        <span>@string.Format("₡{0:N2}", Model.CostoEnvio)</span>
+                    </div>
+                    <div class="d-flex justify-content-between fw-bold fs-5">
+                        <span>Total</span>
+                        <span>@string.Format("₡{0:N2}", Model.Total)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="@Url.Action("Historial", "Pedido")" class="btn btn-outline-dark px-4">
+            Volver a mis pedidos
+        </a>
+
+    </div>
+</section>

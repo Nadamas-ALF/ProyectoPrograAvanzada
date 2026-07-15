@@ -145,7 +145,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CarritoController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="EF\BD_LEN.Context.cs">
       <AutoGen>True</AutoGen>
@@ -162,6 +165,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BD_LEN.edmx</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_ActualizarCantidadCarrito_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_ActualizarContrasennaTemporal_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -171,7 +177,22 @@
     <Compile Include="EF\SP_ActualizarUsuario_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_AgregarProductoCarrito_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConfirmarCompra_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_ConsultarCantonesPorProvincia_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarCarrito_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarConfirmacionPedido_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarDetallePedido_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarDireccionesUsuario_Result.cs">
@@ -189,7 +210,16 @@
     <Compile Include="EF\SP_ConsultarEstados_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_ConsultarHistorialPedidos_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarMetodosPago_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_ConsultarProvincias_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarResumenCheckout_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarRoles_Result.cs">
@@ -205,6 +235,9 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_DesactivarDireccionUsuario_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_EliminarProductoCarrito_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_InsertarDireccionUsuario_Result.cs">
@@ -273,12 +306,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CarritoViewModel.cs" />
+    <Compile Include="Models\CheckoutViewModel.cs" />
+    <Compile Include="Models\ConfirmacionViewModel.cs" />
+    <Compile Include="Models\DetallePedidoViewModel.cs" />
     <Compile Include="Models\DireccionModel.cs" />
+    <Compile Include="Models\HistorialViewModel.cs" />
     <Compile Include="Models\InicioSesionModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CarritoService.cs" />
     <Compile Include="Services\CorreoService.cs" />
     <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\PedidoService.cs" />
     <Compile Include="Services\UsuarioService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +381,13 @@
     <Content Include="Views\Home\Principal.cshtml" />
     <Content Include="Views\Usuario\Detalle.cshtml" />
     <Content Include="Views\Home\Registro.cshtml" />
+    <Content Include="Views\Carrito\Index.cshtml" />
+    <Content Include="Views\Checkout\Index.cshtml" />
+    <Content Include="Views\Checkout\Confirmacion.cshtml" />
+    <Content Include="Views\Pedido\Historial.cshtml" />
+    <Content Include="Views\Pedido\Detalle.cshtml" />
+    <Content Include="Scripts\carrito.js" />
+    <Content Include="Scripts\checkout.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

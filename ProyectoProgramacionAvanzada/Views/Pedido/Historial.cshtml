@@ -1,0 +1,132 @@
+﻿@model ProyectoProgramacionAvanzada.Models.HistorialViewModel
+
+@{
+    ViewBag.Title = "Mis pedidos | LEN";
+}
+
+@helper BadgeEstado(string EstadoVisible)
+{
+    var Clase = "bg-light text-dark";
+
+    switch (EstadoVisible)
+    {
+        case "Comprada":
+            Clase = "bg-success";
+            break;
+        case "En camino":
+            Clase = "bg-warning text-dark";
+            break;
+        case "Recibido":
+            Clase = "bg-secondary";
+            break;
+    }
+
+    <span class="badge @Clase">@EstadoVisible</span>
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Mis pedidos</h1>
+                <p class="text-muted m-0">
+                    Historial de compras de su cuenta.
+                </p>
+            </div>
+        </div>
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        @if (!Model.TienePedidos)
+        {
+            <div class="text-center py-5 border rounded">
+                <h2 class="h4 pb-2">Aún no tiene pedidos</h2>
+                <p class="text-muted">
+                    Cuando realice una compra, podrá ver aquí su historial.
+                </p>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-dark px-4">
+                    Ver productos
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Factura</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col" class="text-center">Artículos</th>
+                            <th scope="col" class="text-end">Total</th>
+                            <th scope="col" class="text-center">Estado</th>
+                            <th scope="col" class="text-end"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Pedido in Model.Pedidos)
+                        {
+                            <tr>
+                                <td class="fw-bold">@Pedido.NumeroFactura</td>
+                                <td>@Pedido.FechaPedido.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center">@Pedido.CantidadProductos</td>
+                                <td class="text-end">
+                                    @string.Format("₡{0:N2}", Pedido.Total)
+                                </td>
+                                <td class="text-center">
+                                    @BadgeEstado(Pedido.EstadoVisible)
+                                </td>
+                                <td class="text-end">
+                                    <a href="@Url.Action("Detalle", "Pedido", new { id = Pedido.IdPedido })"
+                                       class="btn btn-outline-dark btn-sm">
+                                        Ver detalle
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            if (Model.TotalPaginas > 1)
+            {
+                <nav aria-label="Paginación del historial">
+                    <ul class="pagination justify-content-center mt-4">
+
+                        <li class="page-item @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                            <a class="page-link text-dark"
+                               href="@Url.Action("Historial", new { pagina = Model.PaginaActual - 1 })">
+                                Anterior
+                            </a>
+                        </li>
+
+                        @for (int Pagina = 1; Pagina <= Model.TotalPaginas; Pagina++)
+                        {
+                            <li class="page-item @(Pagina == Model.PaginaActual ? "active" : "")">
+                                <a class="page-link @(Pagina == Model.PaginaActual ? "bg-dark border-dark" : "text-dark")"
+                                   href="@Url.Action("Historial", new { pagina = Pagina })">
+                                    @Pagina
+                                </a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                            <a class="page-link text-dark"
+                               href="@Url.Action("Historial", new { pagina = Model.PaginaActual + 1 })">
+                                Siguiente
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            }
+        }
+
+    </div>
+</section>

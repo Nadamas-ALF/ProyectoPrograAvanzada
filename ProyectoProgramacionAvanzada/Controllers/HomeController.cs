@@ -19,7 +19,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         {
             if (Session["IdUsuario"] != null)
             {
-                return RedirectToAction("Principal", "Home");
+                return RedirigirSegunRol();
             }
 
             return View(new InicioSesionModel());
@@ -61,7 +61,12 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     Session["IdEstado"] = Usuario.IdEstado;
                     Session["NombreEstado"] = Usuario.NombreEstado;
 
-                    return RedirectToAction("Principal", "Home");
+                    /*
+                     * El destino depende del rol: el panel administrativo
+                     * es solo para administradores; los clientes navegan
+                     * la tienda (index).
+                     */
+                    return RedirigirSegunRol();
                 }
             }
             catch (Exception Excepcion)
@@ -92,6 +97,11 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
+            if (!EsAdministrador())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -111,7 +121,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         {
             if (Session["IdUsuario"] != null)
             {
-                return RedirectToAction("Principal");
+                return RedirigirSegunRol();
             }
 
             return View(new UsuarioModel());
@@ -229,7 +239,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         {
             if (Session["IdUsuario"] != null)
             {
-                return RedirectToAction("Principal");
+                return RedirigirSegunRol();
             }
 
             return View(new UsuarioModel());
@@ -366,6 +376,25 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
         }
 
+
+        private bool EsAdministrador()
+        {
+            return string.Equals(
+                Session["NombreRol"] as string,
+                "Administrador",
+                StringComparison.OrdinalIgnoreCase
+            );
+        }
+
+        private ActionResult RedirigirSegunRol()
+        {
+            if (EsAdministrador())
+            {
+                return RedirectToAction("Principal", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
 
         private void RegistrarError(
             string Origen,
