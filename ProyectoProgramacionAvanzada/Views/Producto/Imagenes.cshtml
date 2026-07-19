@@ -1,0 +1,126 @@
+@model ProyectoProgramacionAvanzada.Models.ImagenesProductoViewModel
+
+@{
+    ViewBag.Title = "Imágenes del producto";
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Imágenes de "@Model.NombreProducto"</h1>
+        <p class="text-muted m-0">
+            La imagen principal es la que se muestra en el catálogo.
+        </p>
+    </div>
+
+    <a href="@Url.Action("Index", "Producto")" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+        Volver a productos
+    </a>
+</div>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["MensajeExito"]
+    </div>
+}
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-warning" role="alert">
+        @TempData["MensajeError"]
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        @using (Html.BeginForm(
+            "SubirImagen",
+            "Producto",
+            FormMethod.Post,
+            new { enctype = "multipart/form-data", @class = "row g-2 align-items-end" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.IdProducto" />
+
+            <div class="col-12 col-md-8">
+                <label class="form-label" for="archivo">
+                    Nueva imagen (JPG, PNG o WEBP, máximo 5 MB)
+                </label>
+                <input type="file"
+                       class="form-control"
+                       id="archivo"
+                       name="archivo"
+                       accept=".jpg,.jpeg,.png,.webp"
+                       required />
+            </div>
+
+            <div class="col-12 col-md-4 d-grid">
+                <button type="submit" class="btn btn-dark">
+                    <i class="bi bi-upload me-1" aria-hidden="true"></i>
+                    Subir imagen
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.Imagenes.Count == 0)
+{
+    <div class="text-center py-5 border rounded">
+        <h2 class="h5 pb-2">Este producto aún no tiene imágenes</h2>
+        <p class="text-muted m-0">
+            Suba al menos una imagen para mostrarla en el catálogo.
+        </p>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var Imagen in Model.Imagenes)
+        {
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card h-100">
+                    <img src="@Url.Content("~/" + Imagen.RutaImagen)"
+                         alt="Imagen del producto"
+                         class="card-img-top"
+                         style="height:180px;object-fit:cover;" />
+
+                    <div class="card-body d-flex flex-column gap-2">
+                        @if (Imagen.EsPrincipal)
+                        {
+                            <span class="badge bg-success align-self-start">
+                                <i class="bi bi-star-fill me-1" aria-hidden="true"></i>
+                                Principal
+                            </span>
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("MarcarPrincipal", "Producto", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@Imagen.IdImagen" />
+                                <input type="hidden" name="idProducto" value="@Model.IdProducto" />
+                                <button type="submit" class="btn btn-sm btn-outline-success w-100">
+                                    Marcar como principal
+                                </button>
+                            }
+                        }
+
+                        @using (Html.BeginForm("EliminarImagen", "Producto", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Imagen.IdImagen" />
+                            <input type="hidden" name="idProducto" value="@Model.IdProducto" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                <i class="bi bi-trash me-1" aria-hidden="true"></i>
+                                Eliminar
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
