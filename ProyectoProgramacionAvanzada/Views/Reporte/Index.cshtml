@@ -1,0 +1,176 @@
+@model ProyectoProgramacionAvanzada.Models.ReporteVentasViewModel
+
+@{
+    ViewBag.Title = "Reportes de ventas";
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Reportes de ventas</h1>
+        <p class="text-muted m-0">
+            Desempeño de la tienda en el período seleccionado.
+        </p>
+    </div>
+
+    <a href="@Url.Action("Exportar", "Reporte", new
+             {
+                 fechaInicio = Model.FechaInicio.ToString("yyyy-MM-dd"),
+                 fechaFin = Model.FechaFin.ToString("yyyy-MM-dd")
+             })"
+       class="btn btn-dark">
+        <i class="bi bi-download me-1" aria-hidden="true"></i>
+        Exportar reporte
+    </a>
+</div>
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-warning" role="alert">
+        @TempData["MensajeError"]
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" action="@Url.Action("Index", "Reporte")" class="row g-2 align-items-end">
+            <div class="col-6 col-md-4">
+                <label class="form-label" for="fechaInicio">Fecha de inicio</label>
+                <input type="date"
+                       class="form-control"
+                       id="fechaInicio"
+                       name="fechaInicio"
+                       value="@Model.FechaInicio.ToString("yyyy-MM-dd")"
+                       required />
+            </div>
+
+            <div class="col-6 col-md-4">
+                <label class="form-label" for="fechaFin">Fecha de fin</label>
+                <input type="date"
+                       class="form-control"
+                       id="fechaFin"
+                       name="fechaFin"
+                       value="@Model.FechaFin.ToString("yyyy-MM-dd")"
+                       required />
+            </div>
+
+            <div class="col-12 col-md-4 d-grid">
+                <button type="submit" class="btn btn-outline-dark">
+                    <i class="bi bi-graph-up me-1" aria-hidden="true"></i>
+                    Generar reporte
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Total de ventas</small>
+                <span class="h4 fw-bold">₡@Model.Resumen.TotalVentas.ToString("N2")</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Pedidos</small>
+                <span class="h4 fw-bold">@Model.Resumen.CantidadPedidos</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Productos vendidos</small>
+                <span class="h4 fw-bold">@Model.Resumen.ProductosVendidos</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white">
+                <strong>Ventas por día</strong>
+            </div>
+
+            @if (Model.VentasPorDia.Count == 0)
+            {
+                <div class="card-body text-muted">
+                    No hay ventas registradas en el período seleccionado.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha</th>
+                                <th scope="col" class="text-center">Pedidos</th>
+                                <th scope="col" class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Dia in Model.VentasPorDia)
+                            {
+                                <tr>
+                                    <td>@Dia.Fecha.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">@Dia.CantidadPedidos</td>
+                                    <td class="text-end">₡@Dia.TotalVentas.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white">
+                <strong>Productos más vendidos</strong>
+            </div>
+
+            @if (Model.ProductosMasVendidos.Count == 0)
+            {
+                <div class="card-body text-muted">
+                    No hay productos vendidos en el período seleccionado.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col" class="text-center">Unidades</th>
+                                <th scope="col" class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Producto in Model.ProductosMasVendidos)
+                            {
+                                <tr>
+                                    <td>@Producto.NombreProducto</td>
+                                    <td class="text-muted">@Producto.NombreCategoria</td>
+                                    <td class="text-center">@Producto.UnidadesVendidas</td>
+                                    <td class="text-end">₡@Producto.TotalVendido.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

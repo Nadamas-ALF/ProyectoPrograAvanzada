@@ -1,0 +1,229 @@
+@model ProyectoProgramacionAvanzada.Models.DetallePedidoAdminViewModel
+
+@{
+    ViewBag.Title = "Detalle del pedido";
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="h3 fw-bold mb-1">
+            @(Model.NumeroFactura ?? ("Pedido #" + Model.IdPedido))
+        </h1>
+        <p class="text-muted m-0">
+            Realizado el @Model.FechaPedido.ToString("dd/MM/yyyy hh:mm tt")
+        </p>
+    </div>
+
+    <a href="@Url.Action("Index", "PedidoAdmin")" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+        Volver a pedidos
+    </a>
+</div>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["MensajeExito"]
+    </div>
+}
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-warning" role="alert">
+        @TempData["MensajeError"]
+    </div>
+}
+
+<div class="row g-4">
+    <div class="col-12 col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <strong>Productos del pedido</strong>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Producto</th>
+                            <th scope="col" class="text-center">Cantidad</th>
+                            <th scope="col" class="text-end">Precio unitario</th>
+                            <th scope="col" class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Linea in Model.Lineas)
+                        {
+                            <tr>
+                                <td>@Linea.NombreProducto</td>
+                                <td class="text-center">@Linea.Cantidad</td>
+                                <td class="text-end">₡@Linea.PrecioUnitario.ToString("N2")</td>
+                                <td class="text-end">₡@Linea.SubtotalLinea.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end text-muted">Subtotal</td>
+                            <td class="text-end">₡@Model.Subtotal.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end text-muted">Costo de envío</td>
+                            <td class="text-end">₡@Model.CostoEnvio.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total</strong></td>
+                            <td class="text-end"><strong>₡@Model.Total.ToString("N2")</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-white">
+                <strong>Datos del cliente y envío</strong>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <small class="text-muted d-block">Cliente</small>
+                        @Model.NombreCliente
+                        <br />
+                        <small class="text-muted">@Model.EmailCliente</small>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <small class="text-muted d-block">Destinatario</small>
+                        @Model.NombreDestinatario
+                        <br />
+                        <small class="text-muted">Tel: @Model.TelefonoContacto</small>
+                    </div>
+
+                    <div class="col-12">
+                        <small class="text-muted d-block">Dirección de envío</small>
+                        @Model.DireccionExacta,
+                        @Model.NombreDistrito,
+                        @Model.NombreCanton,
+                        @Model.NombreProvincia
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <small class="text-muted d-block">Método de pago</small>
+                        @(Model.NombreMetodoPago ?? "No registrado")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <strong>Estado del pedido</strong>
+            </div>
+            <div class="card-body">
+                @{
+                    string ClaseEstado = "bg-light text-dark";
+
+                    switch (Model.NombreEstado)
+                    {
+                        case "Pagado":
+                            ClaseEstado = "bg-success";
+                            break;
+                        case "En preparación":
+                            ClaseEstado = "bg-warning text-dark";
+                            break;
+                        case "Entregado":
+                            ClaseEstado = "bg-secondary";
+                            break;
+                        case "Cancelado":
+                            ClaseEstado = "bg-danger";
+                            break;
+                    }
+                }
+
+                <p>
+                    Estado actual:
+                    <span class="badge @ClaseEstado">@Model.NombreEstado</span>
+                </p>
+
+                @if (Model.NombreEstado == "Cancelado"
+                     && !string.IsNullOrWhiteSpace(Model.MotivoCancelacion))
+                {
+                    <div class="alert alert-danger">
+                        <strong>Motivo de cancelación:</strong>
+                        <br />
+                        @Model.MotivoCancelacion
+                    </div>
+                }
+
+                @if (Model.PuedeCambiarEstado)
+                {
+                    using (Html.BeginForm("ActualizarEstado", "PedidoAdmin", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.IdPedido" />
+
+                        <div class="mb-3">
+                            <label class="form-label" for="idEstadoNuevo">Nuevo estado</label>
+                            <select class="form-select" id="idEstadoNuevo" name="idEstadoNuevo" required>
+                                <option value="">Seleccione un estado</option>
+                                @foreach (var Estado in Model.EstadosSiguientes)
+                                {
+                                    <option value="@Estado.Value">@Estado.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="GrupoMotivo" style="display:none;">
+                            <label class="form-label" for="motivoCancelacion">
+                                Motivo de la cancelación
+                            </label>
+                            <textarea class="form-control"
+                                      id="motivoCancelacion"
+                                      name="motivoCancelacion"
+                                      maxlength="255"
+                                      rows="3"
+                                      placeholder="Indique el motivo (opcional)"></textarea>
+                            <small class="text-muted">
+                                Al cancelar, el stock de los productos se devuelve al inventario.
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100">
+                            Actualizar estado
+                        </button>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted m-0">
+                        Este pedido ya no admite cambios de estado.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var Selector = document.getElementById("idEstadoNuevo");
+            var GrupoMotivo = document.getElementById("GrupoMotivo");
+
+            if (!Selector || !GrupoMotivo) {
+                return;
+            }
+
+            Selector.addEventListener("change", function () {
+                var TextoSeleccionado =
+                    Selector.options[Selector.selectedIndex].text;
+
+                GrupoMotivo.style.display =
+                    TextoSeleccionado === "Cancelado" ? "block" : "none";
+            });
+        })();
+    </script>
+}
