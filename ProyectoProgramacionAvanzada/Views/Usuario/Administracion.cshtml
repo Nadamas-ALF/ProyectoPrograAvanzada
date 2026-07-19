@@ -1,0 +1,1161 @@
+﻿@model List<ProyectoProgramacionAvanzada.Models.UsuarioModel>
+
+@using System
+@using System.Web.Mvc
+
+@{
+    ViewBag.Title = "Administración de usuarios";
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+
+    SelectList Roles = ViewBag.Roles as SelectList;
+    SelectList Estados = ViewBag.Estados as SelectList;
+
+    int TotalUsuarios = 0;
+    int UsuariosActivos = 0;
+    int UsuariosInactivos = 0;
+    int Administradores = 0;
+
+    if (Model != null)
+    {
+        TotalUsuarios = Model.Count;
+
+        foreach (var Usuario in Model)
+        {
+            if (string.Equals(
+                Usuario.NombreEstado,
+                "Activo",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                UsuariosActivos++;
+            }
+
+            if (string.Equals(
+                Usuario.NombreEstado,
+                "Inactivo",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                UsuariosInactivos++;
+            }
+
+            if (string.Equals(
+                Usuario.NombreRol,
+                "Administrador",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                Administradores++;
+            }
+        }
+    }
+}
+
+<header class="page-heading mb-4">
+
+    <div class="d-flex flex-column flex-md-row
+                justify-content-between align-items-md-center gap-3">
+
+        <div class="page-heading-copy">
+
+            <span class="page-icon">
+                <i class="bi bi-people"
+                   aria-hidden="true"></i>
+            </span>
+
+            <div>
+
+                <p class="eyebrow mb-1">
+                    Administración
+                </p>
+
+                <h1 class="h3 mb-1">
+                    Usuarios
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Administra las cuentas, roles y estados
+                    de los usuarios registrados.
+                </p>
+
+            </div>
+
+        </div>
+
+        <button type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#ModalAgregarUsuario">
+
+            <i class="bi bi-person-plus me-1"
+               aria-hidden="true"></i>
+
+            Agregar usuario
+
+        </button>
+
+    </div>
+
+</header>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show"
+         role="alert">
+
+        <i class="bi bi-check-circle me-2"
+           aria-hidden="true"></i>
+
+        @TempData["MensajeExito"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Cerrar">
+        </button>
+
+    </div>
+}
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show"
+         role="alert">
+
+        <i class="bi bi-exclamation-circle me-2"
+           aria-hidden="true"></i>
+
+        @TempData["MensajeError"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Cerrar">
+        </button>
+
+    </div>
+}
+
+<section class="row g-3 mb-4">
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="panel h-100">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <p class="text-muted mb-1">
+                        Total de usuarios
+                    </p>
+
+                    <h2 class="h3 mb-0">
+                        @TotalUsuarios
+                    </h2>
+
+                </div>
+
+                <span class="page-icon">
+                    <i class="bi bi-people"
+                       aria-hidden="true"></i>
+                </span>
+
+            </div>
+
+        </article>
+
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="panel h-100">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <p class="text-muted mb-1">
+                        Usuarios activos
+                    </p>
+
+                    <h2 class="h3 mb-0 text-success">
+                        @UsuariosActivos
+                    </h2>
+
+                </div>
+
+                <span class="page-icon">
+                    <i class="bi bi-person-check"
+                       aria-hidden="true"></i>
+                </span>
+
+            </div>
+
+        </article>
+
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="panel h-100">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <p class="text-muted mb-1">
+                        Usuarios inactivos
+                    </p>
+
+                    <h2 class="h3 mb-0 text-secondary">
+                        @UsuariosInactivos
+                    </h2>
+
+                </div>
+
+                <span class="page-icon">
+                    <i class="bi bi-person-x"
+                       aria-hidden="true"></i>
+                </span>
+
+            </div>
+
+        </article>
+
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+
+        <article class="panel h-100">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <p class="text-muted mb-1">
+                        Administradores
+                    </p>
+
+                    <h2 class="h3 mb-0 text-primary">
+                        @Administradores
+                    </h2>
+
+                </div>
+
+                <span class="page-icon">
+                    <i class="bi bi-shield-check"
+                       aria-hidden="true"></i>
+                </span>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header d-flex flex-column flex-md-row
+                justify-content-between align-items-md-center gap-3">
+
+        <div>
+
+            <h2 class="h5 mb-1">
+                Lista de usuarios
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulta y modifica los usuarios registrados.
+            </p>
+
+        </div>
+
+        <div style="width: 100%; max-width: 320px;">
+
+            <label class="visually-hidden"
+                   for="BuscarUsuario">
+                Buscar usuario
+            </label>
+
+            <div class="input-group">
+
+                <span class="input-group-text">
+                    <i class="bi bi-search"
+                       aria-hidden="true"></i>
+                </span>
+
+                <input type="search"
+                       id="BuscarUsuario"
+                       class="form-control"
+                       placeholder="Buscar usuario..."
+                       autocomplete="off" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table align-middle mb-0"
+               id="TablaUsuarios">
+
+            <thead>
+
+                <tr>
+                    <th>Usuario</th>
+                    <th>Cédula</th>
+                    <th>Teléfono</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Fecha de registro</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model == null || Model.Count == 0)
+                {
+                    <tr>
+
+                        <td colspan="7"
+                            class="text-center text-muted py-5">
+
+                            <i class="bi bi-people fs-3 d-block mb-2"
+                               aria-hidden="true"></i>
+
+                            No hay usuarios registrados.
+
+                        </td>
+
+                    </tr>
+                }
+                else
+                {
+                    foreach (var Usuario in Model)
+                    {
+                        bool EstaActivo = string.Equals(
+                            Usuario.NombreEstado,
+                            "Activo",
+                            StringComparison.OrdinalIgnoreCase
+                        );
+
+                        <tr class="FilaUsuario">
+
+                            <td>
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <span class="profile-avatar avatar-sm">
+
+                                        @{
+                                            string InicialUsuario = "";
+
+                                            if (!string.IsNullOrWhiteSpace(
+                                                Usuario.Nombre))
+                                            {
+                                                InicialUsuario +=
+                                                    Usuario.Nombre.Substring(0, 1);
+                                            }
+
+                                            if (!string.IsNullOrWhiteSpace(
+                                                Usuario.Apellido))
+                                            {
+                                                InicialUsuario +=
+                                                    Usuario.Apellido.Substring(0, 1);
+                                            }
+                                        }
+
+                                        @InicialUsuario.ToUpper()
+
+                                    </span>
+
+                                    <div>
+
+                                        <strong class="d-block">
+                                            @Usuario.Nombre @Usuario.Apellido
+                                        </strong>
+
+                                        <small class="text-muted">
+                                            @Usuario.Email
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                @(string.IsNullOrWhiteSpace(Usuario.Cedula)
+                                    ? "No registrada"
+                                    : Usuario.Cedula)
+
+                            </td>
+
+                            <td>
+
+                                @(string.IsNullOrWhiteSpace(Usuario.Telefono)
+                                    ? "No registrado"
+                                    : Usuario.Telefono)
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge bg-primary">
+                                    @Usuario.NombreRol
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                @if (EstaActivo)
+                                {
+                                    <span class="badge bg-success">
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        @Usuario.NombreEstado
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+                                @Usuario.FechaRegistro.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td class="text-end text-nowrap">
+
+                                <a class="btn btn-outline-secondary btn-sm"
+                                   href="@Url.Action(
+                                       "Detalle",
+                                       "Usuario",
+                                       new
+                                       {
+                                           IdUsuario = Usuario.IdUsuario
+                                       }
+                                   )">
+
+                                    <i class="bi bi-eye"
+                                       aria-hidden="true"></i>
+
+                                    Ver
+
+                                </a>
+
+                                <button type="button"
+                                        class="btn btn-outline-primary btn-sm BotonEditarUsuario"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#ModalEditarUsuario"
+                                        data-id="@Usuario.IdUsuario"
+                                        data-nombre="@Usuario.Nombre"
+                                        data-apellido="@Usuario.Apellido"
+                                        data-cedula="@Usuario.Cedula"
+                                        data-telefono="@Usuario.Telefono"
+                                        data-email="@Usuario.Email"
+                                        data-rol="@Usuario.IdRol"
+                                        data-estado="@Usuario.IdEstado">
+
+                                    <i class="bi bi-pencil"
+                                       aria-hidden="true"></i>
+
+                                    Editar
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div id="MensajeSinResultados"
+         class="text-center text-muted py-5 d-none">
+
+        <i class="bi bi-search fs-3 d-block mb-2"
+           aria-hidden="true"></i>
+
+        No se encontraron usuarios.
+
+    </div>
+
+</section>
+
+<!-- ===================================================== -->
+<!-- MODAL AGREGAR USUARIO -->
+<!-- ===================================================== -->
+
+<div class="modal fade"
+     id="ModalAgregarUsuario"
+     tabindex="-1"
+     aria-labelledby="TituloModalAgregarUsuario"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            @using (Html.BeginForm(
+                "AgregarUsuario",
+                "Usuario",
+                FormMethod.Post,
+                new
+                {
+                    autocomplete = "off"
+                }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="modal-header">
+
+                    <div>
+
+                        <h2 class="modal-title fs-5"
+                            id="TituloModalAgregarUsuario">
+
+                            <i class="bi bi-person-plus me-2"
+                               aria-hidden="true"></i>
+
+                            Agregar usuario
+
+                        </h2>
+
+                        <p class="text-muted small mb-0">
+                            Complete los datos de la nueva cuenta.
+                        </p>
+
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Cerrar">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarNombre">
+                                Nombre
+                            </label>
+
+                            <input type="text"
+                                   id="AgregarNombre"
+                                   name="Nombre"
+                                   class="form-control"
+                                   maxlength="100"
+                                   required />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarApellido">
+                                Apellido
+                            </label>
+
+                            <input type="text"
+                                   id="AgregarApellido"
+                                   name="Apellido"
+                                   class="form-control"
+                                   maxlength="100"
+                                   required />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarCedula">
+                                Cédula
+                            </label>
+
+                            <input type="text"
+                                   id="AgregarCedula"
+                                   name="Cedula"
+                                   class="form-control"
+                                   maxlength="20" />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarTelefono">
+                                Teléfono
+                            </label>
+
+                            <input type="tel"
+                                   id="AgregarTelefono"
+                                   name="Telefono"
+                                   class="form-control"
+                                   maxlength="20" />
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label class="form-label"
+                                   for="AgregarEmail">
+                                Correo electrónico
+                            </label>
+
+                            <input type="email"
+                                   id="AgregarEmail"
+                                   name="Email"
+                                   class="form-control"
+                                   maxlength="150"
+                                   required />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarIdRol">
+                                Rol
+                            </label>
+
+                            @Html.DropDownList(
+                                "IdRol",
+                                Roles,
+                                "Seleccione un rol",
+                                new
+                                {
+                                    id = "AgregarIdRol",
+                                    @class = "form-select",
+                                    required = "required"
+                                }
+                            )
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarIdEstado">
+                                Estado
+                            </label>
+
+                            @Html.DropDownList(
+                                "IdEstado",
+                                Estados,
+                                "Seleccione un estado",
+                                new
+                                {
+                                    id = "AgregarIdEstado",
+                                    @class = "form-select",
+                                    required = "required"
+                                }
+                            )
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarContrasenna">
+                                Contraseña
+                            </label>
+
+                            <div class="input-group">
+
+                                <input type="password"
+                                       id="AgregarContrasenna"
+                                       name="Contrasenna"
+                                       class="form-control"
+                                       minlength="8"
+                                       maxlength="255"
+                                       autocomplete="new-password"
+                                       required />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        data-password-toggle="AgregarContrasenna"
+                                        aria-label="Mostrar u ocultar contraseña">
+
+                                    <i class="bi bi-eye"
+                                       aria-hidden="true"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="AgregarConfirmarContrasenna">
+                                Confirmar contraseña
+                            </label>
+
+                            <div class="input-group">
+
+                                <input type="password"
+                                       id="AgregarConfirmarContrasenna"
+                                       name="ConfirmarContrasenna"
+                                       class="form-control"
+                                       minlength="8"
+                                       maxlength="255"
+                                       autocomplete="new-password"
+                                       required />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        data-password-toggle="AgregarConfirmarContrasenna"
+                                        aria-label="Mostrar u ocultar contraseña">
+
+                                    <i class="bi bi-eye"
+                                       aria-hidden="true"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-floppy me-1"
+                           aria-hidden="true"></i>
+
+                        Registrar usuario
+
+                    </button>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- MODAL EDITAR USUARIO -->
+<!-- ===================================================== -->
+
+<div class="modal fade"
+     id="ModalEditarUsuario"
+     tabindex="-1"
+     aria-labelledby="TituloModalEditarUsuario"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            @using (Html.BeginForm(
+                "EditarUsuario",
+                "Usuario",
+                FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       id="EditarIdUsuario"
+                       name="IdUsuario" />
+
+                <div class="modal-header">
+
+                    <div>
+
+                        <h2 class="modal-title fs-5"
+                            id="TituloModalEditarUsuario">
+
+                            <i class="bi bi-pencil me-2"
+                               aria-hidden="true"></i>
+
+                            Editar usuario
+
+                        </h2>
+
+                        <p class="text-muted small mb-0">
+                            Modifique los datos generales de la cuenta.
+                        </p>
+
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Cerrar">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="EditarNombre">
+                                Nombre
+                            </label>
+
+                            <input type="text"
+                                   id="EditarNombre"
+                                   name="Nombre"
+                                   class="form-control"
+                                   maxlength="100"
+                                   required />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="EditarApellido">
+                                Apellido
+                            </label>
+
+                            <input type="text"
+                                   id="EditarApellido"
+                                   name="Apellido"
+                                   class="form-control"
+                                   maxlength="100"
+                                   required />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="EditarCedula">
+                                Cédula
+                            </label>
+
+                            <input type="text"
+                                   id="EditarCedula"
+                                   name="Cedula"
+                                   class="form-control"
+                                   maxlength="20" />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="EditarTelefono">
+                                Teléfono
+                            </label>
+
+                            <input type="tel"
+                                   id="EditarTelefono"
+                                   name="Telefono"
+                                   class="form-control"
+                                   maxlength="20" />
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label class="form-label"
+                                   for="EditarEmail">
+                                Correo electrónico
+                            </label>
+
+                            <input type="email"
+                                   id="EditarEmail"
+                                   name="Email"
+                                   class="form-control"
+                                   maxlength="150"
+                                   required />
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="EditarIdRol">
+                                Rol
+                            </label>
+
+                            @Html.DropDownList(
+                                "IdRol",
+                                Roles,
+                                "Seleccione un rol",
+                                new
+                                {
+                                    id = "EditarIdRol",
+                                    @class = "form-select",
+                                    required = "required"
+                                }
+                            )
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label"
+                                   for="EditarIdEstado">
+                                Estado
+                            </label>
+
+                            @Html.DropDownList(
+                                "IdEstado",
+                                Estados,
+                                "Seleccione un estado",
+                                new
+                                {
+                                    id = "EditarIdEstado",
+                                    @class = "form-select",
+                                    required = "required"
+                                }
+                            )
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-floppy me-1"
+                           aria-hidden="true"></i>
+
+                        Guardar cambios
+
+                    </button>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const Buscador =
+                document.getElementById("BuscarUsuario");
+
+            const Filas =
+                document.querySelectorAll(
+                    "#TablaUsuarios .FilaUsuario"
+                );
+
+            const MensajeSinResultados =
+                document.getElementById(
+                    "MensajeSinResultados"
+                );
+
+            if (Buscador) {
+
+                Buscador.addEventListener(
+                    "input",
+                    function () {
+
+                        const Texto =
+                            this.value
+                                .toLowerCase()
+                                .trim();
+
+                        let Coincidencias = 0;
+
+                        Filas.forEach(function (Fila) {
+
+                            const Contenido =
+                                Fila.textContent
+                                    .toLowerCase();
+
+                            const Mostrar =
+                                Contenido.includes(Texto);
+
+                            Fila.style.display =
+                                Mostrar ? "" : "none";
+
+                            if (Mostrar) {
+                                Coincidencias++;
+                            }
+                        });
+
+                        if (MensajeSinResultados) {
+
+                            MensajeSinResultados
+                                .classList
+                                .toggle(
+                                    "d-none",
+                                    Coincidencias > 0
+                                );
+                        }
+                    }
+                );
+            }
+
+            document
+                .querySelectorAll(
+                    ".BotonEditarUsuario"
+                )
+                .forEach(function (Boton) {
+
+                    Boton.addEventListener(
+                        "click",
+                        function () {
+
+                            document.getElementById(
+                                "EditarIdUsuario"
+                            ).value =
+                                this.dataset.id || "";
+
+                            document.getElementById(
+                                "EditarNombre"
+                            ).value =
+                                this.dataset.nombre || "";
+
+                            document.getElementById(
+                                "EditarApellido"
+                            ).value =
+                                this.dataset.apellido || "";
+
+                            document.getElementById(
+                                "EditarCedula"
+                            ).value =
+                                this.dataset.cedula || "";
+
+                            document.getElementById(
+                                "EditarTelefono"
+                            ).value =
+                                this.dataset.telefono || "";
+
+                            document.getElementById(
+                                "EditarEmail"
+                            ).value =
+                                this.dataset.email || "";
+
+                            document.getElementById(
+                                "EditarIdRol"
+                            ).value =
+                                this.dataset.rol || "";
+
+                            document.getElementById(
+                                "EditarIdEstado"
+                            ).value =
+                                this.dataset.estado || "";
+                        }
+                    );
+                });
+
+            document
+                .querySelectorAll(
+                    "[data-password-toggle]"
+                )
+                .forEach(function (Boton) {
+
+                    Boton.addEventListener(
+                        "click",
+                        function () {
+
+                            const IdCampo =
+                                this.dataset.passwordToggle;
+
+                            const Campo =
+                                document.getElementById(
+                                    IdCampo
+                                );
+
+                            const Icono =
+                                this.querySelector("i");
+
+                            if (!Campo || !Icono) {
+                                return;
+                            }
+
+                            if (Campo.type === "password") {
+
+                                Campo.type = "text";
+                                Icono.className =
+                                    "bi bi-eye-slash";
+                            }
+                            else {
+
+                                Campo.type = "password";
+                                Icono.className =
+                                    "bi bi-eye";
+                            }
+                        }
+                    );
+                });
+
+            const AbrirModalAgregar =
+                '@Convert.ToString(
+                    TempData["AbrirModalAgregarUsuario"]
+                )';
+
+            if (
+                AbrirModalAgregar
+                    .toLowerCase() === "true"
+            ) {
+                const ElementoModal =
+                    document.getElementById(
+                        "ModalAgregarUsuario"
+                    );
+
+                if (ElementoModal) {
+
+                    const ModalAgregar =
+                        new bootstrap.Modal(
+                            ElementoModal
+                        );
+
+                    ModalAgregar.show();
+                }
+            }
+        });
+    </script>
+}

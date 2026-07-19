@@ -120,19 +120,27 @@
 
                 </a>
 
-                <a class="nav-link"
-                   href="@Url.Action("Index", "Usuario")">
+                @if (string.Equals(
+                    NombreRol,
+                    "Administrador",
+                    StringComparison.OrdinalIgnoreCase))
+                     {
+                    <a class="nav-link"
+                       href="@Url.Action(
+                    "Administracion",
+                    "Usuario"
+                     )">
 
-                    <span class="nav-icon">
-                        <i class="bi bi-people"
-                           aria-hidden="true"></i>
-                    </span>
+                        <span class="nav-icon">
+                            <i class="bi bi-people"
+                               aria-hidden="true"></i>
+                        </span>
 
-                    <span class="nav-text">
-                        Usuarios
-                    </span>
-
-                </a>
+                        <span class="nav-text">
+                            Usuarios
+                        </span>
+                    </a>
+                }
 
                 <a class="nav-link"
                    href="@Url.Action("Index", "Producto")">

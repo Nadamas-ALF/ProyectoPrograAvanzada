@@ -307,6 +307,9 @@
     <Compile Include="EF\SP_ConsultarUsuarioRecuperacion_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_ConsultarUsuarios_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_DesactivarDireccionUsuario_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -314,6 +317,9 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_InsertarDireccionUsuario_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_RegistrarUsuarioAdministracion_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_RegistrarUsuario_Result.cs">
@@ -473,6 +479,7 @@
     <Content Include="Views\Producto\Imagenes.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
     <Content Include="Views\Reporte\Index.cshtml" />
+    <Content Include="Views\Usuario\Administracion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
