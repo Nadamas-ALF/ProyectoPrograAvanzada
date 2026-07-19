@@ -1,0 +1,139 @@
+@using System.Linq
+@model ProyectoProgramacionAvanzada.Models.CatalogoViewModel
+
+@{
+    ViewBag.Title = "Catálogo | LEN";
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Catálogo de accesorios</h1>
+                <p class="text-muted m-0">
+                    Explore los accesorios disponibles en LEN Accessories.
+                </p>
+            </div>
+        </div>
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        @if (TempData["MensajeExito"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["MensajeExito"]
+            </div>
+        }
+
+        <form method="get" action="@Url.Action("Index", "Catalogo")" class="row g-2 mb-4">
+            <div class="col-md-5">
+                <input type="text" name="busqueda" value="@Model.Busqueda"
+                       class="form-control" placeholder="Buscar por nombre...">
+            </div>
+            <div class="col-md-3">
+                <select name="idCategoria" class="form-select">
+                    <option value="">Todas las categorías</option>
+                    @foreach (var Categoria in Model.Categorias)
+                    {
+                        <option value="@Categoria.Value"
+                                selected="@(Model.IdCategoria.HasValue && Model.IdCategoria.Value.ToString() == Categoria.Value)">
+                            @Categoria.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="text" name="color" value="@Model.Color"
+                       class="form-control" placeholder="Color">
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-dark">Buscar</button>
+            </div>
+        </form>
+
+        @if (Model.Productos.Count == 0)
+        {
+            <div class="text-center py-5 border rounded">
+                <h2 class="h4 pb-2">
+                    @if (!string.IsNullOrWhiteSpace(Model.Busqueda) || Model.IdCategoria.HasValue || !string.IsNullOrWhiteSpace(Model.Color))
+                    {
+                        <text>No se encontraron resultados para su búsqueda.</text>
+                    }
+                    else
+                    {
+                        <text>No hay productos disponibles por el momento.</text>
+                    }
+                </h2>
+                <p class="text-muted">
+                    Intente con otros filtros o vuelva más tarde.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var Producto in Model.Productos)
+                {
+                    <div class="col">
+                        <div class="border rounded h-100 position-relative">
+                            @if (Session["IdUsuario"] != null)
+                            {
+                                <form method="post"
+                                      action="@Url.Action(Producto.EsFavorito ? "Eliminar" : "Agregar", "Favorito")"
+                                      class="position-absolute top-0 end-0 m-2">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="idProducto" value="@Producto.IdProducto">
+                                    <input type="hidden" name="urlRetorno" value="@Request.Url">
+                                    <button type="submit"
+                                            class="btn btn-sm @(Producto.EsFavorito ? "btn-danger" : "btn-outline-danger")"
+                                            title="@(Producto.EsFavorito ? "Quitar de favoritos" : "Agregar a favoritos")">
+                                        <i class="bi @(Producto.EsFavorito ? "bi-heart-fill" : "bi-heart")"></i>
+                                    </button>
+                                </form>
+                            }
+                            <a href="@Url.Action("Detalle", "Catalogo", new { id = Producto.IdProducto })"
+                               class="text-decoration-none text-reset">
+                                <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Producto.RutaImagen) ? "Content/Images/logo.jpeg" : Producto.RutaImagen))"
+                                     alt="@Producto.NombreProducto"
+                                     class="w-100 object-fit-cover"
+                                     style="height: 220px;">
+                                <div class="p-3">
+                                    <p class="text-muted small mb-1">@Producto.NombreCategoria</p>
+                                    <h3 class="h6 fw-bold mb-1">@Producto.NombreProducto</h3>
+                                    <p class="fw-bold mb-1">@string.Format("₡{0:N2}", Producto.Precio)</p>
+                                    @if (!Producto.Disponible)
+                                    {
+                                        <span class="badge bg-secondary">Agotado</span>
+                                    }
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            if (Model.TotalPaginas > 1)
+            {
+                <nav class="mt-4" aria-label="Paginación del catálogo">
+                    <ul class="pagination justify-content-center">
+                        @for (int Pagina = 1; Pagina <= Model.TotalPaginas; Pagina++)
+                        {
+                            <li class="page-item @(Pagina == Model.PaginaActual ? "active" : "")">
+                                <a class="page-link"
+                                   href="@Url.Action("Index", "Catalogo", new { busqueda = Model.Busqueda, idCategoria = Model.IdCategoria, color = Model.Color, pagina = Pagina })">
+                                    @Pagina
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        }
+    </div>
+</section>

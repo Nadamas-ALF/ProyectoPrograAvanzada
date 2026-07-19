@@ -1,0 +1,163 @@
+@using System.Linq
+@model ProyectoProgramacionAvanzada.Models.ProductoDetalleViewModel
+
+@{
+    ViewBag.Title = Model.NombreProducto + " | LEN";
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        @Html.AntiForgeryToken()
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        @if (TempData["MensajeExito"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["MensajeExito"]
+            </div>
+        }
+
+        <div id="alerta-carrito" class="alert d-none" role="alert"></div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                @{
+                    var ImagenPrincipal = Model.Imagenes.Any()
+                        ? Model.Imagenes.First().RutaImagen
+                        : "Content/Images/logo.jpeg";
+                }
+                <img id="imagen-principal"
+                     src="@Url.Content("~/" + ImagenPrincipal)"
+                     alt="@Model.NombreProducto"
+                     class="w-100 rounded mb-3"
+                     style="max-height: 480px; object-fit: cover;">
+
+                @if (Model.Imagenes.Count > 1)
+                {
+                    <div class="d-flex gap-2 flex-wrap">
+                        @foreach (var Imagen in Model.Imagenes)
+                        {
+                            <img src="@Url.Content("~/" + Imagen.RutaImagen)"
+                                 alt="@Model.NombreProducto"
+                                 class="js-miniatura rounded"
+                                 style="width: 72px; height: 72px; object-fit: cover; cursor: pointer;"
+                                 data-src="@Url.Content("~/" + Imagen.RutaImagen)">
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-6">
+                <p class="text-muted mb-1">@Model.NombreCategoria</p>
+                <h1 class="h3 fw-bold">@Model.NombreProducto</h1>
+                <p class="fs-4 fw-bold">@string.Format("₡{0:N2}", Model.Precio)</p>
+
+                <p>
+                    @if (Model.Disponible)
+                    {
+                        <span class="badge bg-success">Disponible</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Agotado</span>
+                    }
+                    @if (Model.EsPiezaUnica)
+                    {
+                        <span class="badge bg-dark">Pieza única</span>
+                    }
+                </p>
+
+                <p>@Model.Descripcion</p>
+
+                @if (Model.Variantes.Any())
+                {
+                    <div class="mb-3">
+                        <label for="select-variante" class="form-label fw-bold">Opciones disponibles</label>
+                        <select id="select-variante" class="form-select">
+                            @foreach (var Variante in Model.Variantes)
+                            {
+                                var Etiqueta = string.Join(
+                                    " / ",
+                                    new[] { Variante.Color, Variante.Talla, Variante.Modelo }
+                                        .Where(Valor => !string.IsNullOrWhiteSpace(Valor))
+                                );
+
+                                <option value="@Variante.IdVariante" data-stock="@Variante.Stock">
+                                    @Etiqueta (@(Variante.Stock > 0 ? Variante.Stock + " disponibles" : "agotado"))
+                                </option>
+                            }
+                        </select>
+                        <p id="stock-variante" class="text-muted small mt-1"></p>
+                    </div>
+                }
+
+                @if (Session["IdUsuario"] != null)
+                {
+                    <form method="post"
+                          action="@Url.Action(Model.EsFavorito ? "Eliminar" : "Agregar", "Favorito")"
+                          class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="idProducto" value="@Model.IdProducto">
+                        <input type="hidden" name="urlRetorno" value="@Request.Url">
+                        <button type="submit" class="btn btn-outline-danger mb-3">
+                            <i class="bi @(Model.EsFavorito ? "bi-heart-fill" : "bi-heart")"></i>
+                            @(Model.EsFavorito ? "Quitar de favoritos" : "Agregar a favoritos")
+                        </button>
+                    </form>
+                }
+
+                <div class="d-flex gap-2 align-items-center mb-3">
+                    <input type="number" id="cantidad" class="form-control" style="width: 100px;"
+                           value="1" min="1" max="@Model.Stock">
+                    <button type="button" id="btn-agregar-carrito"
+                            class="btn btn-dark px-4"
+                            data-idproducto="@Model.IdProducto"
+                            disabled="@(!Model.Disponible)">
+                        Agregar al carrito
+                    </button>
+                </div>
+
+                <a href="@Url.Action("Index", "Catalogo")" class="d-inline-block text-hover fw-bold">
+                    &larr; Volver al catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/carrito.js")"></script>
+    <script>
+        $(function () {
+            $('.js-miniatura').on('click', function () {
+                $('#imagen-principal').attr('src', $(this).data('src'));
+            });
+
+            $('#select-variante').on('change', function () {
+                var stock = $(this).find(':selected').data('stock');
+
+                $('#stock-variante').text(
+                    stock > 0
+                        ? 'Unidades disponibles para esta opción: ' + stock
+                        : 'Esta opción está agotada.'
+                );
+
+                $('#cantidad').attr('max', stock);
+            }).trigger('change');
+
+            $('#btn-agregar-carrito').on('click', function () {
+                var idProducto = $(this).data('idproducto');
+                var cantidad = parseInt($('#cantidad').val(), 10) || 1;
+
+                window.LEN_AgregarAlCarrito(idProducto, cantidad);
+            });
+        });
+    </script>
+}

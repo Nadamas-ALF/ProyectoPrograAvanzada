@@ -1,0 +1,82 @@
+@model System.Collections.Generic.List<ProyectoProgramacionAvanzada.Models.FavoritoViewModel>
+
+@{
+    ViewBag.Title = "Mis favoritos | LEN";
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Mis favoritos</h1>
+                <p class="text-muted m-0">
+                    Productos que ha guardado para revisar más tarde.
+                </p>
+            </div>
+        </div>
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        @if (TempData["MensajeExito"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["MensajeExito"]
+            </div>
+        }
+
+        @if (Model.Count == 0)
+        {
+            <div class="text-center py-5 border rounded">
+                <h2 class="h4 pb-2">Aún no ha guardado productos favoritos</h2>
+                <p class="text-muted">
+                    Explore el catálogo y agregue productos a su lista de favoritos.
+                </p>
+                <a href="@Url.Action("Index", "Catalogo")" class="btn btn-dark px-4">
+                    Ver catálogo
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var Favorito in Model)
+                {
+                    <div class="col">
+                        <div class="border rounded h-100">
+                            <a href="@Url.Action("Detalle", "Catalogo", new { id = Favorito.IdProducto })"
+                               class="text-decoration-none text-reset">
+                                <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Favorito.RutaImagen) ? "Content/Images/logo.jpeg" : Favorito.RutaImagen))"
+                                     alt="@Favorito.NombreProducto"
+                                     class="w-100 object-fit-cover"
+                                     style="height: 220px;">
+                                <div class="p-3 pb-0">
+                                    <p class="text-muted small mb-1">@Favorito.NombreCategoria</p>
+                                    <h3 class="h6 fw-bold mb-1">@Favorito.NombreProducto</h3>
+                                    <p class="fw-bold mb-1">@string.Format("₡{0:N2}", Favorito.Precio)</p>
+                                    @if (!Favorito.Disponible)
+                                    {
+                                        <span class="badge bg-secondary">Agotado</span>
+                                    }
+                                </div>
+                            </a>
+                            <form method="post" action="@Url.Action("Eliminar", "Favorito")" class="p-3 pt-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="idProducto" value="@Favorito.IdProducto">
+                                <input type="hidden" name="urlRetorno" value="@Url.Action("Index", "Favorito")">
+                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                    Quitar de favoritos
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
