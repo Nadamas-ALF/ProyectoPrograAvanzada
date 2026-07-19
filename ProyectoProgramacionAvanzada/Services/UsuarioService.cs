@@ -403,6 +403,66 @@ namespace ProyectoProgramacionAvanzada.Services
             return Resultado.Mensaje;
         }
 
+        public List<UsuarioModel> ConsultarUsuarios()
+        {
+            return Contexto
+                .SP_ConsultarUsuarios()
+                .Select(Usuario => new UsuarioModel
+                {
+                    IdUsuario = Usuario.IdUsuario,
+                    Nombre = Usuario.Nombre,
+                    Apellido = Usuario.Apellido,
+                    Cedula = Usuario.Cedula,
+                    Telefono = Usuario.Telefono,
+                    Email = Usuario.Email,
+                    IdRol = Usuario.IdRol,
+                    NombreRol = Usuario.NombreRol,
+                    IdEstado = Usuario.IdEstado,
+                    NombreEstado = Usuario.NombreEstado,
+                    FechaRegistro = Usuario.FechaRegistro
+                })
+                .ToList();
+        }
+
+        public string RegistrarUsuarioAdministracion(
+        UsuarioModel Modelo)
+        {
+            string HashContrasenna =
+                BCrypt.Net.BCrypt.HashPassword(
+                    Modelo.Contrasenna
+                );
+
+            SP_RegistrarUsuarioAdministracion_Result Resultado =
+                Contexto
+                    .SP_RegistrarUsuarioAdministracion(
+                        Modelo.Nombre,
+                        Modelo.Apellido,
+                        Modelo.Cedula,
+                        Modelo.Telefono,
+                        Modelo.Email,
+                        HashContrasenna,
+                        Modelo.IdRol,
+                        Modelo.IdEstado
+                    )
+                    .FirstOrDefault();
+
+            if (Resultado == null)
+            {
+                throw new InvalidOperationException(
+                    "No fue posible registrar el usuario."
+                );
+            }
+
+            if (Resultado.Exitoso != true)
+            {
+                throw new InvalidOperationException(
+                    Resultado.Mensaje
+                );
+            }
+
+            return Resultado.Mensaje;
+        }
+
 
         public string GenerarContrasennaTemporal()
         {

@@ -11,9 +11,18 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_ConsultarRoles_Result
+    public partial class SP_ConsultarUsuarios_Result
     {
+        public int IdUsuario { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
+        public string Cedula { get; set; }
+        public string Telefono { get; set; }
+        public string Email { get; set; }
         public int IdRol { get; set; }
         public string NombreRol { get; set; }
+        public int IdEstado { get; set; }
+        public string NombreEstado { get; set; }
+        public System.DateTime FechaRegistro { get; set; }
     }
 }

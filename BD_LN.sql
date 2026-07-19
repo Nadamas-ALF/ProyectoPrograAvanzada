@@ -1380,83 +1380,181 @@ WHERE U.email = N'edgardoasolano@gmail.com';
 
 GO
 
-   /* ============================================================
-   Inserts iniciales 
+  /* ============================================================
+  CONSULTAR USUARIOS GENERAL
    ============================================================ */
 
-INSERT INTO dbo.TB_canton (id_provincia, nombre_canton)
-SELECT P.id_provincia, C.nombre_canton
-FROM (VALUES
-    (N'San Jos�', N'San Jos�'),
-    (N'San Jos�', N'Escaz�'),
-    (N'San Jos�', N'Desamparados'),
-    (N'Alajuela', N'Alajuela'),
-    (N'Alajuela', N'Grecia'),
-    (N'Cartago', N'Cartago'),
-    (N'Cartago', N'La Uni�n'),
-    (N'Heredia', N'Heredia'),
-    (N'Heredia', N'San Rafael'),
-    (N'Guanacaste', N'Liberia'),
-    (N'Puntarenas', N'Puntarenas'),
-    (N'Lim�n', N'Lim�n')
-) AS C (nombre_provincia, nombre_canton)
-INNER JOIN dbo.TB_provincia AS P
-    ON P.nombre_provincia = C.nombre_provincia
-WHERE NOT EXISTS
-(
-    SELECT 1
-    FROM dbo.TB_canton AS X
-    WHERE X.id_provincia = P.id_provincia
-      AND X.nombre_canton = C.nombre_canton
-);
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarUsuarios
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        U.id_usuario AS IdUsuario,
+        U.nombre AS Nombre,
+        U.apellido AS Apellido,
+        U.cedula AS Cedula,
+        U.telefono AS Telefono,
+        U.email AS Email,
+        U.id_rol AS IdRol,
+        R.nombre_rol AS NombreRol,
+        U.id_estado AS IdEstado,
+        E.nombre_estado AS NombreEstado,
+        U.fecha_registro AS FechaRegistro
+    FROM dbo.TB_usuario AS U
+    INNER JOIN dbo.TB_rol AS R
+        ON R.id_rol = U.id_rol
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = U.id_estado
+    ORDER BY
+        U.fecha_registro DESC,
+        U.nombre ASC,
+        U.apellido ASC;
+END;
 GO
 
-INSERT INTO dbo.TB_distrito (id_canton, nombre_distrito)
-SELECT CA.id_canton, D.nombre_distrito
-FROM (VALUES
-    (N'San Jos�', N'San Jos�', N'Carmen'),
-    (N'San Jos�', N'San Jos�', N'Merced'),
-    (N'San Jos�', N'San Jos�', N'Hospital'),
-    (N'San Jos�', N'Escaz�', N'Escaz�'),
-    (N'San Jos�', N'Escaz�', N'San Antonio'),
-    (N'San Jos�', N'Escaz�', N'San Rafael'),
-    (N'San Jos�', N'Desamparados', N'Desamparados'),
-    (N'San Jos�', N'Desamparados', N'San Miguel'),
-    (N'Alajuela', N'Alajuela', N'Alajuela'),
-    (N'Alajuela', N'Alajuela', N'San Jos�'),
-    (N'Alajuela', N'Alajuela', N'Carrizal'),
-    (N'Alajuela', N'Grecia', N'Grecia'),
-    (N'Alajuela', N'Grecia', N'San Isidro'),
-    (N'Cartago', N'Cartago', N'Oriental'),
-    (N'Cartago', N'Cartago', N'Occidental'),
-    (N'Cartago', N'Cartago', N'Carmen'),
-    (N'Cartago', N'La Uni�n', N'Tres R�os'),
-    (N'Cartago', N'La Uni�n', N'San Diego'),
-    (N'Heredia', N'Heredia', N'Heredia'),
-    (N'Heredia', N'Heredia', N'Mercedes'),
-    (N'Heredia', N'Heredia', N'San Francisco'),
-    (N'Heredia', N'San Rafael', N'San Rafael'),
-    (N'Heredia', N'San Rafael', N'San Josecito'),
-    (N'Guanacaste', N'Liberia', N'Liberia'),
-    (N'Guanacaste', N'Liberia', N'Ca�as Dulces'),
-    (N'Puntarenas', N'Puntarenas', N'Puntarenas'),
-    (N'Puntarenas', N'Puntarenas', N'Chacarita'),
-    (N'Lim�n', N'Lim�n', N'Lim�n'),
-    (N'Lim�n', N'Lim�n', N'Valle La Estrella')
-) AS D (nombre_provincia, nombre_canton, nombre_distrito)
-INNER JOIN dbo.TB_provincia AS P
-    ON P.nombre_provincia = D.nombre_provincia
-INNER JOIN dbo.TB_canton AS CA
-    ON CA.id_provincia = P.id_provincia
-   AND CA.nombre_canton = D.nombre_canton
-WHERE NOT EXISTS
-(
-    SELECT 1
-    FROM dbo.TB_distrito AS X
-    WHERE X.id_canton = CA.id_canton
-      AND X.nombre_distrito = D.nombre_distrito
-);
+  /* ============================================================
+  CONSULTAR USUARIOS GENERAL
+   ============================================================ */
+  
+CREATE OR ALTER PROCEDURE dbo.SP_RegistrarUsuarioAdministracion
+    @Nombre NVARCHAR(100),
+    @Apellido NVARCHAR(100),
+    @Cedula NVARCHAR(30) = NULL,
+    @Telefono NVARCHAR(30) = NULL,
+    @Email NVARCHAR(150),
+    @Contrasenna NVARCHAR(255),
+    @IdRol INT,
+    @IdEstado INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SET @Nombre = LTRIM(RTRIM(@Nombre));
+    SET @Apellido = LTRIM(RTRIM(@Apellido));
+    SET @Cedula = NULLIF(LTRIM(RTRIM(@Cedula)), '');
+    SET @Telefono = NULLIF(LTRIM(RTRIM(@Telefono)), '');
+    SET @Email = LOWER(LTRIM(RTRIM(@Email)));
+
+    IF @Nombre IS NULL OR @Nombre = ''
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El nombre es obligatorio.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF @Apellido IS NULL OR @Apellido = ''
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El apellido es obligatorio.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF @Email IS NULL OR @Email = ''
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El correo electrónico es obligatorio.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM dbo.TB_usuario
+        WHERE LOWER(LTRIM(RTRIM(email))) = @Email
+    )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El correo electrónico ya está registrado.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF @Cedula IS NOT NULL
+       AND EXISTS
+       (
+           SELECT 1
+           FROM dbo.TB_usuario
+           WHERE LTRIM(RTRIM(cedula)) = @Cedula
+       )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'La cédula ya está registrada.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM dbo.TB_rol
+        WHERE id_rol = @IdRol
+    )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El rol seleccionado no es válido.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM dbo.TB_estado
+        WHERE id_estado = @IdEstado
+    )
+    BEGIN
+        SELECT
+            CAST(0 AS BIT) AS Exitoso,
+            N'El estado seleccionado no es válido.' AS Mensaje;
+
+        RETURN;
+    END;
+
+    INSERT INTO dbo.TB_usuario
+    (
+        nombre,
+        apellido,
+        cedula,
+        telefono,
+        email,
+        contrasena,
+        id_rol,
+        id_estado,
+        fecha_registro,
+        tiene_contrasenna_temporal,
+        vigencia_contrasenna_temporal
+    )
+    VALUES
+    (
+        @Nombre,
+        @Apellido,
+        @Cedula,
+        @Telefono,
+        @Email,
+        @Contrasenna,
+        @IdRol,
+        @IdEstado,
+        GETDATE(),
+        0,
+        NULL
+    );
+
+    SELECT
+        CAST(1 AS BIT) AS Exitoso,
+        N'El usuario fue registrado correctamente.' AS Mensaje;
+END;
 GO
+
 
 
    /* ============================================================

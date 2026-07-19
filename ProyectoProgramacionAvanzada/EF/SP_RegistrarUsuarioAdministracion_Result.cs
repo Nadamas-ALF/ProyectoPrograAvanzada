@@ -11,10 +11,9 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_RegistrarUsuario_Result
+    public partial class SP_RegistrarUsuarioAdministracion_Result
     {
         public Nullable<bool> Exitoso { get; set; }
         public string Mensaje { get; set; }
-        public Nullable<int> IdUsuario { get; set; }
     }
 }
