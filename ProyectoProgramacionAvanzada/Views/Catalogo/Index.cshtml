@@ -1,4 +1,4 @@
-@using System.Linq
+﻿@using System.Linq
 @model ProyectoProgramacionAvanzada.Models.CatalogoViewModel
 
 @{
@@ -101,8 +101,7 @@
                                class="text-decoration-none text-reset">
                                 <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Producto.RutaImagen) ? "Content/Images/logo.jpeg" : Producto.RutaImagen))"
                                      alt="@Producto.NombreProducto"
-                                     class="w-100 object-fit-cover"
-                                     style="height: 220px;">
+                                     class="w-100 img-producto">
                                 <div class="p-3">
                                     <p class="text-muted small mb-1">@Producto.NombreCategoria</p>
                                     <h3 class="h6 fw-bold mb-1">@Producto.NombreProducto</h3>

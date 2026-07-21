@@ -1,20 +1,17 @@
-﻿using ProyectoProgramacionAvanzada.Models;
+﻿using ProyectoProgramacionAvanzada.Filtros;
+using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
 using System.Web.Mvc;
 
 namespace ProyectoProgramacionAvanzada.Controllers
 {
+    [SesionRequerida]
     public class CarritoController : Controller
     {
         [HttpGet]
         public ActionResult Index()
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try
@@ -47,11 +44,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Agregar(int IdProducto, int Cantidad)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return JsonRequiereLogin();
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try
@@ -89,11 +81,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult ActualizarCantidad(int IdProducto, int Cantidad)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return JsonRequiereLogin();
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try
@@ -130,11 +117,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult Eliminar(int IdProducto)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return JsonRequiereLogin();
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try
@@ -166,15 +148,31 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
         }
 
-        private JsonResult JsonRequiereLogin()
+ 
+        [ChildActionOnly]
+        public ActionResult ContadorParcial()
         {
-            return Json(new
+            if (Session["IdUsuario"] == null)
             {
-                exitoso = false,
-                requiereLogin = true,
-                mensaje = "Debe iniciar sesión para usar el carrito.",
-                urlLogin = Url.Action("Login", "Home")
-            });
+                return PartialView("_ContadorCarrito", 0);
+            }
+
+            try
+            {
+                int IdUsuario = (int)Session["IdUsuario"];
+
+                using (var Servicio = new CarritoService())
+                {
+                    int CantidadItems =
+                        Servicio.ConsultarCarrito(IdUsuario).CantidadItems;
+
+                    return PartialView("_ContadorCarrito", CantidadItems);
+                }
+            }
+            catch
+            {
+                return PartialView("_ContadorCarrito", 0);
+            }
         }
 
         private JsonResult JsonErrorGenerico()

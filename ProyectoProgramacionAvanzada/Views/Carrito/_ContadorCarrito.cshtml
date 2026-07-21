@@ -1,0 +1,6 @@
+@model int
+<span id="badge-carrito"
+      class="badge rounded-pill bg-dark position-absolute top-0 start-100 translate-middle @(Model > 0 ? "" : "d-none")"
+      style="font-size: 0.65rem;">
+    @Model
+</span>

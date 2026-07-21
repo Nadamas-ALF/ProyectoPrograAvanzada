@@ -1,4 +1,5 @@
-﻿using ProyectoProgramacionAvanzada.Models;
+﻿using ProyectoProgramacionAvanzada.Filtros;
+using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
 using System.Configuration;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace ProyectoProgramacionAvanzada.Controllers
 {
+    [SesionRequerida]
     public class CheckoutController : Controller
     {
         /*
@@ -19,11 +21,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try
@@ -106,11 +103,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Confirmar(CheckoutViewModel Modelo)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             if (Modelo.IdDireccionSeleccionada <= 0)
@@ -177,11 +169,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [HttpGet]
         public ActionResult Confirmacion(int id)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try

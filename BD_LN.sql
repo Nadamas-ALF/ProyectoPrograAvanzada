@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    BASE DE DATOS: BD_LEN
    Proyecto: LEN - Tienda de accesorios
    ============================================================ */
@@ -13,7 +13,7 @@ USE BD_LEN;
 GO
 
 /* ============================================================
-   TABLAS CAT�LOGO
+   TABLAS CATÁLOGO
    ============================================================ */
 
 CREATE TABLE dbo.TB_rol
@@ -71,7 +71,7 @@ WHERE cedula IS NOT NULL;
 GO
 
 /* ============================================================
-   UBICACI�N COSTA RICA
+   UBICACIÓN COSTA RICA
    ============================================================ */
 
 CREATE TABLE dbo.TB_provincia
@@ -392,8 +392,8 @@ GO
 
 /* ============================================================
    TABLA DE ERRORES
-   Esta tabla no tiene relaci�n con ninguna otra.
-   Se puede usar dentro de TRY/CATCH desde la aplicaci�n.
+   Esta tabla no tiene relación con ninguna otra.
+   Se puede usar dentro de TRY/CATCH desde la aplicación.
    ============================================================ */
 
 CREATE TABLE dbo.TB_error
@@ -459,13 +459,13 @@ SELECT N'Entregado'
 WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_estado WHERE nombre_estado = N'Entregado');
 
 INSERT INTO dbo.TB_estado (nombre_estado)
-SELECT N'En preparaci�n'
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_estado WHERE nombre_estado = N'En preparaci�n');
+SELECT N'En preparación'
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_estado WHERE nombre_estado = N'En preparación');
 GO
 
 INSERT INTO dbo.TB_provincia (nombre_provincia)
-SELECT N'San Jos�'
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'San Jos�');
+SELECT N'San José'
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'San José');
 
 INSERT INTO dbo.TB_provincia (nombre_provincia)
 SELECT N'Alajuela'
@@ -488,8 +488,8 @@ SELECT N'Puntarenas'
 WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'Puntarenas');
 
 INSERT INTO dbo.TB_provincia (nombre_provincia)
-SELECT N'Lim�n'
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'Lim�n');
+SELECT N'Limón'
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_provincia WHERE nombre_provincia = N'Limón');
 GO
 
 DECLARE @IdEstadoActivo INT;
@@ -498,8 +498,8 @@ FROM dbo.TB_estado
 WHERE nombre_estado = N'Activo';
 
 INSERT INTO dbo.TB_metodo_pago (nombre_metodo, id_estado)
-SELECT N'SINPE M�vil', @IdEstadoActivo
-WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_metodo_pago WHERE nombre_metodo = N'SINPE M�vil');
+SELECT N'SINPE Móvil', @IdEstadoActivo
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TB_metodo_pago WHERE nombre_metodo = N'SINPE Móvil');
 
 INSERT INTO dbo.TB_metodo_pago (nombre_metodo, id_estado)
 SELECT N'Transferencia bancaria', @IdEstadoActivo
@@ -529,7 +529,7 @@ GO
 
    /* ============================================================
    Carrito
-   COLUMNAS DE CONTRASE�A TEMPORAL (adelantadas)
+   COLUMNAS DE CONTRASEÑA TEMPORAL (adelantadas)
    ============================================================ */
 
 IF COL_LENGTH('dbo.TB_usuario', 'tiene_contrasenna_temporal') IS NULL
@@ -689,7 +689,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El correo electr�nico ya est� registrado.' AS Mensaje;
+            N'El correo electrónico ya está registrado.' AS Mensaje;
 
         RETURN;
     END;
@@ -706,7 +706,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'La c�dula ya est� registrada.' AS Mensaje;
+            N'La cédula ya está registrada.' AS Mensaje;
 
         RETURN;
     END;
@@ -726,7 +726,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontr� el usuario.' AS Mensaje;
+            N'No se encontró el usuario.' AS Mensaje;
 
         RETURN;
     END;
@@ -738,7 +738,7 @@ END;
 GO
 
   /* ============================================================
-  RESTABLECER CONTRASE�A
+  RESTABLECER CONTRASEÑA
    ============================================================ */
    CREATE OR ALTER PROCEDURE dbo.SP_RestablecerContrasennaUsuario
     @IdUsuario INT,
@@ -755,14 +755,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontr� el usuario.' AS Mensaje;
+            N'No se encontró el usuario.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La contrase�a fue restablecida correctamente.' AS Mensaje;
+        N'La contraseña fue restablecida correctamente.' AS Mensaje;
 END;
 GO
 
@@ -868,7 +868,7 @@ BEGIN
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La direcci�n fue agregada correctamente.' AS Mensaje,
+        N'La dirección fue agregada correctamente.' AS Mensaje,
         @IdDireccion AS IdDireccion;
 END;
 GO
@@ -959,14 +959,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontr� la direcci�n.' AS Mensaje;
+            N'No se encontró la dirección.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La direcci�n fue actualizada correctamente.' AS Mensaje;
+        N'La dirección fue actualizada correctamente.' AS Mensaje;
 END;
 GO
 
@@ -997,14 +997,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontr� la direcci�n.' AS Mensaje;
+            N'No se encontró la dirección.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La direcci�n fue desactivada correctamente.' AS Mensaje;
+        N'La dirección fue desactivada correctamente.' AS Mensaje;
 END;
 GO
 
@@ -1158,7 +1158,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontr� el rol Cliente.' AS Mensaje,
+            N'No se encontró el rol Cliente.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1168,7 +1168,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No se encontr� el estado Activo.' AS Mensaje,
+            N'No se encontró el estado Activo.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1183,7 +1183,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El correo electr�nico ya est� registrado.' AS Mensaje,
+            N'El correo electrónico ya está registrado.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1199,7 +1199,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'La c�dula ya est� registrada.' AS Mensaje,
+            N'La cédula ya está registrada.' AS Mensaje,
             CAST(NULL AS INT) AS IdUsuario;
 
         RETURN;
@@ -1287,14 +1287,14 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'No fue posible actualizar la contrase�a.' AS Mensaje;
+            N'No fue posible actualizar la contraseña.' AS Mensaje;
 
         RETURN;
     END;
 
     SELECT
         CAST(1 AS BIT) AS Exitoso,
-        N'La contrase�a temporal fue generada.' AS Mensaje;
+        N'La contraseña temporal fue generada.' AS Mensaje;
 END;
 GO
 
@@ -1644,7 +1644,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El producto no est� disponible.' AS Mensaje,
+            N'El producto no está disponible.' AS Mensaje,
             CAST(NULL AS INT) AS CantidadItems;
         RETURN;
     END;
@@ -1752,7 +1752,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El producto no est� en el carrito.' AS Mensaje;
+            N'El producto no está en el carrito.' AS Mensaje;
         RETURN;
     END;
 
@@ -1777,7 +1777,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El producto no est� disponible.' AS Mensaje;
+            N'El producto no está disponible.' AS Mensaje;
         RETURN;
     END;
 
@@ -1834,7 +1834,7 @@ BEGIN
     BEGIN
         SELECT
             CAST(0 AS BIT) AS Exitoso,
-            N'El producto no est� en el carrito.' AS Mensaje;
+            N'El producto no está en el carrito.' AS Mensaje;
         RETURN;
     END;
 
@@ -1956,7 +1956,7 @@ GO
 
    /* ============================================================
    Carrito
-   CONSULTAR M�TODOS DE PAGO ACTIVOS (RF-05)
+   CONSULTAR MÉTODOS DE PAGO ACTIVOS (RF-05)
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE dbo.SP_ConsultarMetodosPago
@@ -1995,7 +1995,7 @@ BEGIN
         BEGIN
             SELECT
                 CAST(0 AS BIT) AS Exitoso,
-                N'El costo de env�o no es v�lido.' AS Mensaje,
+                N'El costo de envío no es válido.' AS Mensaje,
                 CAST(NULL AS INT) AS IdPedido,
                 CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
             RETURN;
@@ -2028,7 +2028,7 @@ BEGIN
         BEGIN
             SELECT
                 CAST(0 AS BIT) AS Exitoso,
-                N'La direcci�n seleccionada no es v�lida.' AS Mensaje,
+                N'La dirección seleccionada no es válida.' AS Mensaje,
                 CAST(NULL AS INT) AS IdPedido,
                 CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
             RETURN;
@@ -2044,7 +2044,7 @@ BEGIN
         BEGIN
             SELECT
                 CAST(0 AS BIT) AS Exitoso,
-                N'El m�todo de pago seleccionado no es v�lido.' AS Mensaje,
+                N'El método de pago seleccionado no es válido.' AS Mensaje,
                 CAST(NULL AS INT) AS IdPedido,
                 CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
             RETURN;
@@ -2068,7 +2068,7 @@ BEGIN
         BEGIN
             SELECT
                 CAST(0 AS BIT) AS Exitoso,
-                N'El carrito est� vac�o.' AS Mensaje,
+                N'El carrito está vacío.' AS Mensaje,
                 CAST(NULL AS INT) AS IdPedido,
                 CAST(NULL AS NVARCHAR(50)) AS NumeroFactura;
             RETURN;
@@ -2077,7 +2077,7 @@ BEGIN
         BEGIN TRANSACTION;
 
         /* Bloqueo de las filas de producto del carrito y
-           revalidaci�n final de stock y disponibilidad. */
+           revalidación final de stock y disponibilidad. */
         DECLARE @Faltantes INT;
 
         SELECT @Faltantes = COUNT(*)
@@ -2196,7 +2196,7 @@ BEGIN
             @IdEstadoPagado
         );
 
-        /* El carrito queda vac�o pero activo para reutilizarse. */
+        /* El carrito queda vacío pero activo para reutilizarse. */
         DELETE FROM dbo.TB_detalle_carrito
         WHERE id_carrito = @IdCarrito;
 
@@ -2234,7 +2234,7 @@ GO
 
    /* ============================================================
     Carrito
-   CONSULTAR CONFIRMACI�N DE PEDIDO (RF-08)
+   CONSULTAR CONFIRMACIÓN DE PEDIDO (RF-08)
    ============================================================ */
 
 CREATE OR ALTER PROCEDURE dbo.SP_ConsultarConfirmacionPedido
@@ -2254,7 +2254,7 @@ BEGIN
         E.nombre_estado AS NombreEstado,
         CASE E.nombre_estado
             WHEN N'Pagado' THEN N'Comprada'
-            WHEN N'En preparaci�n' THEN N'En camino'
+            WHEN N'En preparación' THEN N'En camino'
             WHEN N'Entregado' THEN N'Recibido'
             ELSE E.nombre_estado
         END AS EstadoVisible,
@@ -2331,7 +2331,7 @@ BEGIN
         E.nombre_estado AS NombreEstado,
         CASE E.nombre_estado
             WHEN N'Pagado' THEN N'Comprada'
-            WHEN N'En preparaci�n' THEN N'En camino'
+            WHEN N'En preparación' THEN N'En camino'
             WHEN N'Entregado' THEN N'Recibido'
             ELSE E.nombre_estado
         END AS EstadoVisible,
@@ -2374,7 +2374,7 @@ BEGIN
         E.nombre_estado AS NombreEstado,
         CASE E.nombre_estado
             WHEN N'Pagado' THEN N'Comprada'
-            WHEN N'En preparaci�n' THEN N'En camino'
+            WHEN N'En preparación' THEN N'En camino'
             WHEN N'Entregado' THEN N'Recibido'
             ELSE E.nombre_estado
         END AS EstadoVisible,
@@ -2428,7 +2428,7 @@ GO
 
    /* ============================================================
    Carrito
-   DATOS DE PRUEBA DEL M�DULO CARRITO/CHECKOUT
+   DATOS DE PRUEBA DEL MÓDULO CARRITO/CHECKOUT
    ============================================================ */
 
 DECLARE @IdEstadoActivo INT;
@@ -2468,7 +2468,7 @@ FROM (VALUES
     (N'Collar Bello',      N'Collar artesanal con dije',        CAST(8500.00 AS DECIMAL(10,2)), 10, 0, 1, N'Collares', 0),
     (N'Collar Pato',       N'Collar artesanal con dije de pato', CAST(7000.00 AS DECIMAL(10,2)),  5, 0, 0, N'Collares', 0),
     (N'Pulsera de Perlas', N'Pulsera de perlas hecha a mano',    CAST(5500.00 AS DECIMAL(10,2)),  8, 0, 1, N'Pulseras', 0),
-    (N'Pulsera Cl�sica',   N'Pulsera artesanal pieza �nica',     CAST(4500.00 AS DECIMAL(10,2)),  1, 1, 0, N'Pulseras', 0),
+    (N'Pulsera Clásica',   N'Pulsera artesanal pieza única',     CAST(4500.00 AS DECIMAL(10,2)),  1, 1, 0, N'Pulseras', 0),
     (N'Llavero Flor',      N'Llavero artesanal con flor',        CAST(2500.00 AS DECIMAL(10,2)),  0, 0, 0, N'Llaveros', 1)
 ) AS P (nombre_producto, descripcion, precio, stock, es_pieza_unica, destacado, nombre_categoria, agotado)
 INNER JOIN dbo.TB_categoria AS CAT
@@ -2486,7 +2486,7 @@ FROM (VALUES
     (N'Collar Bello',      N'Content/Images/collarbello.jpeg'),
     (N'Collar Pato',       N'Content/Images/collarpato.jpeg'),
     (N'Pulsera de Perlas', N'Content/Images/perlas.jpeg'),
-    (N'Pulsera Cl�sica',   N'Content/Images/pulsera.jpeg'),
+    (N'Pulsera Clásica',   N'Content/Images/pulsera.jpeg'),
     (N'Llavero Flor',      N'Content/Images/llaveroflor.jpeg')
 ) AS I (nombre_producto, ruta_imagen)
 INNER JOIN dbo.TB_producto AS PROD
@@ -2498,4 +2498,39 @@ WHERE NOT EXISTS
     WHERE X.id_producto = PROD.id_producto
       AND X.es_principal = 1
 );
+GO
+
+   /* ============================================================
+   CONSULTAR PRODUCTOS DESTACADOS (portada)
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_ConsultarProductosDestacados
+    @Top INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @Top IS NULL OR @Top < 1
+    BEGIN
+        SET @Top = 4;
+    END;
+
+    SELECT TOP (@Top)
+        P.id_producto AS IdProducto,
+        P.nombre_producto AS NombreProducto,
+        P.precio AS Precio,
+        IMG.ruta_imagen AS RutaImagen,
+        C.nombre_categoria AS NombreCategoria
+    FROM dbo.TB_producto AS P
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = P.id_estado
+    INNER JOIN dbo.TB_categoria AS C
+        ON C.id_categoria = P.id_categoria
+    LEFT JOIN dbo.TB_imagen_producto AS IMG
+        ON IMG.id_producto = P.id_producto
+       AND IMG.es_principal = 1
+    WHERE P.destacado = 1
+      AND E.nombre_estado = N'Disponible'
+    ORDER BY P.fecha_creacion DESC, P.id_producto DESC;
+END;
 GO

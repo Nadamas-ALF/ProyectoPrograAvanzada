@@ -1,4 +1,4 @@
-@using System.Linq
+﻿@using System.Linq
 @model ProyectoProgramacionAvanzada.Models.ProductoDetalleViewModel
 
 @{
@@ -46,8 +46,8 @@
                         {
                             <img src="@Url.Content("~/" + Imagen.RutaImagen)"
                                  alt="@Model.NombreProducto"
-                                 class="js-miniatura rounded"
-                                 style="width: 72px; height: 72px; object-fit: cover; cursor: pointer;"
+                                 class="js-miniatura rounded img-producto-mini"
+                                 style="cursor: pointer;"
                                  data-src="@Url.Content("~/" + Imagen.RutaImagen)">
                         }
                     </div>
@@ -139,17 +139,14 @@
             $('.js-miniatura').on('click', function () {
                 $('#imagen-principal').attr('src', $(this).data('src'));
             });
-
             $('#select-variante').on('change', function () {
                 var stock = $(this).find(':selected').data('stock');
 
                 $('#stock-variante').text(
                     stock > 0
-                        ? 'Unidades disponibles para esta opción: ' + stock
-                        : 'Esta opción está agotada.'
+                        ? 'Disponibilidad de esta opción: ' + stock + ' unidad(es).'
+                        : 'Esta opción está agotada; consulte otras opciones del producto.'
                 );
-
-                $('#cantidad').attr('max', stock);
             }).trigger('change');
 
             $('#btn-agregar-carrito').on('click', function () {

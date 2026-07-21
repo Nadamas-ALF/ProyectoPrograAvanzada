@@ -1,4 +1,4 @@
-using ProyectoProgramacionAvanzada.Models;
+﻿using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
 using System.Web.Mvc;
@@ -76,6 +76,29 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     "No fue posible cargar el detalle del producto.";
 
                 return RedirectToAction("Index");
+            }
+        }
+
+ 
+        [ChildActionOnly]
+        public ActionResult MenuCategorias()
+        {
+            try
+            {
+                using (var Servicio = new CatalogoService())
+                {
+                    return PartialView(
+                        "_MenuCategorias",
+                        Servicio.ConsultarCategorias()
+                    );
+                }
+            }
+            catch
+            {
+                return PartialView(
+                    "_MenuCategorias",
+                    new System.Collections.Generic.List<SelectListItem>()
+                );
             }
         }
 

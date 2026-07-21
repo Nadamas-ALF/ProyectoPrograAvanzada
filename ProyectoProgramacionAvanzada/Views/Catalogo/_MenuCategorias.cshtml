@@ -1,0 +1,10 @@
+﻿@model System.Collections.Generic.List<System.Web.Mvc.SelectListItem>
+
+@foreach (var Categoria in Model)
+{
+    <li class="nav-item">
+        <a class="nav-link me-5" href="@Url.Action("Index", "Catalogo", new { idCategoria = Categoria.Value })">
+            @Categoria.Text
+        </a>
+    </li>
+}

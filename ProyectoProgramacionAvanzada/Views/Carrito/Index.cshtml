@@ -64,9 +64,7 @@
                                         <div class="d-flex align-items-center gap-3">
                                             <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Linea.RutaImagen) ? "Content/Images/logo.jpeg" : Linea.RutaImagen))"
                                                  alt="@Linea.NombreProducto"
-                                                 width="64" height="64"
-                                                 class="rounded object-fit-cover"
-                                                 style="max-width: 100%;">
+                                                 class="rounded img-producto-mini">
                                             <div>
                                                 <p class="fw-bold m-0">@Linea.NombreProducto</p>
                                                 @if (!Linea.Disponible)

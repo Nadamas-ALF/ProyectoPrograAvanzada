@@ -2,6 +2,7 @@
 using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace ProyectoProgramacionAvanzada.Controllers
@@ -10,7 +11,59 @@ namespace ProyectoProgramacionAvanzada.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+
+            var Modelo = new PortadaViewModel();
+
+            try
+            {
+                using (var Servicio = new CatalogoService())
+                {
+                    int? IdUsuario = Session["IdUsuario"] as int?;
+
+                    Modelo.Catalogo = Servicio.ConsultarCatalogo(
+                        null,
+                        null,
+                        null,
+                        IdUsuario,
+                        1,
+                        10
+                    );
+                }
+
+                using (var ServicioPortada = new PortadaService())
+                {
+                    Modelo.Destacados =
+                        ServicioPortada.ConsultarDestacados(4);
+                }
+
+
+                if (Modelo.Destacados.Count == 0)
+                {
+                    Modelo.Destacados = Modelo.Catalogo.Productos
+                        .Where(Producto => Producto.Disponible)
+                        .Take(4)
+                        .Select(Producto => new ProductoDestacadoViewModel
+                        {
+                            IdProducto = Producto.IdProducto,
+                            NombreProducto = Producto.NombreProducto,
+                            Precio = Producto.Precio,
+                            RutaImagen = Producto.RutaImagen,
+                            NombreCategoria = Producto.NombreCategoria
+                        })
+                        .ToList();
+                }
+            }
+            catch (Exception Excepcion)
+            {
+                RegistrarError(
+                    "HomeController",
+                    "Index",
+                    Excepcion,
+                    Session["NombreUsuario"] as string
+                );
+            }
+
+            return View(Modelo);
         }
 
 
@@ -61,11 +114,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     Session["IdEstado"] = Usuario.IdEstado;
                     Session["NombreEstado"] = Usuario.NombreEstado;
 
-                    /*
-                     * El destino depende del rol: el panel administrativo
-                     * es solo para administradores; los clientes navegan
-                     * la tienda (index).
-                     */
+
                     return RedirigirSegunRol();
                 }
             }
@@ -113,7 +162,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
             Session.Clear();
             Session.Abandon();
 
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -282,10 +331,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
                             Modelo.Email
                         );
 
-                    /*
-                     * Se muestra el mismo mensaje exista o no el correo.
-                     * Esto evita revelar qué correos están registrados.
-                     */
+ 
                     if (Usuario != null)
                     {
                         string ContrasennaTemporal =
