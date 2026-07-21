@@ -1,0 +1,44 @@
+﻿/* ============================================================
+   =De ALF=
+   len.css — Estilos propios de la tienda LEN.
+   Complementa la plantilla stylish (no la modifica).
+   ============================================================ */
+
+/* Carrusel del hero: alturas contenidas, imagen siempre cover. */
+.hero-slide {
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.hero-imagen {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+}
+
+@media (max-width: 991px) {
+    .hero-imagen {
+        height: 340px;
+    }
+}
+
+@media (max-width: 575px) {
+    .hero-imagen {
+        height: 240px;
+    }
+}
+
+/* Imágenes de producto con proporción uniforme (tarjetas). */
+.img-producto {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Miniaturas (carrito, checkout, detalle de pedido). */
+.img-producto-mini {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+}
