@@ -146,6 +146,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CarritoController.cs" />
+    <Compile Include="Controllers\CuentaController.cs" />
     <Compile Include="Controllers\CatalogoController.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
@@ -156,6 +157,8 @@
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Filtros\SesionRequeridaAttribute.cs" />
+    <Compile Include="Filtros\SoloAdministradorAttribute.cs" />
     <Compile Include="EF\BD_LEN.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -394,6 +397,8 @@
     <Compile Include="Models\ConfirmacionViewModel.cs" />
     <Compile Include="Models\DetallePedidoViewModel.cs" />
     <Compile Include="Models\DireccionModel.cs" />
+    <Compile Include="Models\PortadaViewModel.cs" />
+    <Compile Include="Models\CuentaViewModel.cs" />
     <Compile Include="Models\HistorialViewModel.cs" />
     <Compile Include="Models\InicioSesionModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
@@ -404,7 +409,8 @@
     <Compile Include="Services\CorreoService.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\FavoritoService.cs" />
-    <Compile Include="Services\PedidoAdminController.cs" />
+    <Compile Include="Services\PedidoAdminService.cs" />
+    <Compile Include="Services\PortadaService.cs" />
     <Compile Include="Services\PedidoService.cs" />
     <Compile Include="Services\ProductoAdminService.cs" />
     <Compile Include="Services\UsuarioService.cs" />
@@ -413,6 +419,7 @@
     <Content Include="Content\bootstrap-icons\bootstrap-icons.css" />
     <Content Include="Content\Correos\RecuperacionContrasenna.html" />
     <Content Include="Content\style.css" />
+    <Content Include="Content\len.css" />
     <Content Include="Content\GeneralStyle.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\vendor.css" />
@@ -469,6 +476,8 @@
     <Content Include="Views\Usuario\Detalle.cshtml" />
     <Content Include="Views\Home\Registro.cshtml" />
     <Content Include="Views\Carrito\Index.cshtml" />
+    <Content Include="Views\Carrito\_ContadorCarrito.cshtml" />
+    <Content Include="Views\Cuenta\Index.cshtml" />
     <Content Include="Views\Checkout\Index.cshtml" />
     <Content Include="Views\Checkout\Confirmacion.cshtml" />
     <Content Include="Views\Pedido\Historial.cshtml" />
@@ -486,6 +495,7 @@
     <Content Include="Views\Usuario\Administracion.cshtml" />
     <Content Include="Views\Catalogo\Detalle.cshtml" />
     <Content Include="Views\Catalogo\Index.cshtml" />
+    <Content Include="Views\Catalogo\_MenuCategorias.cshtml" />
     <Content Include="Views\Favorito\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
