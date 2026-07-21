@@ -1,10 +1,12 @@
-﻿using ProyectoProgramacionAvanzada.Models;
+﻿using ProyectoProgramacionAvanzada.Filtros;
+using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
 using System.Web.Mvc;
 
 namespace ProyectoProgramacionAvanzada.Controllers
 {
+    [SesionRequerida]
     public class PedidoController : Controller
     {
         private const int TamanoPagina = 5;
@@ -12,11 +14,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [HttpGet]
         public ActionResult Historial(int pagina = 1)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try
@@ -56,11 +53,6 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [HttpGet]
         public ActionResult Detalle(int id)
         {
-            if (Session["IdUsuario"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             int IdUsuario = (int)Session["IdUsuario"];
 
             try

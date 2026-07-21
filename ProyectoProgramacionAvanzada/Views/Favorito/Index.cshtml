@@ -1,4 +1,4 @@
-@model System.Collections.Generic.List<ProyectoProgramacionAvanzada.Models.FavoritoViewModel>
+﻿@model System.Collections.Generic.List<ProyectoProgramacionAvanzada.Models.FavoritoViewModel>
 
 @{
     ViewBag.Title = "Mis favoritos | LEN";
@@ -53,8 +53,7 @@
                                class="text-decoration-none text-reset">
                                 <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Favorito.RutaImagen) ? "Content/Images/logo.jpeg" : Favorito.RutaImagen))"
                                      alt="@Favorito.NombreProducto"
-                                     class="w-100 object-fit-cover"
-                                     style="height: 220px;">
+                                     class="w-100 img-producto">
                                 <div class="p-3 pb-0">
                                     <p class="text-muted small mb-1">@Favorito.NombreCategoria</p>
                                     <h3 class="h6 fw-bold mb-1">@Favorito.NombreProducto</h3>

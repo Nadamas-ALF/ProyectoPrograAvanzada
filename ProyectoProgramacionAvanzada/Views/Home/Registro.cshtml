@@ -1,372 +1,156 @@
 ﻿@model ProyectoProgramacionAvanzada.Models.UsuarioModel
 
 @{
-    ViewBag.Title = "Crear cuenta";
-    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+    ViewBag.Title = "Crear cuenta | LEN";
 }
 
-<section class="auth-card">
+<section class="py-5">
+    <div class="container-lg">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
 
-    <a class="auth-brand"
-       href="@Url.Action("Index", "Home")">
+                <div class="text-center pb-4">
+                    <h1 class="display-6 fw-bold">Crear cuenta</h1>
+                    <p class="text-muted m-0">
+                        Complete sus datos para registrarse en LEN.
+                    </p>
+                </div>
 
-        <span class="brand-icon">
-            <i class="bi bi-grid-1x2-fill"
-               aria-hidden="true"></i>
-        </span>
-
-        <span>
-            <strong>LEN</strong>
-
-            <small>
-                Crea tu cuenta para comenzar.
-            </small>
-        </span>
-
-    </a>
-
-    @using (Html.BeginForm(
-        "Registro",
-        "Home",
-        FormMethod.Post,
-        new
-        {
-            @class = "needs-validation",
-            autocomplete = "off"
-        }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="mb-4">
-
-            <p class="eyebrow mb-1">
-                Nueva cuenta
-            </p>
-
-            <h1 class="h3 mb-1">
-                Crear cuenta
-            </h1>
-
-            <p class="text-muted mb-0">
-                Completa tus datos para registrarte en LEN.
-            </p>
-
-        </div>
-
-        if (ViewData.ModelState[string.Empty] != null &&
-            ViewData.ModelState[string.Empty].Errors.Count > 0)
-        {
-            @Html.ValidationSummary(
-                true,
-                "",
-                new { @class = "alert alert-danger" }
-            )
-        }
-
-        <div class="row g-3">
-
-            <div class="col-12 col-md-6">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.Nombre,
-                    new { @class = "form-label" }
-                )
-
-                @Html.TextBoxFor(
-                    Modelo => Modelo.Nombre,
-                    new
+                <div class="border rounded p-4">
+                    @using (Html.BeginForm("Registro", "Home", FormMethod.Post, new { @class = "needs-validation", autocomplete = "off" }))
                     {
-                        @class = "form-control",
-                        maxlength = "100",
-                        autocomplete = "given-name"
-                    }
-                )
+                        @Html.AntiForgeryToken()
 
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.Nombre,
-                    "",
-                    new { @class = "text-danger small" }
-                )
-
-            </div>
-
-            <div class="col-12 col-md-6">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.Apellido,
-                    new { @class = "form-label" }
-                )
-
-                @Html.TextBoxFor(
-                    Modelo => Modelo.Apellido,
-                    new
-                    {
-                        @class = "form-control",
-                        maxlength = "100",
-                        autocomplete = "family-name"
-                    }
-                )
-
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.Apellido,
-                    "",
-                    new { @class = "text-danger small" }
-                )
-
-            </div>
-
-            <div class="col-12 col-md-6">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.Cedula,
-                    new { @class = "form-label" }
-                )
-
-                @Html.TextBoxFor(
-                    Modelo => Modelo.Cedula,
-                    new
-                    {
-                        @class = "form-control",
-                        maxlength = "20"
-                    }
-                )
-
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.Cedula,
-                    "",
-                    new { @class = "text-danger small" }
-                )
-
-            </div>
-
-            <div class="col-12 col-md-6">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.Telefono,
-                    new { @class = "form-label" }
-                )
-
-                @Html.TextBoxFor(
-                    Modelo => Modelo.Telefono,
-                    new
-                    {
-                        @class = "form-control",
-                        type = "tel",
-                        maxlength = "20",
-                        autocomplete = "tel"
-                    }
-                )
-
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.Telefono,
-                    "",
-                    new { @class = "text-danger small" }
-                )
-
-            </div>
-
-            <div class="col-12">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.Email,
-                    new { @class = "form-label" }
-                )
-
-                @Html.TextBoxFor(
-                    Modelo => Modelo.Email,
-                    new
-                    {
-                        @class = "form-control",
-                        type = "email",
-                        maxlength = "150",
-                        autocomplete = "email"
-                    }
-                )
-
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.Email,
-                    "",
-                    new { @class = "text-danger small" }
-                )
-
-            </div>
-
-            <div class="col-12 col-md-6">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.Contrasenna,
-                    "Contraseña",
-                    new { @class = "form-label" }
-                )
-
-                <div class="input-group">
-
-                    @Html.PasswordFor(
-                        Modelo => Modelo.Contrasenna,
-                        new
+                        if (ViewData.ModelState[string.Empty] != null &&
+                            ViewData.ModelState[string.Empty].Errors.Count > 0)
                         {
-                            @class = "form-control",
-                            minlength = "8",
-                            maxlength = "255",
-                            autocomplete = "new-password"
+                            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
                         }
-                    )
 
-                    <button class="btn btn-outline-secondary"
-                            type="button"
-                            data-password-toggle="Contrasenna"
-                            aria-label="Mostrar u ocultar contraseña">
+                        <div class="row g-3">
 
-                        <i class="bi bi-eye"
-                           aria-hidden="true"></i>
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Nombre, new { @class = "form-label" })
+                                @Html.TextBoxFor(
+                                    Modelo => Modelo.Nombre,
+                                    new { @class = "form-control", maxlength = "100", autocomplete = "given-name" }
+                                )
+                                @Html.ValidationMessageFor(Modelo => Modelo.Nombre, "", new { @class = "text-danger small" })
+                            </div>
 
-                    </button>
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Apellido, new { @class = "form-label" })
+                                @Html.TextBoxFor(
+                                    Modelo => Modelo.Apellido,
+                                    new { @class = "form-control", maxlength = "100", autocomplete = "family-name" }
+                                )
+                                @Html.ValidationMessageFor(Modelo => Modelo.Apellido, "", new { @class = "text-danger small" })
+                            </div>
 
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Cedula, new { @class = "form-label" })
+                                @Html.TextBoxFor(
+                                    Modelo => Modelo.Cedula,
+                                    new { @class = "form-control", maxlength = "20" }
+                                )
+                                @Html.ValidationMessageFor(Modelo => Modelo.Cedula, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Telefono, new { @class = "form-label" })
+                                @Html.TextBoxFor(
+                                    Modelo => Modelo.Telefono,
+                                    new { @class = "form-control", type = "tel", maxlength = "20", autocomplete = "tel" }
+                                )
+                                @Html.ValidationMessageFor(Modelo => Modelo.Telefono, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12">
+                                @Html.LabelFor(Modelo => Modelo.Email, new { @class = "form-label" })
+                                @Html.TextBoxFor(
+                                    Modelo => Modelo.Email,
+                                    new { @class = "form-control", type = "email", maxlength = "150", autocomplete = "email" }
+                                )
+                                @Html.ValidationMessageFor(Modelo => Modelo.Email, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Contrasenna, "Contraseña", new { @class = "form-label" })
+                                <div class="input-group">
+                                    @Html.PasswordFor(
+                                        Modelo => Modelo.Contrasenna,
+                                        new { @class = "form-control", minlength = "8", maxlength = "255", autocomplete = "new-password" }
+                                    )
+                                    <button class="btn btn-outline-dark" type="button"
+                                            data-password-toggle="Contrasenna"
+                                            aria-label="Mostrar u ocultar contraseña">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                @Html.ValidationMessageFor(Modelo => Modelo.Contrasenna, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.ConfirmarContrasenna, "Confirmar contraseña", new { @class = "form-label" })
+                                <div class="input-group">
+                                    @Html.PasswordFor(
+                                        Modelo => Modelo.ConfirmarContrasenna,
+                                        new { @class = "form-control", minlength = "8", maxlength = "255", autocomplete = "new-password" }
+                                    )
+                                    <button class="btn btn-outline-dark" type="button"
+                                            data-password-toggle="ConfirmarContrasenna"
+                                            aria-label="Mostrar u ocultar contraseña">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                @Html.ValidationMessageFor(Modelo => Modelo.ConfirmarContrasenna, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="Terminos" name="Terminos" type="checkbox" required />
+                                    <label class="form-check-label" for="Terminos">
+                                        Acepto los términos y condiciones.
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Debe aceptar los términos para continuar.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button class="btn btn-dark w-100" type="submit">
+                                    Crear cuenta
+                                </button>
+                            </div>
+
+                        </div>
+                    }
                 </div>
 
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.Contrasenna,
-                    "",
-                    new { @class = "text-danger small" }
-                )
+                <p class="text-center pt-3 m-0">
+                    ¿Ya tiene una cuenta?
+                    <a href="@Url.Action("Login", "Home")" class="fw-bold text-hover">Iniciar sesión</a>
+                </p>
 
             </div>
-
-            <div class="col-12 col-md-6">
-
-                @Html.LabelFor(
-                    Modelo => Modelo.ConfirmarContrasenna,
-                    "Confirmar contraseña",
-                    new { @class = "form-label" }
-                )
-
-                <div class="input-group">
-
-                    @Html.PasswordFor(
-                        Modelo => Modelo.ConfirmarContrasenna,
-                        new
-                        {
-                            @class = "form-control",
-                            minlength = "8",
-                            maxlength = "255",
-                            autocomplete = "new-password"
-                        }
-                    )
-
-                    <button class="btn btn-outline-secondary"
-                            type="button"
-                            data-password-toggle="ConfirmarContrasenna"
-                            aria-label="Mostrar u ocultar contraseña">
-
-                        <i class="bi bi-eye"
-                           aria-hidden="true"></i>
-
-                    </button>
-
-                </div>
-
-                @Html.ValidationMessageFor(
-                    Modelo => Modelo.ConfirmarContrasenna,
-                    "",
-                    new { @class = "text-danger small" }
-                )
-
-            </div>
-
-            <div class="col-12">
-
-                <div class="form-check">
-
-                    <input class="form-check-input"
-                           id="Terminos"
-                           name="Terminos"
-                           type="checkbox"
-                           required />
-
-                    <label class="form-check-label"
-                           for="Terminos">
-
-                        Acepto los términos y condiciones.
-
-                    </label>
-
-                    <div class="invalid-feedback">
-                        Debe aceptar los términos para continuar.
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-12">
-
-                <button class="btn btn-primary w-100"
-                        type="submit">
-
-                    <i class="bi bi-person-plus me-1"
-                       aria-hidden="true"></i>
-
-                    Crear cuenta
-
-                </button>
-
-            </div>
-
         </div>
-    }
-
-    <div class="auth-footer">
-
-        ¿Ya tienes una cuenta?
-
-        <a href="@Url.Action("Login", "Home")">
-            Iniciar sesión
-        </a>
-
     </div>
-
 </section>
 
 @section Scripts {
-
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        $(function () {
+            $('[data-password-toggle]').on('click', function () {
+                var $boton = $(this);
+                var idCampo = $boton.data('password-toggle');
+                var $campo = $('#' + idCampo);
+                var $icono = $boton.find('i');
+                var esOculta = $campo.attr('type') === 'password';
 
-            document
-                .querySelectorAll("[data-password-toggle]")
-                .forEach(function (Boton) {
-
-                    Boton.addEventListener(
-                        "click",
-                        function () {
-
-                            const IdCampo =
-                                this.dataset.passwordToggle;
-
-                            const Campo =
-                                document.getElementById(IdCampo);
-
-                            const Icono =
-                                this.querySelector("i");
-
-                            if (!Campo || !Icono) {
-                                return;
-                            }
-
-                            if (Campo.type === "password") {
-                                Campo.type = "text";
-                                Icono.className =
-                                    "bi bi-eye-slash";
-                            }
-                            else {
-                                Campo.type = "password";
-                                Icono.className =
-                                    "bi bi-eye";
-                            }
-                        }
-                    );
-                });
-
+                $campo.attr('type', esOculta ? 'text' : 'password');
+                $icono.toggleClass('bi-eye bi-eye-slash');
+            });
         });
     </script>
 }

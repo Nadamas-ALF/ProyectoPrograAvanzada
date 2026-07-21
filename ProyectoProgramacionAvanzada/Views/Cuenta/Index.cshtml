@@ -1,0 +1,136 @@
+﻿@model ProyectoProgramacionAvanzada.Models.CuentaViewModel
+
+@{
+    ViewBag.Title = "Mi cuenta | LEN";
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Mi cuenta</h1>
+                <p class="text-muted m-0">
+                    Hola, @Model.Usuario.Nombre. Aquí puede consultar su información
+                    y acceder a sus compras.
+                </p>
+            </div>
+        </div>
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        @*Accesos rápidos*@
+        <div class="row g-3 pb-4">
+            <div class="col-6 col-md-3">
+                <a href="@Url.Action("Index", "Carrito")"
+                   class="border rounded p-4 d-block text-center text-decoration-none text-reset h-100">
+                    <i class="bi bi-cart fs-2 d-block pb-2" aria-hidden="true"></i>
+                    <span class="fw-bold">Mi carrito</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="@Url.Action("Historial", "Pedido")"
+                   class="border rounded p-4 d-block text-center text-decoration-none text-reset h-100">
+                    <i class="bi bi-box-seam fs-2 d-block pb-2" aria-hidden="true"></i>
+                    <span class="fw-bold">Mis pedidos</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="@Url.Action("Index", "Favorito")"
+                   class="border rounded p-4 d-block text-center text-decoration-none text-reset h-100">
+                    <i class="bi bi-heart fs-2 d-block pb-2" aria-hidden="true"></i>
+                    <span class="fw-bold">Mis favoritos</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <form action="@Url.Action("CerrarSesion", "Home")" method="post" class="h-100">
+                    @Html.AntiForgeryToken()
+                    <button type="submit"
+                            class="border rounded p-4 d-block text-center w-100 h-100 bg-transparent">
+                        <i class="bi bi-box-arrow-right fs-2 d-block pb-2" aria-hidden="true"></i>
+                        <span class="fw-bold">Cerrar sesión</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            @*Datos personales*@
+            <div class="col-lg-6">
+                <div class="border rounded p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center pb-2">
+                        <h2 class="h5 fw-bold m-0">Mis datos</h2>
+                        <a href="@Url.Action("Detalle", "Usuario")" class="btn btn-outline-dark btn-sm">
+                            Editar
+                        </a>
+                    </div>
+                    <dl class="row m-0">
+                        <dt class="col-sm-4">Nombre</dt>
+                        <dd class="col-sm-8">@Model.Usuario.Nombre @Model.Usuario.Apellido</dd>
+
+                        <dt class="col-sm-4">Correo</dt>
+                        <dd class="col-sm-8">@Model.Usuario.Email</dd>
+
+                        <dt class="col-sm-4">Teléfono</dt>
+                        <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Usuario.Telefono) ? "—" : Model.Usuario.Telefono)</dd>
+
+                        <dt class="col-sm-4">Cédula</dt>
+                        <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Usuario.Cedula) ? "—" : Model.Usuario.Cedula)</dd>
+
+                        <dt class="col-sm-4">Miembro desde</dt>
+                        <dd class="col-sm-8 m-0">@Model.Usuario.FechaRegistro.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+                </div>
+            </div>
+
+            @*Direcciones*@
+            <div class="col-lg-6">
+                <div class="border rounded p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center pb-2">
+                        <h2 class="h5 fw-bold m-0">Mis direcciones</h2>
+                        <a href="@Url.Action("Detalle", "Usuario")" class="btn btn-outline-dark btn-sm">
+                            Administrar
+                        </a>
+                    </div>
+
+                    @if (Model.Direcciones.Count == 0)
+                    {
+                        <p class="text-muted m-0">
+                            Aún no tiene direcciones registradas. Agregue una para
+                            poder completar sus compras.
+                        </p>
+                    }
+                    else
+                    {
+                        foreach (var Direccion in Model.Direcciones)
+                        {
+                            <div class="border rounded p-3 mb-2">
+                                <p class="m-0">
+                                    <span class="fw-bold">@Direccion.NombreDestinatario</span>
+                                    @if (Direccion.EsPrincipal)
+                                    {
+                                        <span class="badge bg-dark ms-1">Principal</span>
+                                    }
+                                    <br>
+                                    @Direccion.DireccionExacta<br>
+                                    <span class="text-muted">
+                                        @Direccion.NombreDistrito, @Direccion.NombreCanton, @Direccion.NombreProvincia
+                                        · Tel: @Direccion.TelefonoContacto
+                                    </span>
+                                </p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>

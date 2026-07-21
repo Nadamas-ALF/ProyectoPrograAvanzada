@@ -1,118 +1,108 @@
 ﻿@model ProyectoProgramacionAvanzada.Models.InicioSesionModel
 
 @{
-    ViewBag.Title = "Inicio de Sesión";
-    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
-
+    ViewBag.Title = "Iniciar sesión | LEN";
 }
 
-<section class="auth-card">
-    <a class="auth-brand" href="index.html"><span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span><span><strong>Panel de Administración</strong><small>Gestiona productos y pedidos desde un solo lugar.</small></span></a>
+<section class="py-5">
+    <div class="container-lg">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
 
-    @if (TempData["MensajeExito"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show mt-3"
-             role="alert">
+                <div class="text-center pb-4">
+                    <h1 class="display-6 fw-bold">Iniciar sesión</h1>
+                    <p class="text-muted m-0">
+                        Ingrese sus datos para acceder a su cuenta LEN.
+                    </p>
+                </div>
 
-            <i class="bi bi-check-circle me-2"
-               aria-hidden="true"></i>
+                @if (TempData["MensajeExito"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["MensajeExito"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    </div>
+                }
 
-            @TempData["MensajeExito"]
+                <div class="border rounded p-4">
+                    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
 
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Cerrar">
-            </button>
-        </div>
-    }
+                        if (ViewData.ModelState[string.Empty] != null &&
+                            ViewData.ModelState[string.Empty].Errors.Count > 0)
+                        {
+                            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+                        }
 
-    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new
-    {
-        @class = "needs-validation",
-        novalidate = "novalidate"
-    }))
-    {
-        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            @Html.LabelFor(Modelo => Modelo.Email, new { @class = "form-label" })
+                            @Html.TextBoxFor(
+                                Modelo => Modelo.Email,
+                                new
+                                {
+                                    @class = "form-control",
+                                    type = "email",
+                                    autocomplete = "email",
+                                    placeholder = "correo@ejemplo.com"
+                                }
+                            )
+                            @Html.ValidationMessageFor(Modelo => Modelo.Email, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="mb-4">
-            <p class="eyebrow mb-3">Acceso Seguro</p>
-            <h1 class="h3 mb-1">Inicio de Sesion</h1>
-        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between">
+                                @Html.LabelFor(Modelo => Modelo.Contrasenna, "Contraseña", new { @class = "form-label" })
+                                <a class="small fw-semibold text-hover" href="@Url.Action("ForgotPassword", "Home")">
+                                    ¿Olvidó su contraseña?
+                                </a>
+                            </div>
 
-        if (ViewData.ModelState[string.Empty] != null &&
-        ViewData.ModelState[string.Empty].Errors.Count > 0)
-        {
-            @Html.ValidationSummary(
-                              true,
-                              "",
-                              new { @class = "alert alert-danger" }
-                          )
-        }
+                            <div class="input-group">
+                                @Html.PasswordFor(
+                                    Modelo => Modelo.Contrasenna,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        autocomplete = "current-password",
+                                        id = "campo-contrasenna"
+                                    }
+                                )
+                                <button type="button" class="btn btn-outline-dark" id="btn-mostrar-contrasenna"
+                                        aria-label="Mostrar u ocultar contraseña">
+                                    <i class="bi bi-eye" id="icono-mostrar-contrasenna" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            @Html.ValidationMessageFor(Modelo => Modelo.Contrasenna, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="mb-3">
-            @Html.LabelFor(
-                                              Modelo => Modelo.Email,
-                                              new { @class = "form-label" }
-                                          )
+                        <button class="btn btn-dark w-100" type="submit">
+                            Iniciar sesión
+                        </button>
+                    }
+                </div>
 
-            @Html.TextBoxFor(
-                                              Modelo => Modelo.Email,
-                                              new
-                                              {
-                                                  @class = "form-control",
-                                                  type = "email",
-                                                  autocomplete = "email",
-                                                  placeholder = "correo@ejemplo.com"
-                                              }
-                                          )
+                <p class="text-center pt-3 m-0">
+                    ¿No tiene una cuenta?
+                    <a href="@Url.Action("Registro", "Home")" class="fw-bold text-hover">Regístrese</a>
+                </p>
 
-            @Html.ValidationMessageFor(
-                                              Modelo => Modelo.Email,
-                                              "",
-                                              new { @class = "text-danger" }
-                                          )
-        </div>
-
-        <div class="mb-4">
-            <div class="d-flex justify-content-between">
-                @Html.LabelFor(
-                                                  Modelo => Modelo.Contrasenna,
-                                                  "Contraseña",
-                                                  new { @class = "form-label" }
-                                              )
-
-                <a class="small fw-semibold"
-                   href="@Url.Action("ForgotPassword", "Home")">
-                    ¿Olvidaste tu contraseña?
-                </a>
             </div>
-
-            @Html.PasswordFor(
-                                              Modelo => Modelo.Contrasenna,
-                                              new
-                                              {
-                                                  @class = "form-control",
-                                                  autocomplete = "current-password"
-                                              }
-                                          )
-
-            @Html.ValidationMessageFor(
-                                              Modelo => Modelo.Contrasenna,
-                                              "",
-                                              new { @class = "text-danger" }
-                                          )
         </div>
-
-        <button class="btn btn-primary w-100"
-                type="submit">
-            <i class="bi bi-box-arrow-in-right"
-               aria-hidden="true"></i>
-
-            Iniciar Sesión
-        </button>
-    }
-
-    <div class="auth-footer">No tiene una cuenta? <a href="@Url.Action("Registro", "Home")">Registrarse</a></div>
+    </div>
 </section>
-    
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#btn-mostrar-contrasenna').on('click', function () {
+                var $campo = $('#campo-contrasenna');
+                var $icono = $('#icono-mostrar-contrasenna');
+                var esOculta = $campo.attr('type') === 'password';
+
+                $campo.attr('type', esOculta ? 'text' : 'password');
+                $icono.toggleClass('bi-eye bi-eye-slash');
+            });
+        });
+    </script>
+}

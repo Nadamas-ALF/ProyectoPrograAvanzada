@@ -1,5 +1,5 @@
-﻿
-<!-- Loader 4 -->
+﻿@model ProyectoProgramacionAvanzada.Models.PortadaViewModel
+
 <div class="search-box bg-dark position-relative">
     <div class="search-wrap">
         <div class="close-button">
@@ -7,8 +7,8 @@
                 <use xlink:href="#close"></use>
             </svg>
         </div>
-        <form id="search-form" class="text-lg-center text-md-left pt-3" action="index.html" method="get">
-            <input type="text" class="search-input" placeholder="Search...">
+        <form id="search-form" class="text-lg-center text-md-left pt-3" action="@Url.Action("Index", "Catalogo")" method="get">
+            <input type="text" name="busqueda" class="search-input" placeholder="Buscar accesorios...">
             <svg class="search">
                 <use xlink:href="#search"></use>
             </svg>
@@ -16,459 +16,115 @@
     </div>
 </div>
 
-<!-- quick view -->
-<div class="modal fade" id="modaltoggle" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="col-lg-12 col-md-12 me-3">
-                    <div class="image-holder">
-                        <img src="~/Content/Images/collarbello.jpeg" alt="Collar de colores">
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="summary">
-                        <div class="summary-content fs-6">
-                            <div class="product-header d-flex justify-content-between mt-4">
-                                <h3 class="display-7">Collares</h3>
-                                <div class="modal-close-btn">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    </button>
-                                </div>
-                            </div>
-                            <span class="product-price fs-3">$99</span>
-                            <div class="product-details">
-                                <p class="fs-7">
-                                    Buy good shoes and a good mattress, because when you're not in one you're in the
-                                    other. With four pairs of shoes, I can travel the world.
-                                </p>
-                            </div>
-                            <ul class="select">
-                                <li>
-                                    <strong>Colour Shown:</strong> Red, White, Black
-                                </li>
-                                <li>
-                                    <strong>Style:</strong> SM3018-100
-                                </li>
-                            </ul>
-                            <div class="variations-form shopify-cart">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="quantity d-flex pb-4">
-                                            <div class="qty-number align-top qty-number-plus d-flex justify-content-center align-items-center text-center">
-                                                <span class="increase-qty plus">
-                                                    <svg class="plus">
-                                                        <use xlink:href="#plus"></use>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                            <input type="number" id="quantity_001" class="input-text text-center" step="1" min="1" name="quantity" value="1" title="Qty">
-                                            <div class="qty-number qty-number-minus d-flex justify-content-center align-items-center text-center">
-                                                <span class="increase-qty minus">
-                                                    <svg class="minus">
-                                                        <use xlink:href="#minus"></use>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <a rel="nofollow" data-no-instant="" href="#" class="out-stock button">Out of stock</a>
-                                        <button type="submit" class="btn btn-medium btn-black hvr-sweep-to-right">Add to cart</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- variations-form -->
-                            <div class="categories d-flex flex-wrap pt-3">
-                                <strong class="pe-2">Categories:</strong>
-                                <a href="#" title="categories">Clothing,</a>
-                                <a href="#" title="categories">Men's Clothes,</a>
-                                <a href="#" title="categories">Tops & T-Shirts</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- / quick view -->
-
-<div class="modal fade" id="modallong" tabindex="-1" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5">Cart</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="shopping-cart">
-                    <div class="shopping-cart-content">
-                        <div class="mini-cart cart-list p-0 mt-3">
-                            <div class="mini-cart-item d-flex border-bottom pb-3">
-                                <div class="col-lg-2 col-md-3 col-sm-2 me-4">
-                                    <a href="#" title="product-image">
-                                        <img src="~/Content/images/single-product-thumb1.jpg" class="img-fluid" alt="single-product-item">
-                                    </a>
-                                </div>
-                                <div class="col-lg-9 col-md-8 col-sm-8">
-                                    <div class="product-header d-flex justify-content-between align-items-center mb-3">
-                                        <h4 class="product-title fs-6 me-5">Sport Shoes For Men</h4>
-                                        <a href="" class="remove" aria-label="Remove this item" data-product_id="11913"
-                                           data-cart_item_key="abc" data-product_sku="">
-                                            <svg class="close">
-                                                <use xlink:href="#close"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                    <div class="quantity-price d-flex justify-content-between align-items-center">
-                                        <div class="input-group product-qty">
-                                            <button type="button"
-                                                    class="quantity-left-minus btn btn-light rounded-0 rounded-start btn-number"
-                                                    data-type="minus">
-                                                <svg width="16" height="16">
-                                                    <use xlink:href="#minus"></use>
-                                                </svg>
-                                            </button>
-                                            <input type="text" name="quantity" class="form-control input-number quantity" value="1">
-                                            <button type="button" class="quantity-right-plus btn btn-light rounded-0 rounded-end btn-number"
-                                                    data-type="plus">
-                                                <svg width="16" height="16">
-                                                    <use xlink:href="#plus"></use>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div class="price-code">
-                                            <span class="product-price fs-6">$99</span>
-                                        </div>
-                                    </div>
-                                    <!-- quantity-price -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mini-cart cart-list p-0 mt-3">
-                            <div class="mini-cart-item d-flex border-bottom pb-3">
-                                <div class="col-lg-2 col-md-3 col-sm-2 me-4">
-                                    <a href="#" title="product-image">
-                                        <img src="~/Content/images/single-product-thumb2.jpg" class="img-fluid" alt="single-product-item">
-                                    </a>
-                                </div>
-                                <div class="col-lg-9 col-md-8 col-sm-8">
-                                    <div class="product-header d-flex justify-content-between align-items-center mb-3">
-                                        <h4 class="product-title fs-6 me-5">Brand Shoes For Men</h4>
-                                        <a href="" class="remove" aria-label="Remove this item" data-product_id="11913"
-                                           data-cart_item_key="abc" data-product_sku="">
-                                            <svg class="close">
-                                                <use xlink:href="#close"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                    <div class="quantity-price d-flex justify-content-between align-items-center">
-                                        <div class="input-group product-qty">
-                                            <button type="button"
-                                                    class="quantity-left-minus btn btn-light rounded-0 rounded-start btn-number"
-                                                    data-type="minus">
-                                                <svg width="16" height="16">
-                                                    <use xlink:href="#minus"></use>
-                                                </svg>
-                                            </button>
-                                            <input type="text" name="quantity" class="form-control input-number quantity" value="1">
-                                            <button type="button" class="quantity-right-plus btn btn-light rounded-0 rounded-end btn-number"
-                                                    data-type="plus">
-                                                <svg width="16" height="16">
-                                                    <use xlink:href="#plus"></use>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div class="price-code">
-                                            <span class="product-price fs-6">$99</span>
-                                        </div>
-                                    </div>
-                                    <!-- quantity-price -->
-                                </div>
-                            </div>
-                        </div>
-                        <!-- cart-list -->
-                        <div class="mini-cart-total d-flex justify-content-between py-4">
-                            <span class="fs-6">Subtotal:</span>
-                            <span class="special-price-code">
-                                <span class="price-amount amount fs-6" style="opacity: 1;">
-                                    <bdi>
-                                        <span class="price-currency-symbol">$</span>198.00
-                                    </bdi>
-                                </span>
-                            </span>
-                        </div>
-                        <div class="modal-footer my-4 justify-content-center">
-                            <button type="button" class="btn btn-red hvr-sweep-to-right dark-sweep">View Cart</button>
-                            <button type="button"
-                                    class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">
-                                Checkout
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- cart view -->
-
-
-
-<!-- Login -->
-
-<section id="intro" class="position-relative mt-4">
-    <div class="container-lg">
-        <div class="swiper main-swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="card d-flex flex-row align-items-end border-0 large jarallax-keep-img">
-                        <img src="~/Content/Images/ojo.jpeg" alt="collar ojo" class="img-fluid jarallax-img">
-                        <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                            <h2 class="card-title display-3 light">Stylish shoes for Women</h2>
-                            <a href="index.html"
-                               class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Shop Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="row g-4">
-                        <div class="col-lg-12 mb-4">
-                            <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="~/Content/Images/perlas.jpeg" alt="collar perlas" class="img-fluid jarallax-img">
+@*Carrusel de productos destacados (bandera administrada por el módulo de productos).*@
+@if (Model.Destacados.Count > 0)
+{
+    <section id="intro" class="position-relative mt-4">
+        <div class="container-lg">
+            <div class="swiper main-swiper">
+                <div class="swiper-wrapper">
+                    @foreach (var Destacado in Model.Destacados)
+                    {
+                        <div class="swiper-slide">
+                            <a href="@Url.Action("Detalle", "Catalogo", new { id = Destacado.IdProducto })"
+                               class="hero-slide card d-flex flex-row align-items-end border-0 large text-decoration-none"
+                               aria-label="Ver detalle de @Destacado.NombreProducto">
+                                <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Destacado.RutaImagen) ? "Content/Images/logo.jpeg" : Destacado.RutaImagen))"
+                                     alt="@Destacado.NombreProducto"
+                                     class="hero-imagen">
                                 <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                                    <h2 class="card-title style-2 display-4 light">Sports Wear</h2>
-                                    <a href="index.html"
-                                       class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Shop Now</a>
+                                    <p class="text-uppercase light m-0">@Destacado.NombreCategoria</p>
+                                    <h2 class="card-title display-4 light">@Destacado.NombreProducto</h2>
+                                    <span class="fs-4 fw-bold light d-block">@string.Format("₡{0:N2}", Destacado.Precio)</span>
+                                    <span class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Ver producto</span>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="~/Content/Images/llaveroflor.jpeg" alt="llavero flor" class="img-fluid jarallax-img">
-                                <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                                    <h2 class="card-title style-2 display-4 light">Fashion Shoes</h2>
-                                    <a href="index.html"
-                                       class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Shop Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card d-flex flex-row align-items-end border-0 large jarallax-keep-img">
-                        <img src="~/Content/Images/collarbello.jpeg" alt="collar colores" class="img-fluid jarallax-img">
-                        <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                            <h2 class="card-title display-3 light">Stylish shoes for men</h2>
-                            <a href="index.html"
-                               class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Shop Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="row g-4">
-                        <div class="col-lg-12 mb-4">
-                            <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="~/Content/Images/pglobo.jpeg" alt="shoes" class="img-fluid jarallax-img">
-                                <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                                    <h2 class="card-title style-2 display-4 light">Men Shoes</h2>
-                                    <a href="index.html"
-                                       class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Shop Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="~/Content/Images/snicker.jpeg" alt="shoes" class="img-fluid jarallax-img">
-                                <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                                    <h2 class="card-title style-2 display-4 light">Women Shoes</h2>
-                                    <a href="index.html"
-                                       class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Shop Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
+            <div class="swiper-pagination"></div>
         </div>
-        <div class="swiper-pagination"></div>
-    </div>
-</section>
-<section class="discount-coupon py-2 my-2 py-md-5 my-md-5">
-    <div class="container">
-        <div class="bg-gray coupon position-relative p-5">
-            <div class="bold-text position-absolute">10% OFF</div>
-            <div class="row justify-content-between align-items-center">
-                <div class="col-lg-7 col-md-12 mb-3">
-                    <div class="coupon-header">
-                        <h2 class="display-7">10% OFF Discount Coupons</h2>
-                        <p class="m-0">Subscribe us to get 10% OFF on all the purchases</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-12">
-                    <div class="btn-wrap">
-                        <a href="#" class="btn btn-black btn-medium text-uppercase hvr-sweep-to-right">Email me</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
+}
+
+@*Productos reales del catálogo (SP_ConsultarCatalogo vía CatalogoService)*@
 <section id="featured-products" class="product-store">
     <div class="container-md">
+
+        @Html.AntiForgeryToken()
+        <div id="alerta-carrito" class="alert d-none" role="alert"></div>
+
         <div class="display-header d-flex align-items-center justify-content-between">
-            <h2 class="section-title text-uppercase">Featured Products</h2>
+            <h2 class="section-title text-uppercase">Nuestros accesorios</h2>
             <div class="btn-right">
-                <a href="index.html" class="d-inline-block text-uppercase text-hover fw-bold">View all</a>
+                <a href="@Url.Action("Index", "Catalogo")" class="d-inline-block text-uppercase text-hover fw-bold">Ver todo</a>
             </div>
         </div>
+
         <div class="product-content padding-small">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
-                <div class="col mb-4">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/collarbello.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
+            @if (Model.Catalogo.Productos.Count == 0)
+            {
+                <div class="text-center py-5 border rounded">
+                    <h3 class="h5 pb-2">No hay productos disponibles por el momento.</h3>
+                    <p class="text-muted m-0">Vuelva pronto para descubrir nuestros accesorios.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
+                    @foreach (var Producto in Model.Catalogo.Productos)
+                    {
+                        <div class="col mb-4">
+                            <div class="product-card position-relative">
+                                <div class="card-img">
+                                    <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Producto.RutaImagen) ? "Content/Images/logo.jpeg" : Producto.RutaImagen))"
+                                         alt="@Producto.NombreProducto"
+                                         class="product-image img-fluid img-producto">
+                                    @if (!Producto.Disponible)
+                                    {
+                                        <span class="badge bg-secondary position-absolute top-0 start-0 m-2">Agotado</span>
+                                    }
+                                    <div class="cart-concern position-absolute d-flex justify-content-center">
+                                        <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
+                                            @if (Producto.Disponible)
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-light js-agregar-portada"
+                                                        data-idproducto="@Producto.IdProducto"
+                                                        title="Agregar al carrito"
+                                                        aria-label="Agregar @Producto.NombreProducto al carrito">
+                                                    <svg class="shopping-carriage">
+                                                        <use xlink:href="#shopping-carriage"></use>
+                                                    </svg>
+                                                </button>
+                                            }
+                                            <a href="@Url.Action("Detalle", "Catalogo", new { id = Producto.IdProducto })"
+                                               class="btn btn-light"
+                                               title="Ver detalle"
+                                               aria-label="Ver detalle de @Producto.NombreProducto">
+                                                <svg class="quick-view">
+                                                    <use xlink:href="#quick-view"></use>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-detail d-flex justify-content-between align-items-center mt-3">
+                                    <h3 class="card-title fs-6 fw-normal m-0">
+                                        <a href="@Url.Action("Detalle", "Catalogo", new { id = Producto.IdProducto })">@Producto.NombreProducto</a>
+                                    </h3>
+                                    <span class="card-price fw-bold">@string.Format("₡{0:N2}", Producto.Precio)</span>
                                 </div>
                             </div>
-                            <!-- cart-concern -->
                         </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Collar de diamantes y osito</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
+                    }
                 </div>
-                <div class="col mb-4">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/llaveroflor.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Llavero flor</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/perlas.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Collar perlas</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/pulsera.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Pulsera bratz</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/pglobo.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Collar perlas globo</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
+
 <section id="collection-products" class="py-2 my-2 py-md-5 my-md-5">
     <div class="container-md">
         <div class="row">
@@ -477,9 +133,9 @@
                     <img src="~/Content/Images/snicker.jpeg" alt="product-item" class="border-rounded-10 img-fluid jarallax-img">
                     <div class="card-detail p-3 m-3 p-lg-5 m-lg-5">
                         <h3 class="card-title display-3">
-                            <a href="#">Minimal Collection</a>
+                            <a href="@Url.Action("Index", "Catalogo")">Minimal Collection</a>
                         </h3>
-                        <a href="index.html" class="text-uppercase mt-3 d-inline-block text-hover fw-bold">Shop Now</a>
+                        <a href="@Url.Action("Index", "Catalogo")" class="text-uppercase mt-3 d-inline-block text-hover fw-bold">Ver catálogo</a>
                     </div>
                 </div>
             </div>
@@ -488,163 +144,9 @@
                     <img src="~/Content/Images/pato.jpeg" alt="product-item" class="border-rounded-10 img-fluid jarallax-img">
                     <div class="card-detail p-3 m-3 p-lg-5 m-lg-5">
                         <h3 class="card-title display-3">
-                            <a href="#">Sneakers Collection</a>
+                            <a href="@Url.Action("Index", "Catalogo")">Colección LEN</a>
                         </h3>
-                        <a href="index.html" class="text-uppercase mt-3 d-inline-block text-hover fw-bold">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="latest-products" class="product-store py-2 my-2 py-md-5 my-md-5 pt-0">
-    <div class="container-md">
-        <div class="display-header d-flex align-items-center justify-content-between">
-            <h2 class="section-title text-uppercase">Latest Products</h2>
-            <div class="btn-right">
-                <a href="index.html" class="d-inline-block text-uppercase text-hover fw-bold">View all</a>
-            </div>
-        </div>
-        <div class="product-content padding-small">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
-                <div class="col mb-4 mb-3">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/perlasrosadas.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Collar doble PINK</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4 mb-3">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/collarpato.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Collar DAISY</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4 mb-3">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/perlascor.JPEG" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Perlas HEART</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4 mb-3">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/pato.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Collar perlas DUCK</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4 mb-3">
-                    <div class="product-card position-relative">
-                        <div class="card-img">
-                            <img src="~/Content/Images/snicker.jpeg" alt="product-item" class="product-image img-fluid">
-                            <div class="cart-concern position-absolute d-flex justify-content-center">
-                                <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modallong">
-                                        <svg class="shopping-carriage">
-                                            <use xlink:href="#shopping-carriage"></use>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="btn btn-light" data-bs-target="#modaltoggle" data-bs-toggle="modal">
-                                        <svg class="quick-view">
-                                            <use xlink:href="#quick-view"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- cart-concern -->
-                        </div>
-                        <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                            <h3 class="card-title fs-6 fw-normal m-0">
-                                <a href="index.html">Charm Snicker</a>
-                            </h3>
-                            <span class="card-price fw-bold">$99</span>
-                        </div>
+                        <a href="@Url.Action("Index", "Catalogo")" class="text-uppercase mt-3 d-inline-block text-hover fw-bold">Ver catálogo</a>
                     </div>
                 </div>
             </div>
@@ -652,3 +154,13 @@
     </div>
 </section>
 
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/carrito.js")"></script>
+    <script>
+        $(function () {
+            $('.js-agregar-portada').on('click', function () {
+                window.LEN_AgregarAlCarrito($(this).data('idproducto'), 1);
+            });
+        });
+    </script>
+}

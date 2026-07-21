@@ -59,6 +59,20 @@
         );
     }
 
+    function actualizarBadgeCarrito(cantidad) {
+        var $badge = $('#badge-carrito');
+
+        if ($badge.length === 0) {
+            return;
+        }
+
+        if (cantidad > 0) {
+            $badge.removeClass('d-none').text(cantidad);
+        } else {
+            $badge.addClass('d-none').text('0');
+        }
+    }
+
     /* Función global para agregar productos desde el catálogo. */
     window.LEN_AgregarAlCarrito = function (idProducto, cantidad) {
         $.post(
@@ -72,6 +86,7 @@
             .done(function (respuesta) {
                 manejarRespuesta(respuesta, function (datos) {
                     mostrarMensaje('success', datos.mensaje);
+                    actualizarBadgeCarrito(datos.cantidadItems);
                 });
             })
             .fail(errorComunicacion);
