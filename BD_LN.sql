@@ -2533,3 +2533,223 @@ BEGIN
       AND E.nombre_estado = N'Disponible'
     ORDER BY P.fecha_creacion DESC, P.id_producto DESC;
 END;
+
+/* ============================================================
+   DASHBOARD CONSULTAR RESUMEN
+   ============================================================ */
+
+GO
+
+CREATE OR ALTER PROCEDURE dbo.SP_Dashboard_ConsultarResumen
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        CAST(
+            ISNULL(
+                (
+                    SELECT SUM(PE.total)
+                    FROM dbo.TB_pedido AS PE
+                    INNER JOIN dbo.TB_estado AS E
+                        ON E.id_estado = PE.id_estado
+                    WHERE E.nombre_estado IN
+                    (
+                        N'Pagado',
+                        N'En preparación',
+                        N'Entregado'
+                    )
+                ),
+                0
+            )
+            AS DECIMAL(18,2)
+        ) AS TotalVentas,
+
+        (
+            SELECT COUNT(*)
+            FROM dbo.TB_pedido
+            WHERE id_estado IN
+            (
+                SELECT id_estado
+                FROM dbo.TB_estado
+                WHERE nombre_estado IN
+                (
+                    N'Pendiente',
+                    N'Pagado',
+                    N'En preparación',
+                    N'Entregado'
+                )
+            )
+        ) AS TotalPedidos,
+
+        (
+            SELECT COUNT(*)
+            FROM dbo.TB_usuario AS U
+            INNER JOIN dbo.TB_rol AS R
+                ON R.id_rol = U.id_rol
+            INNER JOIN dbo.TB_estado AS E
+                ON E.id_estado = U.id_estado
+            WHERE R.nombre_rol = N'Cliente'
+              AND E.nombre_estado = N'Activo'
+        ) AS TotalClientesActivos,
+
+        (
+            SELECT COUNT(*)
+            FROM dbo.TB_producto AS P
+            INNER JOIN dbo.TB_estado AS E
+                ON E.id_estado = P.id_estado
+            WHERE P.stock = 0
+               OR E.nombre_estado = N'Agotado'
+        ) AS TotalProductosAgotados;
+END;
+GO
+
+
+
+   /* ============================================================
+   DASHBOARD CONSULTAR VENTAS MENSUALES
+   ============================================================ */
+
+   USE BD_LEN;
+GO
+
+CREATE OR ALTER PROCEDURE dbo.SP_Dashboard_ConsultarVentasMensuales
+    @Anno INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    ;WITH Meses AS
+    (
+        SELECT 1 AS NumeroMes, N'Ene' AS NombreMes
+        UNION ALL
+        SELECT 2, N'Feb'
+        UNION ALL
+        SELECT 3, N'Mar'
+        UNION ALL
+        SELECT 4, N'Abr'
+        UNION ALL
+        SELECT 5, N'May'
+        UNION ALL
+        SELECT 6, N'Jun'
+        UNION ALL
+        SELECT 7, N'Jul'
+        UNION ALL
+        SELECT 8, N'Ago'
+        UNION ALL
+        SELECT 9, N'Sep'
+        UNION ALL
+        SELECT 10, N'Oct'
+        UNION ALL
+        SELECT 11, N'Nov'
+        UNION ALL
+        SELECT 12, N'Dic'
+    ),
+    Ventas AS
+    (
+        SELECT
+            MONTH(PE.fecha_pedido) AS NumeroMes,
+            SUM(PE.total) AS TotalVentas
+        FROM dbo.TB_pedido AS PE
+        INNER JOIN dbo.TB_estado AS E
+            ON E.id_estado = PE.id_estado
+        WHERE YEAR(PE.fecha_pedido) = @Anno
+          AND E.nombre_estado IN
+          (
+              N'Pagado',
+              N'En preparación',
+              N'Entregado'
+          )
+        GROUP BY
+            MONTH(PE.fecha_pedido)
+    )
+    SELECT
+        M.NumeroMes,
+        M.NombreMes,
+        CAST(
+            ISNULL(V.TotalVentas, 0)
+            AS DECIMAL(18,2)
+        ) AS TotalVentas
+    FROM Meses AS M
+    LEFT JOIN Ventas AS V
+        ON V.NumeroMes = M.NumeroMes
+    ORDER BY
+        M.NumeroMes;
+END;
+GO
+
+
+
+
+   /* ============================================================
+   DASHBOARD CONSULTAR ACTIVIDADES RECIENTES
+   ============================================================ */
+
+   USE BD_LEN;
+GO
+
+CREATE OR ALTER PROCEDURE dbo.SP_Dashboard_ConsultarActividadReciente
+    @Cantidad INT = 5
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @Cantidad IS NULL OR @Cantidad < 1
+    BEGIN
+        SET @Cantidad = 5;
+    END;
+
+    SELECT TOP (@Cantidad)
+        PE.id_pedido AS IdPedido,
+
+        CONCAT(
+            N'Pedido #',
+            PE.id_pedido
+        ) AS Titulo,
+
+        CONCAT(
+            U.nombre,
+            N' ',
+            U.apellido,
+            N' realizó un pedido por ₡',
+            CONVERT(
+                NVARCHAR(30),
+                CAST(PE.total AS DECIMAL(18,2))
+            )
+        ) AS Descripcion,
+
+        PE.fecha_pedido AS Fecha,
+
+        E.nombre_estado AS Tipo
+    FROM dbo.TB_pedido AS PE
+    INNER JOIN dbo.TB_usuario AS U
+        ON U.id_usuario = PE.id_usuario
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = PE.id_estado
+    ORDER BY
+        PE.fecha_pedido DESC,
+        PE.id_pedido DESC;
+END;
+GO
+
+ /* ============================================================
+   DASHBOARD CONSULTAS GENERALES PRUEBAS
+   ============================================================ */
+
+   USE BD_LEN;
+GO
+
+DECLARE @AnnoActual INT = YEAR(GETDATE());
+
+EXEC dbo.SP_Dashboard_ConsultarResumen;
+GO
+
+DECLARE @AnnoActual INT = YEAR(GETDATE());
+
+EXEC dbo.SP_Dashboard_ConsultarVentasMensuales
+    @Anno = @AnnoActual;
+GO
+
+EXEC dbo.SP_Dashboard_ConsultarActividadReciente
+    @Cantidad = 5;
+GO
