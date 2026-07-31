@@ -46,6 +46,23 @@ namespace ProyectoProgramacionAvanzada.EF
         public virtual DbSet<TB_rol> TB_rol { get; set; }
         public virtual DbSet<TB_usuario> TB_usuario { get; set; }
     
+        public virtual ObjectResult<SP_ActualizarCantidadCarrito_Result> SP_ActualizarCantidadCarrito(Nullable<int> idUsuario, Nullable<int> idProducto, Nullable<int> cantidad)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("Cantidad", cantidad) :
+                new ObjectParameter("Cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarCantidadCarrito_Result>("SP_ActualizarCantidadCarrito", idUsuarioParameter, idProductoParameter, cantidadParameter);
+        }
+    
         public virtual ObjectResult<SP_ActualizarContrasennaTemporal_Result> SP_ActualizarContrasennaTemporal(Nullable<int> idUsuario, string contrasenna, Nullable<System.DateTime> vigenciaContrasennaTemporal)
         {
             var idUsuarioParameter = idUsuario.HasValue ?
@@ -135,365 +152,6 @@ namespace ProyectoProgramacionAvanzada.EF
                 new ObjectParameter("IdEstado", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarUsuario_Result>("SP_ActualizarUsuario", idUsuarioParameter, nombreParameter, apellidoParameter, cedulaParameter, telefonoParameter, emailParameter, idRolParameter, idEstadoParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarCantonesPorProvincia_Result> SP_ConsultarCantonesPorProvincia(Nullable<int> idProvincia)
-        {
-            var idProvinciaParameter = idProvincia.HasValue ?
-                new ObjectParameter("IdProvincia", idProvincia) :
-                new ObjectParameter("IdProvincia", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarCantonesPorProvincia_Result>("SP_ConsultarCantonesPorProvincia", idProvinciaParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarDireccionesUsuario_Result> SP_ConsultarDireccionesUsuario(Nullable<int> idUsuario)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDireccionesUsuario_Result>("SP_ConsultarDireccionesUsuario", idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarDireccionPorId_Result> SP_ConsultarDireccionPorId(Nullable<int> idDireccion, Nullable<int> idUsuario)
-        {
-            var idDireccionParameter = idDireccion.HasValue ?
-                new ObjectParameter("IdDireccion", idDireccion) :
-                new ObjectParameter("IdDireccion", typeof(int));
-    
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDireccionPorId_Result>("SP_ConsultarDireccionPorId", idDireccionParameter, idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarDistritosPorCanton_Result> SP_ConsultarDistritosPorCanton(Nullable<int> idCanton)
-        {
-            var idCantonParameter = idCanton.HasValue ?
-                new ObjectParameter("IdCanton", idCanton) :
-                new ObjectParameter("IdCanton", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDistritosPorCanton_Result>("SP_ConsultarDistritosPorCanton", idCantonParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarEstados_Result> SP_ConsultarEstados()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstados_Result>("SP_ConsultarEstados");
-        }
-    
-        public virtual ObjectResult<SP_ConsultarEstadosUsuario_Result> SP_ConsultarEstadosUsuario()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstadosUsuario_Result>("SP_ConsultarEstadosUsuario");
-        }
-    
-        public virtual ObjectResult<SP_ConsultarProvincias_Result> SP_ConsultarProvincias()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarProvincias_Result>("SP_ConsultarProvincias");
-        }
-    
-        public virtual ObjectResult<SP_ConsultarRoles_Result> SP_ConsultarRoles()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarRoles_Result>("SP_ConsultarRoles");
-        }
-    
-        public virtual ObjectResult<SP_ConsultarUsuarioInicioSesion_Result> SP_ConsultarUsuarioInicioSesion(string email)
-        {
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioInicioSesion_Result>("SP_ConsultarUsuarioInicioSesion", emailParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarUsuarioPorId_Result> SP_ConsultarUsuarioPorId(Nullable<int> idUsuario)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioPorId_Result>("SP_ConsultarUsuarioPorId", idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarUsuarioRecuperacion_Result> SP_ConsultarUsuarioRecuperacion(string email)
-        {
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioRecuperacion_Result>("SP_ConsultarUsuarioRecuperacion", emailParameter);
-        }
-    
-        public virtual ObjectResult<SP_DesactivarDireccionUsuario_Result> SP_DesactivarDireccionUsuario(Nullable<int> idDireccion, Nullable<int> idUsuario)
-        {
-            var idDireccionParameter = idDireccion.HasValue ?
-                new ObjectParameter("IdDireccion", idDireccion) :
-                new ObjectParameter("IdDireccion", typeof(int));
-    
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_DesactivarDireccionUsuario_Result>("SP_DesactivarDireccionUsuario", idDireccionParameter, idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_InsertarDireccionUsuario_Result> SP_InsertarDireccionUsuario(Nullable<int> idUsuario, Nullable<int> idDistrito, string direccionExacta, string referencia, string telefonoContacto, string nombreDestinatario, Nullable<bool> esPrincipal)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var idDistritoParameter = idDistrito.HasValue ?
-                new ObjectParameter("IdDistrito", idDistrito) :
-                new ObjectParameter("IdDistrito", typeof(int));
-    
-            var direccionExactaParameter = direccionExacta != null ?
-                new ObjectParameter("DireccionExacta", direccionExacta) :
-                new ObjectParameter("DireccionExacta", typeof(string));
-    
-            var referenciaParameter = referencia != null ?
-                new ObjectParameter("Referencia", referencia) :
-                new ObjectParameter("Referencia", typeof(string));
-    
-            var telefonoContactoParameter = telefonoContacto != null ?
-                new ObjectParameter("TelefonoContacto", telefonoContacto) :
-                new ObjectParameter("TelefonoContacto", typeof(string));
-    
-            var nombreDestinatarioParameter = nombreDestinatario != null ?
-                new ObjectParameter("NombreDestinatario", nombreDestinatario) :
-                new ObjectParameter("NombreDestinatario", typeof(string));
-    
-            var esPrincipalParameter = esPrincipal.HasValue ?
-                new ObjectParameter("EsPrincipal", esPrincipal) :
-                new ObjectParameter("EsPrincipal", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_InsertarDireccionUsuario_Result>("SP_InsertarDireccionUsuario", idUsuarioParameter, idDistritoParameter, direccionExactaParameter, referenciaParameter, telefonoContactoParameter, nombreDestinatarioParameter, esPrincipalParameter);
-        }
-    
-        public virtual int SP_RegistrarError(string origen, string metodo, string mensajeError, string detalleError, Nullable<int> lineaError, string usuarioSistema, string url, string stackTrace)
-        {
-            var origenParameter = origen != null ?
-                new ObjectParameter("Origen", origen) :
-                new ObjectParameter("Origen", typeof(string));
-    
-            var metodoParameter = metodo != null ?
-                new ObjectParameter("Metodo", metodo) :
-                new ObjectParameter("Metodo", typeof(string));
-    
-            var mensajeErrorParameter = mensajeError != null ?
-                new ObjectParameter("MensajeError", mensajeError) :
-                new ObjectParameter("MensajeError", typeof(string));
-    
-            var detalleErrorParameter = detalleError != null ?
-                new ObjectParameter("DetalleError", detalleError) :
-                new ObjectParameter("DetalleError", typeof(string));
-    
-            var lineaErrorParameter = lineaError.HasValue ?
-                new ObjectParameter("LineaError", lineaError) :
-                new ObjectParameter("LineaError", typeof(int));
-    
-            var usuarioSistemaParameter = usuarioSistema != null ?
-                new ObjectParameter("UsuarioSistema", usuarioSistema) :
-                new ObjectParameter("UsuarioSistema", typeof(string));
-    
-            var urlParameter = url != null ?
-                new ObjectParameter("Url", url) :
-                new ObjectParameter("Url", typeof(string));
-    
-            var stackTraceParameter = stackTrace != null ?
-                new ObjectParameter("StackTrace", stackTrace) :
-                new ObjectParameter("StackTrace", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RegistrarError", origenParameter, metodoParameter, mensajeErrorParameter, detalleErrorParameter, lineaErrorParameter, usuarioSistemaParameter, urlParameter, stackTraceParameter);
-        }
-    
-        public virtual ObjectResult<SP_RegistrarUsuario_Result> SP_RegistrarUsuario(string nombre, string apellido, string cedula, string telefono, string email, string contrasenna)
-        {
-            var nombreParameter = nombre != null ?
-                new ObjectParameter("Nombre", nombre) :
-                new ObjectParameter("Nombre", typeof(string));
-    
-            var apellidoParameter = apellido != null ?
-                new ObjectParameter("Apellido", apellido) :
-                new ObjectParameter("Apellido", typeof(string));
-    
-            var cedulaParameter = cedula != null ?
-                new ObjectParameter("Cedula", cedula) :
-                new ObjectParameter("Cedula", typeof(string));
-    
-            var telefonoParameter = telefono != null ?
-                new ObjectParameter("Telefono", telefono) :
-                new ObjectParameter("Telefono", typeof(string));
-    
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
-    
-            var contrasennaParameter = contrasenna != null ?
-                new ObjectParameter("Contrasenna", contrasenna) :
-                new ObjectParameter("Contrasenna", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RegistrarUsuario_Result>("SP_RegistrarUsuario", nombreParameter, apellidoParameter, cedulaParameter, telefonoParameter, emailParameter, contrasennaParameter);
-        }
-    
-        public virtual ObjectResult<SP_RestablecerContrasennaUsuario_Result> SP_RestablecerContrasennaUsuario(Nullable<int> idUsuario, string contrasenna)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var contrasennaParameter = contrasenna != null ?
-                new ObjectParameter("Contrasenna", contrasenna) :
-                new ObjectParameter("Contrasenna", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RestablecerContrasennaUsuario_Result>("SP_RestablecerContrasennaUsuario", idUsuarioParameter, contrasennaParameter);
-        }
-    
-        public virtual ObjectResult<SP_ActualizarCantidadCarrito_Result> SP_ActualizarCantidadCarrito(Nullable<int> idUsuario, Nullable<int> idProducto, Nullable<int> cantidad)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var idProductoParameter = idProducto.HasValue ?
-                new ObjectParameter("IdProducto", idProducto) :
-                new ObjectParameter("IdProducto", typeof(int));
-    
-            var cantidadParameter = cantidad.HasValue ?
-                new ObjectParameter("Cantidad", cantidad) :
-                new ObjectParameter("Cantidad", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ActualizarCantidadCarrito_Result>("SP_ActualizarCantidadCarrito", idUsuarioParameter, idProductoParameter, cantidadParameter);
-        }
-    
-        public virtual ObjectResult<SP_AgregarProductoCarrito_Result> SP_AgregarProductoCarrito(Nullable<int> idUsuario, Nullable<int> idProducto, Nullable<int> cantidad)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var idProductoParameter = idProducto.HasValue ?
-                new ObjectParameter("IdProducto", idProducto) :
-                new ObjectParameter("IdProducto", typeof(int));
-    
-            var cantidadParameter = cantidad.HasValue ?
-                new ObjectParameter("Cantidad", cantidad) :
-                new ObjectParameter("Cantidad", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_AgregarProductoCarrito_Result>("SP_AgregarProductoCarrito", idUsuarioParameter, idProductoParameter, cantidadParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConfirmarCompra_Result> SP_ConfirmarCompra(Nullable<int> idUsuario, Nullable<int> idDireccion, Nullable<int> idMetodoPago, Nullable<decimal> costoEnvio)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var idDireccionParameter = idDireccion.HasValue ?
-                new ObjectParameter("IdDireccion", idDireccion) :
-                new ObjectParameter("IdDireccion", typeof(int));
-    
-            var idMetodoPagoParameter = idMetodoPago.HasValue ?
-                new ObjectParameter("IdMetodoPago", idMetodoPago) :
-                new ObjectParameter("IdMetodoPago", typeof(int));
-    
-            var costoEnvioParameter = costoEnvio.HasValue ?
-                new ObjectParameter("CostoEnvio", costoEnvio) :
-                new ObjectParameter("CostoEnvio", typeof(decimal));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConfirmarCompra_Result>("SP_ConfirmarCompra", idUsuarioParameter, idDireccionParameter, idMetodoPagoParameter, costoEnvioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarCarrito_Result> SP_ConsultarCarrito(Nullable<int> idUsuario)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarCarrito_Result>("SP_ConsultarCarrito", idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarConfirmacionPedido_Result> SP_ConsultarConfirmacionPedido(Nullable<int> idPedido, Nullable<int> idUsuario)
-        {
-            var idPedidoParameter = idPedido.HasValue ?
-                new ObjectParameter("IdPedido", idPedido) :
-                new ObjectParameter("IdPedido", typeof(int));
-    
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarConfirmacionPedido_Result>("SP_ConsultarConfirmacionPedido", idPedidoParameter, idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarDetallePedido_Result> SP_ConsultarDetallePedido(Nullable<int> idPedido, Nullable<int> idUsuario)
-        {
-            var idPedidoParameter = idPedido.HasValue ?
-                new ObjectParameter("IdPedido", idPedido) :
-                new ObjectParameter("IdPedido", typeof(int));
-    
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDetallePedido_Result>("SP_ConsultarDetallePedido", idPedidoParameter, idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarMetodosPago_Result> SP_ConsultarMetodosPago()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarMetodosPago_Result>("SP_ConsultarMetodosPago");
-        }
-    
-        public virtual ObjectResult<SP_ConsultarResumenCheckout_Result> SP_ConsultarResumenCheckout(Nullable<int> idUsuario, Nullable<int> idDireccion)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var idDireccionParameter = idDireccion.HasValue ?
-                new ObjectParameter("IdDireccion", idDireccion) :
-                new ObjectParameter("IdDireccion", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarResumenCheckout_Result>("SP_ConsultarResumenCheckout", idUsuarioParameter, idDireccionParameter);
-        }
-    
-        public virtual ObjectResult<SP_EliminarProductoCarrito_Result> SP_EliminarProductoCarrito(Nullable<int> idUsuario, Nullable<int> idProducto)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var idProductoParameter = idProducto.HasValue ?
-                new ObjectParameter("IdProducto", idProducto) :
-                new ObjectParameter("IdProducto", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_EliminarProductoCarrito_Result>("SP_EliminarProductoCarrito", idUsuarioParameter, idProductoParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> SP_ObtenerOCrearCarritoActivo(Nullable<int> idUsuario)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_ObtenerOCrearCarritoActivo", idUsuarioParameter);
-        }
-    
-        public virtual ObjectResult<SP_ConsultarHistorialPedidos_Result> SP_ConsultarHistorialPedidos(Nullable<int> idUsuario, Nullable<int> pagina, Nullable<int> tamanoPagina)
-        {
-            var idUsuarioParameter = idUsuario.HasValue ?
-                new ObjectParameter("IdUsuario", idUsuario) :
-                new ObjectParameter("IdUsuario", typeof(int));
-    
-            var paginaParameter = pagina.HasValue ?
-                new ObjectParameter("Pagina", pagina) :
-                new ObjectParameter("Pagina", typeof(int));
-    
-            var tamanoPaginaParameter = tamanoPagina.HasValue ?
-                new ObjectParameter("TamanoPagina", tamanoPagina) :
-                new ObjectParameter("TamanoPagina", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarHistorialPedidos_Result>("SP_ConsultarHistorialPedidos", idUsuarioParameter, paginaParameter, tamanoPaginaParameter);
         }
     
         public virtual ObjectResult<SP_Admin_ActualizarCategoria_Result> SP_Admin_ActualizarCategoria(Nullable<int> idCategoria, string nombreCategoria, string descripcion)
@@ -819,9 +477,361 @@ namespace ProyectoProgramacionAvanzada.EF
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Admin_ReporteVentasPorDia_Result>("SP_Admin_ReporteVentasPorDia", fechaInicioParameter, fechaFinParameter);
         }
     
+        public virtual ObjectResult<SP_AgregarProductoCarrito_Result> SP_AgregarProductoCarrito(Nullable<int> idUsuario, Nullable<int> idProducto, Nullable<int> cantidad)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("Cantidad", cantidad) :
+                new ObjectParameter("Cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_AgregarProductoCarrito_Result>("SP_AgregarProductoCarrito", idUsuarioParameter, idProductoParameter, cantidadParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConfirmarCompra_Result> SP_ConfirmarCompra(Nullable<int> idUsuario, Nullable<int> idDireccion, Nullable<int> idMetodoPago, Nullable<decimal> costoEnvio)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idMetodoPagoParameter = idMetodoPago.HasValue ?
+                new ObjectParameter("IdMetodoPago", idMetodoPago) :
+                new ObjectParameter("IdMetodoPago", typeof(int));
+    
+            var costoEnvioParameter = costoEnvio.HasValue ?
+                new ObjectParameter("CostoEnvio", costoEnvio) :
+                new ObjectParameter("CostoEnvio", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConfirmarCompra_Result>("SP_ConfirmarCompra", idUsuarioParameter, idDireccionParameter, idMetodoPagoParameter, costoEnvioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarCantonesPorProvincia_Result> SP_ConsultarCantonesPorProvincia(Nullable<int> idProvincia)
+        {
+            var idProvinciaParameter = idProvincia.HasValue ?
+                new ObjectParameter("IdProvincia", idProvincia) :
+                new ObjectParameter("IdProvincia", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarCantonesPorProvincia_Result>("SP_ConsultarCantonesPorProvincia", idProvinciaParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarCarrito_Result> SP_ConsultarCarrito(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarCarrito_Result>("SP_ConsultarCarrito", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarConfirmacionPedido_Result> SP_ConsultarConfirmacionPedido(Nullable<int> idPedido, Nullable<int> idUsuario)
+        {
+            var idPedidoParameter = idPedido.HasValue ?
+                new ObjectParameter("IdPedido", idPedido) :
+                new ObjectParameter("IdPedido", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarConfirmacionPedido_Result>("SP_ConsultarConfirmacionPedido", idPedidoParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDetallePedido_Result> SP_ConsultarDetallePedido(Nullable<int> idPedido, Nullable<int> idUsuario)
+        {
+            var idPedidoParameter = idPedido.HasValue ?
+                new ObjectParameter("IdPedido", idPedido) :
+                new ObjectParameter("IdPedido", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDetallePedido_Result>("SP_ConsultarDetallePedido", idPedidoParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDireccionesUsuario_Result> SP_ConsultarDireccionesUsuario(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDireccionesUsuario_Result>("SP_ConsultarDireccionesUsuario", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDireccionPorId_Result> SP_ConsultarDireccionPorId(Nullable<int> idDireccion, Nullable<int> idUsuario)
+        {
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDireccionPorId_Result>("SP_ConsultarDireccionPorId", idDireccionParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarDistritosPorCanton_Result> SP_ConsultarDistritosPorCanton(Nullable<int> idCanton)
+        {
+            var idCantonParameter = idCanton.HasValue ?
+                new ObjectParameter("IdCanton", idCanton) :
+                new ObjectParameter("IdCanton", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarDistritosPorCanton_Result>("SP_ConsultarDistritosPorCanton", idCantonParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarEstados_Result> SP_ConsultarEstados()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstados_Result>("SP_ConsultarEstados");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarEstadosUsuario_Result> SP_ConsultarEstadosUsuario()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarEstadosUsuario_Result>("SP_ConsultarEstadosUsuario");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarHistorialPedidos_Result> SP_ConsultarHistorialPedidos(Nullable<int> idUsuario, Nullable<int> pagina, Nullable<int> tamanoPagina)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var paginaParameter = pagina.HasValue ?
+                new ObjectParameter("Pagina", pagina) :
+                new ObjectParameter("Pagina", typeof(int));
+    
+            var tamanoPaginaParameter = tamanoPagina.HasValue ?
+                new ObjectParameter("TamanoPagina", tamanoPagina) :
+                new ObjectParameter("TamanoPagina", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarHistorialPedidos_Result>("SP_ConsultarHistorialPedidos", idUsuarioParameter, paginaParameter, tamanoPaginaParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarMetodosPago_Result> SP_ConsultarMetodosPago()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarMetodosPago_Result>("SP_ConsultarMetodosPago");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarProvincias_Result> SP_ConsultarProvincias()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarProvincias_Result>("SP_ConsultarProvincias");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarResumenCheckout_Result> SP_ConsultarResumenCheckout(Nullable<int> idUsuario, Nullable<int> idDireccion)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarResumenCheckout_Result>("SP_ConsultarResumenCheckout", idUsuarioParameter, idDireccionParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarRoles_Result> SP_ConsultarRoles()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarRoles_Result>("SP_ConsultarRoles");
+        }
+    
+        public virtual ObjectResult<SP_ConsultarUsuarioInicioSesion_Result> SP_ConsultarUsuarioInicioSesion(string email)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioInicioSesion_Result>("SP_ConsultarUsuarioInicioSesion", emailParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarUsuarioPorId_Result> SP_ConsultarUsuarioPorId(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioPorId_Result>("SP_ConsultarUsuarioPorId", idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_ConsultarUsuarioRecuperacion_Result> SP_ConsultarUsuarioRecuperacion(string email)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarioRecuperacion_Result>("SP_ConsultarUsuarioRecuperacion", emailParameter);
+        }
+    
         public virtual ObjectResult<SP_ConsultarUsuarios_Result> SP_ConsultarUsuarios()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ConsultarUsuarios_Result>("SP_ConsultarUsuarios");
+        }
+    
+        public virtual ObjectResult<SP_Dashboard_ConsultarActividadReciente_Result> SP_Dashboard_ConsultarActividadReciente(Nullable<int> cantidad)
+        {
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("Cantidad", cantidad) :
+                new ObjectParameter("Cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Dashboard_ConsultarActividadReciente_Result>("SP_Dashboard_ConsultarActividadReciente", cantidadParameter);
+        }
+    
+        public virtual ObjectResult<SP_Dashboard_ConsultarResumen_Result> SP_Dashboard_ConsultarResumen()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Dashboard_ConsultarResumen_Result>("SP_Dashboard_ConsultarResumen");
+        }
+    
+        public virtual ObjectResult<SP_Dashboard_ConsultarVentasMensuales_Result> SP_Dashboard_ConsultarVentasMensuales(Nullable<int> anno)
+        {
+            var annoParameter = anno.HasValue ?
+                new ObjectParameter("Anno", anno) :
+                new ObjectParameter("Anno", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Dashboard_ConsultarVentasMensuales_Result>("SP_Dashboard_ConsultarVentasMensuales", annoParameter);
+        }
+    
+        public virtual ObjectResult<SP_DesactivarDireccionUsuario_Result> SP_DesactivarDireccionUsuario(Nullable<int> idDireccion, Nullable<int> idUsuario)
+        {
+            var idDireccionParameter = idDireccion.HasValue ?
+                new ObjectParameter("IdDireccion", idDireccion) :
+                new ObjectParameter("IdDireccion", typeof(int));
+    
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_DesactivarDireccionUsuario_Result>("SP_DesactivarDireccionUsuario", idDireccionParameter, idUsuarioParameter);
+        }
+    
+        public virtual ObjectResult<SP_EliminarProductoCarrito_Result> SP_EliminarProductoCarrito(Nullable<int> idUsuario, Nullable<int> idProducto)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("IdProducto", idProducto) :
+                new ObjectParameter("IdProducto", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_EliminarProductoCarrito_Result>("SP_EliminarProductoCarrito", idUsuarioParameter, idProductoParameter);
+        }
+    
+        public virtual ObjectResult<SP_InsertarDireccionUsuario_Result> SP_InsertarDireccionUsuario(Nullable<int> idUsuario, Nullable<int> idDistrito, string direccionExacta, string referencia, string telefonoContacto, string nombreDestinatario, Nullable<bool> esPrincipal)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var idDistritoParameter = idDistrito.HasValue ?
+                new ObjectParameter("IdDistrito", idDistrito) :
+                new ObjectParameter("IdDistrito", typeof(int));
+    
+            var direccionExactaParameter = direccionExacta != null ?
+                new ObjectParameter("DireccionExacta", direccionExacta) :
+                new ObjectParameter("DireccionExacta", typeof(string));
+    
+            var referenciaParameter = referencia != null ?
+                new ObjectParameter("Referencia", referencia) :
+                new ObjectParameter("Referencia", typeof(string));
+    
+            var telefonoContactoParameter = telefonoContacto != null ?
+                new ObjectParameter("TelefonoContacto", telefonoContacto) :
+                new ObjectParameter("TelefonoContacto", typeof(string));
+    
+            var nombreDestinatarioParameter = nombreDestinatario != null ?
+                new ObjectParameter("NombreDestinatario", nombreDestinatario) :
+                new ObjectParameter("NombreDestinatario", typeof(string));
+    
+            var esPrincipalParameter = esPrincipal.HasValue ?
+                new ObjectParameter("EsPrincipal", esPrincipal) :
+                new ObjectParameter("EsPrincipal", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_InsertarDireccionUsuario_Result>("SP_InsertarDireccionUsuario", idUsuarioParameter, idDistritoParameter, direccionExactaParameter, referenciaParameter, telefonoContactoParameter, nombreDestinatarioParameter, esPrincipalParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_ObtenerOCrearCarritoActivo(Nullable<int> idUsuario)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_ObtenerOCrearCarritoActivo", idUsuarioParameter);
+        }
+    
+        public virtual int SP_RegistrarError(string origen, string metodo, string mensajeError, string detalleError, Nullable<int> lineaError, string usuarioSistema, string url, string stackTrace)
+        {
+            var origenParameter = origen != null ?
+                new ObjectParameter("Origen", origen) :
+                new ObjectParameter("Origen", typeof(string));
+    
+            var metodoParameter = metodo != null ?
+                new ObjectParameter("Metodo", metodo) :
+                new ObjectParameter("Metodo", typeof(string));
+    
+            var mensajeErrorParameter = mensajeError != null ?
+                new ObjectParameter("MensajeError", mensajeError) :
+                new ObjectParameter("MensajeError", typeof(string));
+    
+            var detalleErrorParameter = detalleError != null ?
+                new ObjectParameter("DetalleError", detalleError) :
+                new ObjectParameter("DetalleError", typeof(string));
+    
+            var lineaErrorParameter = lineaError.HasValue ?
+                new ObjectParameter("LineaError", lineaError) :
+                new ObjectParameter("LineaError", typeof(int));
+    
+            var usuarioSistemaParameter = usuarioSistema != null ?
+                new ObjectParameter("UsuarioSistema", usuarioSistema) :
+                new ObjectParameter("UsuarioSistema", typeof(string));
+    
+            var urlParameter = url != null ?
+                new ObjectParameter("Url", url) :
+                new ObjectParameter("Url", typeof(string));
+    
+            var stackTraceParameter = stackTrace != null ?
+                new ObjectParameter("StackTrace", stackTrace) :
+                new ObjectParameter("StackTrace", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RegistrarError", origenParameter, metodoParameter, mensajeErrorParameter, detalleErrorParameter, lineaErrorParameter, usuarioSistemaParameter, urlParameter, stackTraceParameter);
+        }
+    
+        public virtual ObjectResult<SP_RegistrarUsuario_Result> SP_RegistrarUsuario(string nombre, string apellido, string cedula, string telefono, string email, string contrasenna)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var apellidoParameter = apellido != null ?
+                new ObjectParameter("Apellido", apellido) :
+                new ObjectParameter("Apellido", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RegistrarUsuario_Result>("SP_RegistrarUsuario", nombreParameter, apellidoParameter, cedulaParameter, telefonoParameter, emailParameter, contrasennaParameter);
         }
     
         public virtual ObjectResult<SP_RegistrarUsuarioAdministracion_Result> SP_RegistrarUsuarioAdministracion(string nombre, string apellido, string cedula, string telefono, string email, string contrasenna, Nullable<int> idRol, Nullable<int> idEstado)
@@ -859,6 +869,19 @@ namespace ProyectoProgramacionAvanzada.EF
                 new ObjectParameter("IdEstado", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RegistrarUsuarioAdministracion_Result>("SP_RegistrarUsuarioAdministracion", nombreParameter, apellidoParameter, cedulaParameter, telefonoParameter, emailParameter, contrasennaParameter, idRolParameter, idEstadoParameter);
+        }
+    
+        public virtual ObjectResult<SP_RestablecerContrasennaUsuario_Result> SP_RestablecerContrasennaUsuario(Nullable<int> idUsuario, string contrasenna)
+        {
+            var idUsuarioParameter = idUsuario.HasValue ?
+                new ObjectParameter("IdUsuario", idUsuario) :
+                new ObjectParameter("IdUsuario", typeof(int));
+    
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RestablecerContrasennaUsuario_Result>("SP_RestablecerContrasennaUsuario", idUsuarioParameter, contrasennaParameter);
         }
     }
 }
