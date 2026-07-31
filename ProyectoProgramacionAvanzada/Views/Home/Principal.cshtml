@@ -1,6 +1,14 @@
-﻿@{
+﻿@model ProyectoProgramacionAvanzada.Models.DashboardViewModel
+
+@using System
+@using System.Globalization
+
+@{
     ViewBag.Title = "Principal";
     Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+
+    CultureInfo CulturaCostaRica =
+        new CultureInfo("es-CR");
 }
 
 <div class="page-heading">
@@ -13,10 +21,12 @@
         </span>
 
         <div>
-            <p class="eyebrow mb-1">Resumen General</p>
+            <p class="eyebrow mb-1">
+                Resumen general
+            </p>
 
             <h1 class="h3 mb-1">
-                Panel Principal
+                Panel principal
             </h1>
 
             <p class="text-muted mb-0">
@@ -29,26 +39,45 @@
 
     <div class="heading-actions">
 
-        <button class="btn btn-outline-secondary btn-sm"
-                type="button">
+        <a class="btn btn-outline-secondary btn-sm"
+           href="@Url.Action("Index", "Reporte")">
 
             <i class="bi bi-download"
                aria-hidden="true"></i>
 
             Exportar
-        </button>
+        </a>
 
-        <button class="btn btn-primary btn-sm"
-                type="button">
+        <a class="btn btn-primary btn-sm"
+           href="@Url.Action("Index", "Reporte")">
 
             <i class="bi bi-file-earmark-plus"
                aria-hidden="true"></i>
 
             Crear reporte
-        </button>
+        </a>
 
     </div>
 </div>
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show"
+         role="alert">
+
+        <i class="bi bi-exclamation-circle me-2"
+           aria-hidden="true"></i>
+
+        @TempData["MensajeError"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Cerrar">
+        </button>
+
+    </div>
+}
 
 <section class="row g-3 mt-1"
          aria-label="Indicadores principales">
@@ -58,21 +87,33 @@
         <article class="metric-card metric-primary">
 
             <div class="metric-top">
-                <span class="metric-label">Ventas</span>
+
+                <span class="metric-label">
+                    Ventas
+                </span>
 
                 <span class="metric-icon">
                     <i class="bi bi-currency-dollar"
                        aria-hidden="true"></i>
                 </span>
+
             </div>
 
-            <div class="metric-value">₡0</div>
+            <div class="metric-value">
+
+                @Model.TotalVentas.ToString(
+                    "C0",
+                    CulturaCostaRica
+                )
+
+            </div>
 
             <div class="metric-meta">
                 <span>Ventas registradas</span>
             </div>
 
         </article>
+
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
@@ -80,21 +121,28 @@
         <article class="metric-card metric-success">
 
             <div class="metric-top">
-                <span class="metric-label">Pedidos</span>
+
+                <span class="metric-label">
+                    Pedidos
+                </span>
 
                 <span class="metric-icon">
                     <i class="bi bi-bag-check"
                        aria-hidden="true"></i>
                 </span>
+
             </div>
 
-            <div class="metric-value">0</div>
+            <div class="metric-value">
+                @Model.TotalPedidos
+            </div>
 
             <div class="metric-meta">
                 <span>Pedidos registrados</span>
             </div>
 
         </article>
+
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
@@ -102,21 +150,28 @@
         <article class="metric-card metric-warning">
 
             <div class="metric-top">
-                <span class="metric-label">Clientes</span>
+
+                <span class="metric-label">
+                    Clientes
+                </span>
 
                 <span class="metric-icon">
                     <i class="bi bi-people"
                        aria-hidden="true"></i>
                 </span>
+
             </div>
 
-            <div class="metric-value">0</div>
+            <div class="metric-value">
+                @Model.TotalClientesActivos
+            </div>
 
             <div class="metric-meta">
                 <span>Clientes activos</span>
             </div>
 
         </article>
+
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
@@ -124,21 +179,28 @@
         <article class="metric-card metric-danger">
 
             <div class="metric-top">
-                <span class="metric-label">Productos agotados</span>
+
+                <span class="metric-label">
+                    Productos agotados
+                </span>
 
                 <span class="metric-icon">
                     <i class="bi bi-exclamation-triangle"
                        aria-hidden="true"></i>
                 </span>
+
             </div>
 
-            <div class="metric-value">0</div>
+            <div class="metric-value">
+                @Model.TotalProductosAgotados
+            </div>
 
             <div class="metric-meta">
                 <span>Requieren revisión</span>
             </div>
 
         </article>
+
     </div>
 
 </section>
@@ -152,57 +214,80 @@
             <div class="panel-header">
 
                 <div>
+
                     <h2 class="h5 mb-1 section-title">
 
                         <i class="bi bi-graph-up-arrow"
                            aria-hidden="true"></i>
 
-                        <span>Rendimiento de ventas</span>
+                        <span>
+                            Rendimiento de ventas
+                        </span>
+
                     </h2>
 
                     <p class="text-muted mb-0">
-                        Resumen mensual de las ventas registradas.
+                        Resumen mensual de las ventas registradas
+                        durante @DateTime.Now.Year.
                     </p>
+
                 </div>
 
             </div>
 
-            <div class="chart-bars"
-                 aria-label="Gráfico de ventas mensuales">
+            @if (
+                Model.VentasMensuales == null ||
+                Model.VentasMensuales.Count == 0)
+            {
+                <div class="text-center text-muted py-5">
 
-                <div class="chart-column bar-42">
-                    <span></span>
-                    <small>Ene</small>
+                    <i class="bi bi-bar-chart fs-3 d-block mb-2"
+                       aria-hidden="true"></i>
+
+                    No hay información de ventas disponible.
+
                 </div>
+            }
+            else
+            {
+                <div class="chart-bars"
+                     aria-label="Gráfico de ventas mensuales">
 
-                <div class="chart-column bar-58">
-                    <span></span>
-                    <small>Feb</small>
+                    @foreach (
+                        var Venta
+                        in Model.VentasMensuales)
+                    {
+                        decimal Altura =
+                            Venta.Porcentaje;
+
+                        if (Altura > 0 && Altura < 5)
+                        {
+                            Altura = 5;
+                        }
+
+                        <div class="chart-column"
+                             title="@Venta.TotalVentas.ToString(
+                                 "C0",
+                                 CulturaCostaRica
+                             )">
+
+                            <span style="height: @Altura.ToString(
+                                CultureInfo.InvariantCulture
+                            )%;">
+                            </span>
+
+                            <small>
+                                @Venta.NombreMes
+                            </small>
+
+                        </div>
+                    }
+
                 </div>
-
-                <div class="chart-column bar-51">
-                    <span></span>
-                    <small>Mar</small>
-                </div>
-
-                <div class="chart-column bar-72">
-                    <span></span>
-                    <small>Abr</small>
-                </div>
-
-                <div class="chart-column bar-66">
-                    <span></span>
-                    <small>May</small>
-                </div>
-
-                <div class="chart-column bar-83">
-                    <span></span>
-                    <small>Jun</small>
-                </div>
-
-            </div>
+            }
 
         </article>
+
     </div>
 
     <div class="col-12 col-xl-4">
@@ -212,42 +297,123 @@
             <div class="panel-header">
 
                 <div>
+
                     <h2 class="h5 mb-1 section-title">
 
                         <i class="bi bi-activity"
                            aria-hidden="true"></i>
 
-                        <span>Actividad reciente</span>
+                        <span>
+                            Actividad reciente
+                        </span>
+
                     </h2>
 
                     <p class="text-muted mb-0">
                         Últimas actualizaciones del sistema.
                     </p>
+
                 </div>
 
             </div>
 
             <div class="activity-list">
 
-                <div class="activity-item">
+                @if (
+                    Model.ActividadesRecientes == null ||
+                    Model.ActividadesRecientes.Count == 0)
+                {
+                    <div class="activity-item">
 
-                    <span class="activity-dot bg-primary"></span>
+                        <span class="activity-dot bg-secondary">
+                        </span>
 
-                    <div>
-                        <p class="mb-1 fw-semibold">
-                            Sin actividad reciente
-                        </p>
+                        <div>
 
-                        <p class="text-muted small mb-0">
-                            Las acciones recientes aparecerán aquí.
-                        </p>
+                            <p class="mb-1 fw-semibold">
+                                Sin actividad reciente
+                            </p>
+
+                            <p class="text-muted small mb-0">
+                                Las acciones recientes aparecerán aquí.
+                            </p>
+
+                        </div>
+
                     </div>
+                }
+                else
+                {
+                    foreach (
+                        var Actividad
+                        in Model.ActividadesRecientes)
+                    {
+                        string ClaseEstado =
+                            "bg-primary";
 
-                </div>
+                        if (string.Equals(
+                            Actividad.Tipo,
+                            "Entregado",
+                            StringComparison.OrdinalIgnoreCase))
+                        {
+                            ClaseEstado = "bg-success";
+                        }
+                        else if (string.Equals(
+                            Actividad.Tipo,
+                            "Pendiente",
+                            StringComparison.OrdinalIgnoreCase))
+                        {
+                            ClaseEstado = "bg-warning";
+                        }
+                        else if (string.Equals(
+                            Actividad.Tipo,
+                            "Cancelado",
+                            StringComparison.OrdinalIgnoreCase))
+                        {
+                            ClaseEstado = "bg-danger";
+                        }
+
+                        <div class="activity-item">
+
+                            <span class="activity-dot @ClaseEstado">
+                            </span>
+
+                            <div>
+
+                                <p class="mb-1 fw-semibold">
+                                    @Actividad.Titulo
+                                </p>
+
+                                <p class="text-muted small mb-1">
+                                    @Actividad.Descripcion
+                                </p>
+
+                                <small class="text-muted">
+
+                                    @Actividad.Fecha.ToString(
+                                        "dd/MM/yyyy hh:mm tt"
+                                    )
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                        Actividad.Tipo))
+                                    {
+                                        <span>
+                                            · @Actividad.Tipo
+                                        </span>
+                                    }
+
+                                </small>
+
+                            </div>
+
+                        </div>
+                    }
+                }
 
             </div>
 
         </article>
+
     </div>
 
 </section>

@@ -2533,4 +2533,3 @@ BEGIN
       AND E.nombre_estado = N'Disponible'
     ORDER BY P.fecha_creacion DESC, P.id_producto DESC;
 END;
-GO

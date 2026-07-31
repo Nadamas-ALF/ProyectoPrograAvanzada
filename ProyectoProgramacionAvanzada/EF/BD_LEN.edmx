@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="TB_canton">
           <Key>
             <PropertyRef Name="id_canton" />
@@ -706,6 +706,13 @@
           <Parameter Name="Email" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_ConsultarUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_Dashboard_ConsultarActividadReciente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Cantidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_Dashboard_ConsultarResumen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_Dashboard_ConsultarVentasMensuales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Anno" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_DesactivarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdDireccion" Type="int" Mode="In" />
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -886,7 +893,8 @@
             <End Role="TB_usuario" EntitySet="TB_usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BD_LENModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1071,13 +1079,13 @@
           <Property Name="costo_envio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <Property Name="motivo_cancelacion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TB_detalle_pedido" Relationship="Self.FK_TB_detalle_pedido_TB_pedido" FromRole="TB_pedido" ToRole="TB_detalle_pedido" />
           <NavigationProperty Name="TB_direccion_envio" Relationship="Self.FK_TB_pedido_TB_direccion_envio" FromRole="TB_pedido" ToRole="TB_direccion_envio" />
           <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_pedido_TB_estado" FromRole="TB_pedido" ToRole="TB_estado" />
           <NavigationProperty Name="TB_factura" Relationship="Self.FK_TB_factura_TB_pedido" FromRole="TB_pedido" ToRole="TB_factura" />
           <NavigationProperty Name="TB_pago" Relationship="Self.FK_TB_pago_TB_pedido" FromRole="TB_pedido" ToRole="TB_pago" />
           <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_pedido_TB_usuario" FromRole="TB_pedido" ToRole="TB_usuario" />
-          <Property Name="motivo_cancelacion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TB_producto">
           <Key>
@@ -1588,6 +1596,11 @@
             <End Role="TB_rol" EntitySet="TB_rol" />
             <End Role="TB_usuario" EntitySet="TB_usuario" />
           </AssociationSet>
+          <FunctionImport Name="SP_ActualizarCantidadCarrito" ReturnType="Collection(BD_LENModel.SP_ActualizarCantidadCarrito_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="SP_ActualizarContrasennaTemporal" ReturnType="Collection(BD_LENModel.SP_ActualizarContrasennaTemporal_Result)">
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
             <Parameter Name="Contrasenna" Mode="In" Type="String" />
@@ -1612,111 +1625,6 @@
             <Parameter Name="Email" Mode="In" Type="String" />
             <Parameter Name="IdRol" Mode="In" Type="Int32" />
             <Parameter Name="IdEstado" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarCantonesPorProvincia" ReturnType="Collection(BD_LENModel.SP_ConsultarCantonesPorProvincia_Result)">
-          <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarDireccionesUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionesUsuario_Result)">
-          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarDireccionPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionPorId_Result)">
-            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarDistritosPorCanton" ReturnType="Collection(BD_LENModel.SP_ConsultarDistritosPorCanton_Result)">
-          <Parameter Name="IdCanton" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarEstados" ReturnType="Collection(BD_LENModel.SP_ConsultarEstados_Result)" />
-          <FunctionImport Name="SP_ConsultarEstadosUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarEstadosUsuario_Result)" />
-          <FunctionImport Name="SP_ConsultarProvincias" ReturnType="Collection(BD_LENModel.SP_ConsultarProvincias_Result)" />
-          <FunctionImport Name="SP_ConsultarRoles" ReturnType="Collection(BD_LENModel.SP_ConsultarRoles_Result)" />
-          <FunctionImport Name="SP_ConsultarUsuarioInicioSesion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result)">
-          <Parameter Name="Email" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarUsuarioPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioPorId_Result)">
-          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarUsuarioRecuperacion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result)">
-          <Parameter Name="Email" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SP_DesactivarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_DesactivarDireccionUsuario_Result)">
-            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_InsertarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_InsertarDireccionUsuario_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdDistrito" Mode="In" Type="Int32" />
-            <Parameter Name="DireccionExacta" Mode="In" Type="String" />
-            <Parameter Name="Referencia" Mode="In" Type="String" />
-            <Parameter Name="TelefonoContacto" Mode="In" Type="String" />
-            <Parameter Name="NombreDestinatario" Mode="In" Type="String" />
-            <Parameter Name="EsPrincipal" Mode="In" Type="Boolean" />
-          </FunctionImport>
-          <FunctionImport Name="SP_RegistrarError">
-            <Parameter Name="Origen" Mode="In" Type="String" />
-            <Parameter Name="Metodo" Mode="In" Type="String" />
-            <Parameter Name="MensajeError" Mode="In" Type="String" />
-            <Parameter Name="DetalleError" Mode="In" Type="String" />
-            <Parameter Name="LineaError" Mode="In" Type="Int32" />
-            <Parameter Name="UsuarioSistema" Mode="In" Type="String" />
-            <Parameter Name="Url" Mode="In" Type="String" />
-            <Parameter Name="StackTrace" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SP_RegistrarUsuario" ReturnType="Collection(BD_LENModel.SP_RegistrarUsuario_Result)">
-            <Parameter Name="Nombre" Mode="In" Type="String" />
-            <Parameter Name="Apellido" Mode="In" Type="String" />
-            <Parameter Name="Cedula" Mode="In" Type="String" />
-            <Parameter Name="Telefono" Mode="In" Type="String" />
-            <Parameter Name="Email" Mode="In" Type="String" />
-            <Parameter Name="Contrasenna" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SP_RestablecerContrasennaUsuario" ReturnType="Collection(BD_LENModel.SP_RestablecerContrasennaUsuario_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="Contrasenna" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ActualizarCantidadCarrito" ReturnType="Collection(BD_LENModel.SP_ActualizarCantidadCarrito_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
-            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_AgregarProductoCarrito" ReturnType="Collection(BD_LENModel.SP_AgregarProductoCarrito_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
-            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConfirmarCompra" ReturnType="Collection(BD_LENModel.SP_ConfirmarCompra_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
-            <Parameter Name="IdMetodoPago" Mode="In" Type="Int32" />
-            <Parameter Name="CostoEnvio" Mode="In" Type="Decimal" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarCarrito" ReturnType="Collection(BD_LENModel.SP_ConsultarCarrito_Result)">
-          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarConfirmacionPedido" ReturnType="Collection(BD_LENModel.SP_ConsultarConfirmacionPedido_Result)">
-            <Parameter Name="IdPedido" Mode="In" Type="Int32" />
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarDetallePedido" ReturnType="Collection(BD_LENModel.SP_ConsultarDetallePedido_Result)">
-            <Parameter Name="IdPedido" Mode="In" Type="Int32" />
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarMetodosPago" ReturnType="Collection(BD_LENModel.SP_ConsultarMetodosPago_Result)" />
-          <FunctionImport Name="SP_ConsultarResumenCheckout" ReturnType="Collection(BD_LENModel.SP_ConsultarResumenCheckout_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_EliminarProductoCarrito" ReturnType="Collection(BD_LENModel.SP_EliminarProductoCarrito_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ObtenerOCrearCarritoActivo" ReturnType="Collection(Int32)">
-          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_ConsultarHistorialPedidos" ReturnType="Collection(BD_LENModel.SP_ConsultarHistorialPedidos_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="Pagina" Mode="In" Type="Int32" />
-            <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ActualizarCategoria" ReturnType="Collection(BD_LENModel.SP_Admin_ActualizarCategoria_Result)">
             <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
@@ -1743,22 +1651,22 @@
             <Parameter Name="Stock" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_CambiarEstadoCategoria" ReturnType="Collection(BD_LENModel.SP_Admin_CambiarEstadoCategoria_Result)">
-          <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
+            <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_CambiarEstadoProducto" ReturnType="Collection(BD_LENModel.SP_Admin_CambiarEstadoProducto_Result)">
-          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarBajoStock" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarBajoStock_Result)">
-          <Parameter Name="StockMinimo" Mode="In" Type="Int32" />
+            <Parameter Name="StockMinimo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarCategorias" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarCategorias_Result)" />
           <FunctionImport Name="SP_Admin_ConsultarCategoriasActivas" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarCategoriasActivas_Result)" />
           <FunctionImport Name="SP_Admin_ConsultarDetallePedido" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarDetallePedido_Result)">
-          <Parameter Name="IdPedido" Mode="In" Type="Int32" />
+            <Parameter Name="IdPedido" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarEstadosPedido" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarEstadosPedido_Result)" />
           <FunctionImport Name="SP_Admin_ConsultarImagenesProducto" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarImagenesProducto_Result)">
-          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarPedidos" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarPedidos_Result)">
             <Parameter Name="Busqueda" Mode="In" Type="String" />
@@ -1769,7 +1677,7 @@
             <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarProductoPorId" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarProductoPorId_Result)">
-          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarProductos" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarProductos_Result)">
             <Parameter Name="Busqueda" Mode="In" Type="String" />
@@ -1778,7 +1686,7 @@
             <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_EliminarImagenProducto" ReturnType="Collection(BD_LENModel.SP_Admin_EliminarImagenProducto_Result)">
-          <Parameter Name="IdImagen" Mode="In" Type="Int32" />
+            <Parameter Name="IdImagen" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_InsertarCategoria" ReturnType="Collection(BD_LENModel.SP_Admin_InsertarCategoria_Result)">
             <Parameter Name="NombreCategoria" Mode="In" Type="String" />
@@ -1798,7 +1706,7 @@
             <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_MarcarImagenPrincipal" ReturnType="Collection(BD_LENModel.SP_Admin_MarcarImagenPrincipal_Result)">
-          <Parameter Name="IdImagen" Mode="In" Type="Int32" />
+            <Parameter Name="IdImagen" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ReporteProductosMasVendidos" ReturnType="Collection(BD_LENModel.SP_Admin_ReporteProductosMasVendidos_Result)">
             <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
@@ -1813,7 +1721,110 @@
             <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
             <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <FunctionImport Name="SP_AgregarProductoCarrito" ReturnType="Collection(BD_LENModel.SP_AgregarProductoCarrito_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConfirmarCompra" ReturnType="Collection(BD_LENModel.SP_ConfirmarCompra_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+            <Parameter Name="IdMetodoPago" Mode="In" Type="Int32" />
+            <Parameter Name="CostoEnvio" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarCantonesPorProvincia" ReturnType="Collection(BD_LENModel.SP_ConsultarCantonesPorProvincia_Result)">
+            <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarCarrito" ReturnType="Collection(BD_LENModel.SP_ConsultarCarrito_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarConfirmacionPedido" ReturnType="Collection(BD_LENModel.SP_ConsultarConfirmacionPedido_Result)">
+            <Parameter Name="IdPedido" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDetallePedido" ReturnType="Collection(BD_LENModel.SP_ConsultarDetallePedido_Result)">
+            <Parameter Name="IdPedido" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDireccionesUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionesUsuario_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDireccionPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionPorId_Result)">
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarDistritosPorCanton" ReturnType="Collection(BD_LENModel.SP_ConsultarDistritosPorCanton_Result)">
+            <Parameter Name="IdCanton" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarEstados" ReturnType="Collection(BD_LENModel.SP_ConsultarEstados_Result)" />
+          <FunctionImport Name="SP_ConsultarEstadosUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarEstadosUsuario_Result)" />
+          <FunctionImport Name="SP_ConsultarHistorialPedidos" ReturnType="Collection(BD_LENModel.SP_ConsultarHistorialPedidos_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Pagina" Mode="In" Type="Int32" />
+            <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarMetodosPago" ReturnType="Collection(BD_LENModel.SP_ConsultarMetodosPago_Result)" />
+          <FunctionImport Name="SP_ConsultarProvincias" ReturnType="Collection(BD_LENModel.SP_ConsultarProvincias_Result)" />
+          <FunctionImport Name="SP_ConsultarResumenCheckout" ReturnType="Collection(BD_LENModel.SP_ConsultarResumenCheckout_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarRoles" ReturnType="Collection(BD_LENModel.SP_ConsultarRoles_Result)" />
+          <FunctionImport Name="SP_ConsultarUsuarioInicioSesion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result)">
+            <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarUsuarioPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioPorId_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarUsuarioRecuperacion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result)">
+            <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="SP_ConsultarUsuarios" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarios_Result)" />
+          <FunctionImport Name="SP_Dashboard_ConsultarActividadReciente" ReturnType="Collection(BD_LENModel.SP_Dashboard_ConsultarActividadReciente_Result)">
+            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Dashboard_ConsultarResumen" ReturnType="Collection(BD_LENModel.SP_Dashboard_ConsultarResumen_Result)" />
+          <FunctionImport Name="SP_Dashboard_ConsultarVentasMensuales" ReturnType="Collection(BD_LENModel.SP_Dashboard_ConsultarVentasMensuales_Result)">
+            <Parameter Name="Anno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_DesactivarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_DesactivarDireccionUsuario_Result)">
+            <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_EliminarProductoCarrito" ReturnType="Collection(BD_LENModel.SP_EliminarProductoCarrito_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_InsertarDireccionUsuario" ReturnType="Collection(BD_LENModel.SP_InsertarDireccionUsuario_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdDistrito" Mode="In" Type="Int32" />
+            <Parameter Name="DireccionExacta" Mode="In" Type="String" />
+            <Parameter Name="Referencia" Mode="In" Type="String" />
+            <Parameter Name="TelefonoContacto" Mode="In" Type="String" />
+            <Parameter Name="NombreDestinatario" Mode="In" Type="String" />
+            <Parameter Name="EsPrincipal" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ObtenerOCrearCarritoActivo" ReturnType="Collection(Int32)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RegistrarError">
+            <Parameter Name="Origen" Mode="In" Type="String" />
+            <Parameter Name="Metodo" Mode="In" Type="String" />
+            <Parameter Name="MensajeError" Mode="In" Type="String" />
+            <Parameter Name="DetalleError" Mode="In" Type="String" />
+            <Parameter Name="LineaError" Mode="In" Type="Int32" />
+            <Parameter Name="UsuarioSistema" Mode="In" Type="String" />
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="StackTrace" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RegistrarUsuario" ReturnType="Collection(BD_LENModel.SP_RegistrarUsuario_Result)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="SP_RegistrarUsuarioAdministracion" ReturnType="Collection(BD_LENModel.SP_RegistrarUsuarioAdministracion_Result)">
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="Apellido" Mode="In" Type="String" />
@@ -1824,7 +1835,15 @@
             <Parameter Name="IdRol" Mode="In" Type="Int32" />
             <Parameter Name="IdEstado" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="SP_RestablecerContrasennaUsuario" ReturnType="Collection(BD_LENModel.SP_RestablecerContrasennaUsuario_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="SP_ActualizarCantidadCarrito_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="34" />
+        </ComplexType>
         <ComplexType Name="SP_ActualizarContrasennaTemporal_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="40" />
@@ -1836,218 +1855,6 @@
         <ComplexType Name="SP_ActualizarUsuario_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="41" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarCantonesPorProvincia_Result">
-          <Property Type="Int32" Name="IdCanton" Nullable="false" />
-          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarDireccionesUsuario_Result">
-          <Property Type="Int32" Name="IdDireccion" Nullable="false" />
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
-          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="IdCanton" Nullable="false" />
-          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
-          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
-          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarDireccionPorId_Result">
-          <Property Type="Int32" Name="IdDireccion" Nullable="false" />
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
-          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="IdCanton" Nullable="false" />
-          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
-          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
-          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarDistritosPorCanton_Result">
-          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
-          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarEstados_Result">
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarEstadosUsuario_Result">
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarProvincias_Result">
-          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
-          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarRoles_Result">
-          <Property Type="Int32" Name="IdRol" Nullable="false" />
-          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarUsuarioInicioSesion_Result">
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="IdRol" Nullable="false" />
-          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-          <Property Type="Boolean" Name="TieneContrasennaTemporal" Nullable="false" />
-          <Property Type="DateTime" Name="VigenciaContrasennaTemporal" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarUsuarioPorId_Result">
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Cedula" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
-          <Property Type="Int32" Name="IdRol" Nullable="false" />
-          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="IdEstado" Nullable="false" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarUsuarioRecuperacion_Result">
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
-        </ComplexType>
-        <ComplexType Name="SP_DesactivarDireccionUsuario_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="28" />
-        </ComplexType>
-        <ComplexType Name="SP_InsertarDireccionUsuario_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="40" />
-          <Property Type="Int32" Name="IdDireccion" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_RegistrarUsuario_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="30" />
-          <Property Type="Int32" Name="IdUsuario" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_RestablecerContrasennaUsuario_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="26" />
-        </ComplexType>
-        <ComplexType Name="SP_ActualizarCantidadCarrito_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="34" />
-        </ComplexType>
-        <ComplexType Name="SP_AgregarProductoCarrito_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="36" />
-          <Property Type="Int32" Name="CantidadItems" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_ConfirmarCompra_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="31" />
-          <Property Type="Int32" Name="IdPedido" Nullable="true" />
-          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarCarrito_Result">
-          <Property Type="Int32" Name="IdCarrito" Nullable="false" />
-          <Property Type="Int32" Name="IdProducto" Nullable="false" />
-          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
-          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Int32" Name="Cantidad" Nullable="false" />
-          <Property Type="Decimal" Name="SubtotalLinea" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="Int32" Name="StockDisponible" Nullable="false" />
-          <Property Type="Boolean" Name="EsPiezaUnica" Nullable="false" />
-          <Property Type="Boolean" Name="Disponible" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarConfirmacionPedido_Result">
-          <Property Type="Int32" Name="IdPedido" Nullable="false" />
-          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="FechaPedido" Nullable="false" />
-          <Property Type="Decimal" Name="Subtotal" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="CostoEnvio" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="EstadoVisible" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="NombreMetodoPago" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="IdProducto" Nullable="false" />
-          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
-          <Property Type="Int32" Name="Cantidad" Nullable="false" />
-          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="SubtotalLinea" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarDetallePedido_Result">
-          <Property Type="Int32" Name="IdPedido" Nullable="false" />
-          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="FechaPedido" Nullable="false" />
-          <Property Type="Decimal" Name="Subtotal" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="CostoEnvio" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="EstadoVisible" Nullable="false" MaxLength="50" />
-          <Property Type="DateTime" Name="FechaPago" Nullable="true" />
-          <Property Type="String" Name="NombreMetodoPago" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="EstadoPago" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
-          <Property Type="Int32" Name="IdProducto" Nullable="false" />
-          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
-          <Property Type="Int32" Name="Cantidad" Nullable="false" />
-          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Decimal" Name="SubtotalLinea" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarMetodosPago_Result">
-          <Property Type="Int32" Name="IdMetodoPago" Nullable="false" />
-          <Property Type="String" Name="NombreMetodo" Nullable="false" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarResumenCheckout_Result">
-          <Property Type="Int32" Name="IdCarrito" Nullable="false" />
-          <Property Type="Int32" Name="IdProducto" Nullable="false" />
-          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
-          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="Int32" Name="Cantidad" Nullable="false" />
-          <Property Type="Decimal" Name="SubtotalLinea" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="Int32" Name="StockDisponible" Nullable="false" />
-          <Property Type="Boolean" Name="Disponible" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_EliminarProductoCarrito_Result">
-          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
-          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="34" />
-        </ComplexType>
-        <ComplexType Name="SP_ConsultarHistorialPedidos_Result">
-          <Property Type="Int32" Name="IdPedido" Nullable="false" />
-          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="FechaPedido" Nullable="false" />
-          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
-          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="EstadoVisible" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="CantidadProductos" Nullable="true" />
-          <Property Type="Int32" Name="TotalFilas" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Admin_ActualizarCategoria_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
@@ -2214,6 +2021,192 @@
           <Property Type="Int32" Name="CantidadPedidos" Nullable="true" />
           <Property Type="Decimal" Name="TotalVentas" Nullable="false" Precision="38" Scale="2" />
         </ComplexType>
+        <ComplexType Name="SP_AgregarProductoCarrito_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="36" />
+          <Property Type="Int32" Name="CantidadItems" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConfirmarCompra_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="31" />
+          <Property Type="Int32" Name="IdPedido" Nullable="true" />
+          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarCantonesPorProvincia_Result">
+          <Property Type="Int32" Name="IdCanton" Nullable="false" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarCarrito_Result">
+          <Property Type="Int32" Name="IdCarrito" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
+          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Decimal" Name="SubtotalLinea" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="StockDisponible" Nullable="false" />
+          <Property Type="Boolean" Name="EsPiezaUnica" Nullable="false" />
+          <Property Type="Boolean" Name="Disponible" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarConfirmacionPedido_Result">
+          <Property Type="Int32" Name="IdPedido" Nullable="false" />
+          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaPedido" Nullable="false" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="CostoEnvio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EstadoVisible" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="NombreMetodoPago" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="SubtotalLinea" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDetallePedido_Result">
+          <Property Type="Int32" Name="IdPedido" Nullable="false" />
+          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaPedido" Nullable="false" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="CostoEnvio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EstadoVisible" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaPago" Nullable="true" />
+          <Property Type="String" Name="NombreMetodoPago" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="EstadoPago" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="SubtotalLinea" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDireccionesUsuario_Result">
+          <Property Type="Int32" Name="IdDireccion" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdCanton" Nullable="false" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
+          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDireccionPorId_Result">
+          <Property Type="Int32" Name="IdDireccion" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdCanton" Nullable="false" />
+          <Property Type="String" Name="NombreCanton" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="DireccionExacta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Referencia" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="TelefonoContacto" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NombreDestinatario" Nullable="false" MaxLength="150" />
+          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarDistritosPorCanton_Result">
+          <Property Type="Int32" Name="IdDistrito" Nullable="false" />
+          <Property Type="String" Name="NombreDistrito" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarEstados_Result">
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarEstadosUsuario_Result">
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarHistorialPedidos_Result">
+          <Property Type="Int32" Name="IdPedido" Nullable="false" />
+          <Property Type="String" Name="NumeroFactura" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaPedido" Nullable="false" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EstadoVisible" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="CantidadProductos" Nullable="true" />
+          <Property Type="Int32" Name="TotalFilas" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarMetodosPago_Result">
+          <Property Type="Int32" Name="IdMetodoPago" Nullable="false" />
+          <Property Type="String" Name="NombreMetodo" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarProvincias_Result">
+          <Property Type="Int32" Name="IdProvincia" Nullable="false" />
+          <Property Type="String" Name="NombreProvincia" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarResumenCheckout_Result">
+          <Property Type="Int32" Name="IdCarrito" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
+          <Property Type="Decimal" Name="PrecioUnitario" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Decimal" Name="SubtotalLinea" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="StockDisponible" Nullable="false" />
+          <Property Type="Boolean" Name="Disponible" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarRoles_Result">
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarUsuarioInicioSesion_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="TieneContrasennaTemporal" Nullable="false" />
+          <Property Type="DateTime" Name="VigenciaContrasennaTemporal" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarUsuarioPorId_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Cedula" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="String" Name="NombreRol" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdEstado" Nullable="false" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarUsuarioRecuperacion_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+        </ComplexType>
         <ComplexType Name="SP_ConsultarUsuarios_Result">
           <Property Type="Int32" Name="IdUsuario" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
@@ -2227,9 +2220,49 @@
           <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
           <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="SP_Dashboard_ConsultarActividadReciente_Result">
+          <Property Type="Int32" Name="IdPedido" Nullable="false" />
+          <Property Type="String" Name="Titulo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Fecha" Nullable="false" />
+          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_Dashboard_ConsultarResumen_Result">
+          <Property Type="Decimal" Name="TotalVentas" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="TotalPedidos" Nullable="true" />
+          <Property Type="Int32" Name="TotalClientesActivos" Nullable="true" />
+          <Property Type="Int32" Name="TotalProductosAgotados" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_Dashboard_ConsultarVentasMensuales_Result">
+          <Property Type="Int32" Name="NumeroMes" Nullable="false" />
+          <Property Type="String" Name="NombreMes" Nullable="false" MaxLength="3" />
+          <Property Type="Decimal" Name="TotalVentas" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="SP_DesactivarDireccionUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="28" />
+        </ComplexType>
+        <ComplexType Name="SP_EliminarProductoCarrito_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="34" />
+        </ComplexType>
+        <ComplexType Name="SP_InsertarDireccionUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="40" />
+          <Property Type="Int32" Name="IdDireccion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_RegistrarUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="SP_RegistrarUsuarioAdministracion_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="SP_RestablecerContrasennaUsuario_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="26" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2386,7 +2419,6 @@
           <EntitySetMapping Name="TB_pedido">
             <EntityTypeMapping TypeName="BD_LENModel.TB_pedido">
               <MappingFragment StoreEntitySet="TB_pedido">
-                <ScalarProperty Name="motivo_cancelacion" ColumnName="motivo_cancelacion" />
                 <ScalarProperty Name="id_pedido" ColumnName="id_pedido" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
@@ -2395,6 +2427,7 @@
                 <ScalarProperty Name="costo_envio" ColumnName="costo_envio" />
                 <ScalarProperty Name="total" ColumnName="total" />
                 <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+                <ScalarProperty Name="motivo_cancelacion" ColumnName="motivo_cancelacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2448,6 +2481,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_ActualizarCantidadCarrito" FunctionName="BD_LENModel.Store.SP_ActualizarCantidadCarrito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarCantidadCarrito_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_ActualizarContrasennaTemporal" FunctionName="BD_LENModel.Store.SP_ActualizarContrasennaTemporal">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarContrasennaTemporal_Result">
@@ -2469,320 +2510,6 @@
               <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarUsuario_Result">
                 <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarCantonesPorProvincia" FunctionName="BD_LENModel.Store.SP_ConsultarCantonesPorProvincia">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCantonesPorProvincia_Result">
-                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
-                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarDireccionesUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarDireccionesUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDireccionesUsuario_Result">
-                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
-                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
-                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
-                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
-                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
-                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
-                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
-                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
-                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
-                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
-                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarDireccionPorId" FunctionName="BD_LENModel.Store.SP_ConsultarDireccionPorId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDireccionPorId_Result">
-                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
-                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
-                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
-                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
-                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
-                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
-                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
-                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
-                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
-                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
-                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarDistritosPorCanton" FunctionName="BD_LENModel.Store.SP_ConsultarDistritosPorCanton">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDistritosPorCanton_Result">
-                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
-                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarEstados" FunctionName="BD_LENModel.Store.SP_ConsultarEstados">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstados_Result">
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarEstadosUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarEstadosUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstadosUsuario_Result">
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarProvincias" FunctionName="BD_LENModel.Store.SP_ConsultarProvincias">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarProvincias_Result">
-                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
-                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarRoles" FunctionName="BD_LENModel.Store.SP_ConsultarRoles">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarRoles_Result">
-                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioInicioSesion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioInicioSesion">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
-                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-                <ScalarProperty Name="TieneContrasennaTemporal" ColumnName="TieneContrasennaTemporal" />
-                <ScalarProperty Name="VigenciaContrasennaTemporal" ColumnName="VigenciaContrasennaTemporal" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioPorId" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioPorId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioPorId_Result">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioRecuperacion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioRecuperacion">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_DesactivarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_DesactivarDireccionUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_DesactivarDireccionUsuario_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_InsertarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_InsertarDireccionUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_InsertarDireccionUsuario_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_RegistrarError" FunctionName="BD_LENModel.Store.SP_RegistrarError" />
-          <FunctionImportMapping FunctionImportName="SP_RegistrarUsuario" FunctionName="BD_LENModel.Store.SP_RegistrarUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_RegistrarUsuario_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_RestablecerContrasennaUsuario" FunctionName="BD_LENModel.Store.SP_RestablecerContrasennaUsuario">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_RestablecerContrasennaUsuario_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ActualizarCantidadCarrito" FunctionName="BD_LENModel.Store.SP_ActualizarCantidadCarrito">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ActualizarCantidadCarrito_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_AgregarProductoCarrito" FunctionName="BD_LENModel.Store.SP_AgregarProductoCarrito">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_AgregarProductoCarrito_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-                <ScalarProperty Name="CantidadItems" ColumnName="CantidadItems" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConfirmarCompra" FunctionName="BD_LENModel.Store.SP_ConfirmarCompra">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConfirmarCompra_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
-                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarCarrito" FunctionName="BD_LENModel.Store.SP_ConsultarCarrito">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCarrito_Result">
-                <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
-                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
-                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
-                <ScalarProperty Name="StockDisponible" ColumnName="StockDisponible" />
-                <ScalarProperty Name="EsPiezaUnica" ColumnName="EsPiezaUnica" />
-                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarConfirmacionPedido" FunctionName="BD_LENModel.Store.SP_ConsultarConfirmacionPedido">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarConfirmacionPedido_Result">
-                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
-                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
-                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
-                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
-                <ScalarProperty Name="CostoEnvio" ColumnName="CostoEnvio" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-                <ScalarProperty Name="EstadoVisible" ColumnName="EstadoVisible" />
-                <ScalarProperty Name="NombreMetodoPago" ColumnName="NombreMetodoPago" />
-                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
-                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
-                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
-                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
-                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
-                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
-                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarDetallePedido" FunctionName="BD_LENModel.Store.SP_ConsultarDetallePedido">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDetallePedido_Result">
-                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
-                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
-                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
-                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
-                <ScalarProperty Name="CostoEnvio" ColumnName="CostoEnvio" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-                <ScalarProperty Name="EstadoVisible" ColumnName="EstadoVisible" />
-                <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
-                <ScalarProperty Name="NombreMetodoPago" ColumnName="NombreMetodoPago" />
-                <ScalarProperty Name="EstadoPago" ColumnName="EstadoPago" />
-                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
-                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
-                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
-                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
-                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
-                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
-                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
-                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
-                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarMetodosPago" FunctionName="BD_LENModel.Store.SP_ConsultarMetodosPago">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarMetodosPago_Result">
-                <ScalarProperty Name="IdMetodoPago" ColumnName="IdMetodoPago" />
-                <ScalarProperty Name="NombreMetodo" ColumnName="NombreMetodo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarResumenCheckout" FunctionName="BD_LENModel.Store.SP_ConsultarResumenCheckout">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarResumenCheckout_Result">
-                <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
-                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
-                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
-                <ScalarProperty Name="StockDisponible" ColumnName="StockDisponible" />
-                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_EliminarProductoCarrito" FunctionName="BD_LENModel.Store.SP_EliminarProductoCarrito">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_EliminarProductoCarrito_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ObtenerOCrearCarritoActivo" FunctionName="BD_LENModel.Store.SP_ObtenerOCrearCarritoActivo" />
-          <FunctionImportMapping FunctionImportName="SP_ConsultarHistorialPedidos" FunctionName="BD_LENModel.Store.SP_ConsultarHistorialPedidos">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarHistorialPedidos_Result">
-                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
-                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
-                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-                <ScalarProperty Name="EstadoVisible" ColumnName="EstadoVisible" />
-                <ScalarProperty Name="CantidadProductos" ColumnName="CantidadProductos" />
-                <ScalarProperty Name="TotalFilas" ColumnName="TotalFilas" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3043,6 +2770,268 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_AgregarProductoCarrito" FunctionName="BD_LENModel.Store.SP_AgregarProductoCarrito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_AgregarProductoCarrito_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="CantidadItems" ColumnName="CantidadItems" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConfirmarCompra" FunctionName="BD_LENModel.Store.SP_ConfirmarCompra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConfirmarCompra_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarCantonesPorProvincia" FunctionName="BD_LENModel.Store.SP_ConsultarCantonesPorProvincia">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCantonesPorProvincia_Result">
+                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarCarrito" FunctionName="BD_LENModel.Store.SP_ConsultarCarrito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCarrito_Result">
+                <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
+                <ScalarProperty Name="StockDisponible" ColumnName="StockDisponible" />
+                <ScalarProperty Name="EsPiezaUnica" ColumnName="EsPiezaUnica" />
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarConfirmacionPedido" FunctionName="BD_LENModel.Store.SP_ConsultarConfirmacionPedido">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarConfirmacionPedido_Result">
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CostoEnvio" ColumnName="CostoEnvio" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="EstadoVisible" ColumnName="EstadoVisible" />
+                <ScalarProperty Name="NombreMetodoPago" ColumnName="NombreMetodoPago" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDetallePedido" FunctionName="BD_LENModel.Store.SP_ConsultarDetallePedido">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDetallePedido_Result">
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CostoEnvio" ColumnName="CostoEnvio" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="EstadoVisible" ColumnName="EstadoVisible" />
+                <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
+                <ScalarProperty Name="NombreMetodoPago" ColumnName="NombreMetodoPago" />
+                <ScalarProperty Name="EstadoPago" ColumnName="EstadoPago" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
+                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
+                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDireccionesUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarDireccionesUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDireccionesUsuario_Result">
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
+                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDireccionPorId" FunctionName="BD_LENModel.Store.SP_ConsultarDireccionPorId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDireccionPorId_Result">
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+                <ScalarProperty Name="IdCanton" ColumnName="IdCanton" />
+                <ScalarProperty Name="NombreCanton" ColumnName="NombreCanton" />
+                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+                <ScalarProperty Name="DireccionExacta" ColumnName="DireccionExacta" />
+                <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+                <ScalarProperty Name="TelefonoContacto" ColumnName="TelefonoContacto" />
+                <ScalarProperty Name="NombreDestinatario" ColumnName="NombreDestinatario" />
+                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarDistritosPorCanton" FunctionName="BD_LENModel.Store.SP_ConsultarDistritosPorCanton">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarDistritosPorCanton_Result">
+                <ScalarProperty Name="IdDistrito" ColumnName="IdDistrito" />
+                <ScalarProperty Name="NombreDistrito" ColumnName="NombreDistrito" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarEstados" FunctionName="BD_LENModel.Store.SP_ConsultarEstados">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstados_Result">
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarEstadosUsuario" FunctionName="BD_LENModel.Store.SP_ConsultarEstadosUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarEstadosUsuario_Result">
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarHistorialPedidos" FunctionName="BD_LENModel.Store.SP_ConsultarHistorialPedidos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarHistorialPedidos_Result">
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="EstadoVisible" ColumnName="EstadoVisible" />
+                <ScalarProperty Name="CantidadProductos" ColumnName="CantidadProductos" />
+                <ScalarProperty Name="TotalFilas" ColumnName="TotalFilas" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarMetodosPago" FunctionName="BD_LENModel.Store.SP_ConsultarMetodosPago">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarMetodosPago_Result">
+                <ScalarProperty Name="IdMetodoPago" ColumnName="IdMetodoPago" />
+                <ScalarProperty Name="NombreMetodo" ColumnName="NombreMetodo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarProvincias" FunctionName="BD_LENModel.Store.SP_ConsultarProvincias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarProvincias_Result">
+                <ScalarProperty Name="IdProvincia" ColumnName="IdProvincia" />
+                <ScalarProperty Name="NombreProvincia" ColumnName="NombreProvincia" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarResumenCheckout" FunctionName="BD_LENModel.Store.SP_ConsultarResumenCheckout">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarResumenCheckout_Result">
+                <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="SubtotalLinea" ColumnName="SubtotalLinea" />
+                <ScalarProperty Name="StockDisponible" ColumnName="StockDisponible" />
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarRoles" FunctionName="BD_LENModel.Store.SP_ConsultarRoles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarRoles_Result">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioInicioSesion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioInicioSesion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="TieneContrasennaTemporal" ColumnName="TieneContrasennaTemporal" />
+                <ScalarProperty Name="VigenciaContrasennaTemporal" ColumnName="VigenciaContrasennaTemporal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioPorId" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioPorId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioPorId_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarioRecuperacion" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarioRecuperacion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarios" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarios">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarios_Result">
@@ -3060,9 +3049,83 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Dashboard_ConsultarActividadReciente" FunctionName="BD_LENModel.Store.SP_Dashboard_ConsultarActividadReciente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_Dashboard_ConsultarActividadReciente_Result">
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Dashboard_ConsultarResumen" FunctionName="BD_LENModel.Store.SP_Dashboard_ConsultarResumen">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_Dashboard_ConsultarResumen_Result">
+                <ScalarProperty Name="TotalVentas" ColumnName="TotalVentas" />
+                <ScalarProperty Name="TotalPedidos" ColumnName="TotalPedidos" />
+                <ScalarProperty Name="TotalClientesActivos" ColumnName="TotalClientesActivos" />
+                <ScalarProperty Name="TotalProductosAgotados" ColumnName="TotalProductosAgotados" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Dashboard_ConsultarVentasMensuales" FunctionName="BD_LENModel.Store.SP_Dashboard_ConsultarVentasMensuales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_Dashboard_ConsultarVentasMensuales_Result">
+                <ScalarProperty Name="NumeroMes" ColumnName="NumeroMes" />
+                <ScalarProperty Name="NombreMes" ColumnName="NombreMes" />
+                <ScalarProperty Name="TotalVentas" ColumnName="TotalVentas" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_DesactivarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_DesactivarDireccionUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_DesactivarDireccionUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_EliminarProductoCarrito" FunctionName="BD_LENModel.Store.SP_EliminarProductoCarrito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_EliminarProductoCarrito_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_InsertarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_InsertarDireccionUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_InsertarDireccionUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ObtenerOCrearCarritoActivo" FunctionName="BD_LENModel.Store.SP_ObtenerOCrearCarritoActivo" />
+          <FunctionImportMapping FunctionImportName="SP_RegistrarError" FunctionName="BD_LENModel.Store.SP_RegistrarError" />
+          <FunctionImportMapping FunctionImportName="SP_RegistrarUsuario" FunctionName="BD_LENModel.Store.SP_RegistrarUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_RegistrarUsuario_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_RegistrarUsuarioAdministracion" FunctionName="BD_LENModel.Store.SP_RegistrarUsuarioAdministracion">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_RegistrarUsuarioAdministracion_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_RestablecerContrasennaUsuario" FunctionName="BD_LENModel.Store.SP_RestablecerContrasennaUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_RestablecerContrasennaUsuario_Result">
                 <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
               </ComplexTypeMapping>

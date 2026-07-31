@@ -143,15 +143,57 @@ namespace ProyectoProgramacionAvanzada.Controllers
         {
             if (Session["IdUsuario"] == null)
             {
-                return RedirectToAction("Login", "Home");
+                return RedirectToAction(
+                    "Login",
+                    "Home"
+                );
             }
 
-            if (!EsAdministrador())
+            try
             {
-                return RedirectToAction("Index", "Home");
-            }
+                using (var Servicio = new DashboardService())
+                {
+                    DashboardViewModel Modelo =
+                        Servicio.ConsultarDashboard();
 
-            return View();
+                    return View(
+                        "Principal",
+                        Modelo
+                    );
+                }
+            }
+            catch (Exception Excepcion)
+            {
+                try
+                {
+                    using (var ServicioError =
+                        new ErrorService())
+                    {
+                        ServicioError.RegistrarError(
+                            "HomeController",
+                            "Principal",
+                            Excepcion,
+                            Convert.ToString(
+                                Session["NombreUsuario"]
+                            ),
+                            Request.Url != null
+                                ? Request.Url.ToString()
+                                : null
+                        );
+                    }
+                }
+                catch
+                {
+                }
+
+                TempData["MensajeError"] =
+                    "No fue posible cargar el panel principal.";
+
+                return View(
+                    "Principal",
+                    new DashboardViewModel()
+                );
+            }
         }
 
 

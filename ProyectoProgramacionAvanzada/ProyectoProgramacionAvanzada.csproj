@@ -157,8 +157,6 @@
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
-    <Compile Include="Filtros\SesionRequeridaAttribute.cs" />
-    <Compile Include="Filtros\SoloAdministradorAttribute.cs" />
     <Compile Include="EF\BD_LEN.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -315,6 +313,15 @@
     <Compile Include="EF\SP_ConsultarUsuarios_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_Dashboard_ConsultarActividadReciente_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_Dashboard_ConsultarResumen_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_Dashboard_ConsultarVentasMensuales_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_DesactivarDireccionUsuario_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -387,6 +394,8 @@
     <Compile Include="EF\TB_usuario.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="Filtros\SesionRequeridaAttribute.cs" />
+    <Compile Include="Filtros\SoloAdministradorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -395,6 +404,7 @@
     <Compile Include="Models\CatalogoViewModel.cs" />
     <Compile Include="Models\CheckoutViewModel.cs" />
     <Compile Include="Models\ConfirmacionViewModel.cs" />
+    <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\DetallePedidoViewModel.cs" />
     <Compile Include="Models\DireccionModel.cs" />
     <Compile Include="Models\PortadaViewModel.cs" />
@@ -407,6 +417,7 @@
     <Compile Include="Services\CatalogoService.cs" />
     <Compile Include="Services\CategoriaAdminService.cs" />
     <Compile Include="Services\CorreoService.cs" />
+    <Compile Include="Services\DashboardService.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\FavoritoService.cs" />
     <Compile Include="Services\PedidoAdminService.cs" />
