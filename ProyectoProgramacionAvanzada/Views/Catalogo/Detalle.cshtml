@@ -33,10 +33,12 @@
                         ? Model.Imagenes.First().RutaImagen
                         : "Content/Images/logo.jpeg";
                 }
+                @* js-ver-grande: abre la imagen completa en el visor. *@
                 <img id="imagen-principal"
                      src="@Url.Content("~/" + ImagenPrincipal)"
                      alt="@Model.NombreProducto"
-                     class="w-100 rounded mb-3"
+                     title="Clic para ver la imagen completa"
+                     class="w-100 rounded mb-3 js-ver-grande"
                      style="max-height: 480px; object-fit: cover;">
 
                 @if (Model.Imagenes.Count > 1)
@@ -134,6 +136,7 @@
 
 @section Scripts {
     <script src="@Url.Content("~/Scripts/carrito.js")"></script>
+    <script src="@Url.Content("~/Scripts/visor-imagen.js")"></script>
     <script>
         $(function () {
             $('.js-miniatura').on('click', function () {

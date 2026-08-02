@@ -2753,3 +2753,107 @@ GO
 EXEC dbo.SP_Dashboard_ConsultarActividadReciente
     @Cantidad = 5;
 GO
+
+   /* ============================================================
+   ADMINISTRACIÓN DE FACTURAS (RF-14 apoyo)
+   ============================================================ */
+
+   USE BD_LEN;
+GO
+
+CREATE OR ALTER PROCEDURE dbo.SP_Admin_ConsultarFacturas
+    @Busqueda NVARCHAR(150) = NULL,
+    @FechaInicio DATE = NULL,
+    @FechaFin DATE = NULL,
+    @Pagina INT = 1,
+    @TamanoPagina INT = 10
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @Pagina IS NULL OR @Pagina < 1 SET @Pagina = 1;
+    IF @TamanoPagina IS NULL OR @TamanoPagina < 1 SET @TamanoPagina = 10;
+
+    SELECT
+        F.id_factura        AS IdFactura,
+        F.id_pedido         AS IdPedido,
+        F.numero_factura    AS NumeroFactura,
+        F.fecha_factura     AS FechaFactura,
+        F.subtotal          AS Subtotal,
+        F.costo_envio       AS CostoEnvio,
+        F.total             AS Total,
+        E.nombre_estado     AS NombreEstado,
+        U.nombre + N' ' + U.apellido AS NombreCliente,
+        U.email             AS EmailCliente,
+        MP.nombre_metodo    AS MetodoPago,
+        PA.comprobante      AS Comprobante,
+        COUNT(*) OVER ()    AS TotalFilas
+    FROM dbo.TB_factura AS F
+    INNER JOIN dbo.TB_pedido AS PE ON PE.id_pedido = F.id_pedido
+    INNER JOIN dbo.TB_usuario AS U ON U.id_usuario = PE.id_usuario
+    INNER JOIN dbo.TB_estado AS E ON E.id_estado = F.id_estado
+    LEFT JOIN dbo.TB_pago AS PA ON PA.id_pedido = F.id_pedido
+    LEFT JOIN dbo.TB_metodo_pago AS MP ON MP.id_metodo_pago = PA.id_metodo_pago
+    WHERE (@Busqueda IS NULL OR @Busqueda = N''
+           OR F.numero_factura LIKE N'%' + @Busqueda + N'%'
+           OR U.nombre + N' ' + U.apellido LIKE N'%' + @Busqueda + N'%'
+           OR U.email LIKE N'%' + @Busqueda + N'%')
+      AND (@FechaInicio IS NULL OR F.fecha_factura >= @FechaInicio)
+      AND (@FechaFin IS NULL OR F.fecha_factura < DATEADD(DAY, 1, @FechaFin))
+    ORDER BY F.fecha_factura DESC, F.id_factura DESC
+    OFFSET (@Pagina - 1) * @TamanoPagina ROWS
+    FETCH NEXT @TamanoPagina ROWS ONLY;
+END;
+GO
+
+
+CREATE OR ALTER PROCEDURE dbo.SP_Admin_ConsultarDetalleFactura
+    @IdFactura INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    /*
+       Devuelve una fila por producto con el encabezado repetido,
+       siguiendo la convención del resto de SPs de detalle del
+       proyecto (un solo result set, consumible con SqlQuery).
+    */
+    SELECT
+        F.id_factura        AS IdFactura,
+        F.id_pedido         AS IdPedido,
+        F.numero_factura    AS NumeroFactura,
+        F.fecha_factura     AS FechaFactura,
+        F.subtotal          AS Subtotal,
+        F.costo_envio       AS CostoEnvio,
+        F.total             AS Total,
+        E.nombre_estado     AS NombreEstado,
+        U.nombre + N' ' + U.apellido AS NombreCliente,
+        U.email             AS EmailCliente,
+        U.telefono          AS TelefonoCliente,
+        D.direccion_exacta  AS DireccionExacta,
+        PR.nombre_provincia AS Provincia,
+        CA.nombre_canton    AS Canton,
+        DI.nombre_distrito  AS Distrito,
+        MP.nombre_metodo    AS MetodoPago,
+        PA.comprobante      AS Comprobante,
+        PA.fecha_pago       AS FechaPago,
+        P.nombre_producto   AS NombreProducto,
+        DP.cantidad         AS Cantidad,
+        DP.precio_unitario  AS PrecioUnitario,
+        DP.subtotal_linea   AS SubtotalLinea
+    FROM dbo.TB_factura AS F
+    INNER JOIN dbo.TB_pedido AS PE ON PE.id_pedido = F.id_pedido
+    INNER JOIN dbo.TB_usuario AS U ON U.id_usuario = PE.id_usuario
+    INNER JOIN dbo.TB_estado AS E ON E.id_estado = F.id_estado
+    INNER JOIN dbo.TB_detalle_pedido AS DP ON DP.id_pedido = F.id_pedido
+    INNER JOIN dbo.TB_producto AS P ON P.id_producto = DP.id_producto
+    LEFT JOIN dbo.TB_direccion_envio AS D ON D.id_direccion = PE.id_direccion
+    LEFT JOIN dbo.TB_distrito AS DI ON DI.id_distrito = D.id_distrito
+    LEFT JOIN dbo.TB_canton AS CA ON CA.id_canton = DI.id_canton
+    LEFT JOIN dbo.TB_provincia AS PR ON PR.id_provincia = CA.id_provincia
+    LEFT JOIN dbo.TB_pago AS PA ON PA.id_pedido = F.id_pedido
+    LEFT JOIN dbo.TB_metodo_pago AS MP ON MP.id_metodo_pago = PA.id_metodo_pago
+    WHERE F.id_factura = @IdFactura
+    ORDER BY P.nombre_producto;
+END;
+GO

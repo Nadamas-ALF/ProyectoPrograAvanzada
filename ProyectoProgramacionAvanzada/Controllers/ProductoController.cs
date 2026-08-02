@@ -1,6 +1,8 @@
-using ProyectoProgramacionAvanzada.Models;
+﻿using ProyectoProgramacionAvanzada.Models;
 using ProyectoProgramacionAvanzada.Services;
 using System;
+using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -16,10 +18,33 @@ namespace ProyectoProgramacionAvanzada.Controllers
     public class ProductoController : Controller
     {
         private const int TamanoPagina = 10;
-        private const int TamanoMaximoImagen = 5 * 1024 * 1024;
+
+
+        private const int TamanoMaximoImagenMbPredeterminado = 2;
 
         private static readonly string[] ExtensionesPermitidas =
             { ".jpg", ".jpeg", ".png", ".webp" };
+
+        private static int ObtenerTamanoMaximoImagenMb()
+        {
+            string Valor = ConfigurationManager
+                .AppSettings["TamanoMaximoImagenMB"];
+
+            int Megas;
+
+            if (!string.IsNullOrWhiteSpace(Valor)
+                && int.TryParse(
+                       Valor,
+                       NumberStyles.Integer,
+                       CultureInfo.InvariantCulture,
+                       out Megas)
+                && Megas > 0)
+            {
+                return Megas;
+            }
+
+            return TamanoMaximoImagenMbPredeterminado;
+        }
 
         private bool EsAdministrador()
         {
@@ -401,10 +426,15 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     return RedirectToAction("Imagenes", new { id });
                 }
 
-                if (archivo.ContentLength > TamanoMaximoImagen)
+                int TamanoMaximoMb = ObtenerTamanoMaximoImagenMb();
+
+                if (archivo.ContentLength > TamanoMaximoMb * 1024 * 1024)
                 {
+                    /* El mensaje se arma con el límite real configurado. */
                     TempData["MensajeError"] =
-                        "La imagen no puede superar los 5 MB.";
+                        "La imagen no puede superar los "
+                        + TamanoMaximoMb
+                        + " MB.";
 
                     return RedirectToAction("Imagenes", new { id });
                 }
@@ -417,10 +447,19 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     Directory.CreateDirectory(CarpetaFisica);
                 }
 
+                /*
+                 * La imagen se normaliza a un lienzo cuadrado
+                 * (1:1) antes de guardarla: las vistas la muestran
+                 * con object-fit: cover dentro de contenedores
+                 * cuadrados y cualquier otra proporción se veía
+                 * recortada. Se escala completa y se centra, sin
+                 * recortar nada. El resultado siempre es .jpg.
+                 */
                 string NombreArchivo =
-                    Guid.NewGuid().ToString("N") + Extension;
+                    Guid.NewGuid().ToString("N") + ".jpg";
 
-                archivo.SaveAs(
+                ImagenProductoService.GuardarNormalizada(
+                    archivo.InputStream,
                     Path.Combine(CarpetaFisica, NombreArchivo)
                 );
 

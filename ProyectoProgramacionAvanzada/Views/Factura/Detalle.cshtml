@@ -1,0 +1,141 @@
+﻿@model ProyectoProgramacionAvanzada.Models.DetalleFacturaViewModel
+
+@{
+    ViewBag.Title = "Factura " + Model.Encabezado.NumeroFactura;
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+}
+
+<div class="page-heading">
+
+    <div class="page-heading-copy">
+
+        <span class="page-icon">
+            <i class="bi bi-receipt" aria-hidden="true"></i>
+        </span>
+
+        <div>
+            <p class="eyebrow mb-1">
+                Facturación
+            </p>
+
+            <h1 class="h3 mb-1">
+                @Model.Encabezado.NumeroFactura
+            </h1>
+
+            <p class="text-muted mb-0">
+                Emitida el
+                @Model.Encabezado.FechaFactura.ToString("dd/MM/yyyy hh:mm tt")
+            </p>
+        </div>
+
+    </div>
+
+    <div class="heading-actions">
+        <a class="btn btn-outline-secondary btn-sm"
+           href="@Url.Action("Index", "Factura")">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i>
+            Volver
+        </a>
+    </div>
+
+</div>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h6 text-uppercase text-muted mb-3">Cliente</h2>
+                <p class="mb-1"><strong>@Model.Encabezado.NombreCliente</strong></p>
+                <p class="mb-1 small text-muted">@Model.Encabezado.EmailCliente</p>
+                @if (!string.IsNullOrEmpty(Model.Encabezado.TelefonoCliente))
+                {
+                    <p class="mb-0 small text-muted">Tel. @Model.Encabezado.TelefonoCliente</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h6 text-uppercase text-muted mb-3">Dirección de envío</h2>
+                @if (string.IsNullOrEmpty(Model.Encabezado.DireccionExacta))
+                {
+                    <p class="mb-0 text-muted">Sin dirección registrada.</p>
+                }
+                else
+                {
+                    <p class="mb-1">@Model.Encabezado.DireccionExacta</p>
+                    <p class="mb-0 small text-muted">
+                        @Model.Encabezado.Distrito, @Model.Encabezado.Canton,
+                        @Model.Encabezado.Provincia
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h6 text-uppercase text-muted mb-3">Pago</h2>
+                <p class="mb-1">
+                    @(string.IsNullOrEmpty(Model.Encabezado.MetodoPago)
+                        ? "Sin método registrado"
+                        : Model.Encabezado.MetodoPago)
+                </p>
+                @if (!string.IsNullOrEmpty(Model.Encabezado.Comprobante))
+                {
+                    <p class="mb-1 small text-muted">
+                        Comprobante: @Model.Encabezado.Comprobante
+                    </p>
+                }
+                <span class="badge @(Model.Encabezado.NombreEstado == "Pagado" ? "bg-success" : "bg-light text-dark")">
+                    @Model.Encabezado.NombreEstado
+                </span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col" class="text-center">Cantidad</th>
+                    <th scope="col" class="text-end">Precio unitario</th>
+                    <th scope="col" class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Linea in Model.Lineas)
+                {
+                    <tr>
+                        <td>@Linea.NombreProducto</td>
+                        <td class="text-center">@Linea.Cantidad</td>
+                        <td class="text-end">₡@Linea.PrecioUnitario.ToString("N2")</td>
+                        <td class="text-end">₡@Linea.SubtotalLinea.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end">Subtotal</td>
+                    <td class="text-end">₡@Model.Encabezado.Subtotal.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end">Costo de envío</td>
+                    <td class="text-end">₡@Model.Encabezado.CostoEnvio.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Total</strong></td>
+                    <td class="text-end"><strong>₡@Model.Encabezado.Total.ToString("N2")</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
