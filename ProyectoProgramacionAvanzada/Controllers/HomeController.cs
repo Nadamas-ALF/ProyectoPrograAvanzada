@@ -149,6 +149,15 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 );
             }
 
+
+            if (!EsAdministrador())
+            {
+                return RedirectToAction(
+                    "Index",
+                    "Home"
+                );
+            }
+
             try
             {
                 using (var Servicio = new DashboardService())
