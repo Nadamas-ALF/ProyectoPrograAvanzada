@@ -107,6 +107,11 @@
                             <h2 class="h6 fw-bold pb-2">Pago</h2>
                             <p class="m-0">
                                 Método: <span class="fw-bold">@Model.NombreMetodoPago</span><br>
+                                @if (!string.IsNullOrWhiteSpace(Model.ComprobantePago))
+                                {
+                                    <span>@Model.ComprobantePago</span>
+                                    <br>
+                                }
                                 <span class="text-muted">
                                     Pago simulado registrado correctamente.
                                 </span>

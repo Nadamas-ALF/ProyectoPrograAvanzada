@@ -41,7 +41,7 @@
                             <div class="alert alert-warning m-0" role="alert">
                                 No tiene direcciones registradas.
                                 Agregue una dirección desde
-                                <a href="@Url.Action("Detalle", "Usuario")" class="fw-bold">su perfil</a>
+                                <a href="@Url.Action("Editar", "Cuenta")" class="fw-bold">su perfil</a>
                                 para poder completar la compra.
                             </div>
                         }
@@ -83,12 +83,82 @@
                             no se realiza ningún cobro real.
                         </p>
 
-                        @Html.DropDownList(
-                            "IdMetodoPagoSeleccionado",
-                            Model.MetodosPago,
-                            "Seleccione un método de pago",
-                            new { @class = "form-select", id = "metodo-pago" }
-                        )
+                        <select name="IdMetodoPagoSeleccionado"
+                                id="metodo-pago"
+                                class="form-select">
+                            <option value="">Seleccione un método de pago</option>
+                            @foreach (var Metodo in Model.MetodosPago)
+                            {
+                                <option value="@Metodo.Value"
+                                        data-nombre="@Metodo.Text"
+                                        selected="@(Metodo.Value == Model.IdMetodoPagoSeleccionado.ToString())">
+                                    @Metodo.Text
+                                </option>
+                            }
+                        </select>
+
+                        <input type="hidden" name="DatoPagoSimulado" id="dato-pago-simulado" />
+
+                        @*Tarjeta*@
+                        <div id="pago-tarjeta" class="border rounded p-3 mt-3 d-none">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label" for="tarjeta-numero">Número de tarjeta</label>
+                                    <input type="text" class="form-control" id="tarjeta-numero"
+                                           placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" autocomplete="off">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="tarjeta-vencimiento">Vencimiento (MM/AA)</label>
+                                    <input type="text" class="form-control" id="tarjeta-vencimiento"
+                                           placeholder="MM/AA" maxlength="5" autocomplete="off">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="tarjeta-cvv">CVV</label>
+                                    <input type="text" class="form-control" id="tarjeta-cvv"
+                                           placeholder="123" maxlength="4" inputmode="numeric" autocomplete="off">
+                                </div>
+                            </div>
+                            <p class="text-muted small m-0 pt-2">
+                                Datos simulados: no se procesa ningún cobro real ni se almacena la tarjeta completa.
+                            </p>
+                        </div>
+
+                        @*Transferencia bancaria*@
+                        <div id="pago-transferencia" class="border rounded p-3 mt-3 d-none">
+                            <p class="m-0">
+                                Realice la transferencia simulada a la siguiente cuenta:
+                            </p>
+                            <p class="fw-bold m-0">
+                                Banco LEN · Cuenta IBAN CR05-0000-0000-0000-0000-0000
+                            </p>
+                            <div class="pt-2">
+                                <label class="form-label" for="transferencia-referencia">
+                                    Número de comprobante de la transferencia
+                                </label>
+                                <input type="text" class="form-control" id="transferencia-referencia"
+                                       placeholder="Ej. 000123456" maxlength="50" autocomplete="off">
+                            </div>
+                        </div>
+
+                        @*SINPE Móvil*@
+                        <div id="pago-sinpe" class="border rounded p-3 mt-3 d-none">
+                            <p class="m-0">
+                                Realice el SINPE Móvil simulado al siguiente número:
+                            </p>
+                            <p class="fw-bold m-0">8888-8888 · Tienda LEN</p>
+                            <div class="pt-2">
+                                <label class="form-label" for="sinpe-telefono">
+                                    Número desde el que envía
+                                </label>
+                                <input type="tel" class="form-control" id="sinpe-telefono"
+                                       placeholder="Ej. 8888-8888" maxlength="20" autocomplete="off">
+                            </div>
+                        </div>
+
+                        @*Efectivo contra entrega*@
+                        <div id="pago-efectivo" class="alert alert-secondary mt-3 mb-0 d-none">
+                            Pague en efectivo al recibir su pedido.
+                        </div>
                     </div>
 
                 </div>

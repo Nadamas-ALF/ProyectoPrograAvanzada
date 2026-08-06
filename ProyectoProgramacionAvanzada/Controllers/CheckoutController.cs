@@ -133,7 +133,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                         IdUsuario,
                         Modelo.IdDireccionSeleccionada,
                         Modelo.IdMetodoPagoSeleccionado,
-                        ObtenerCostoEnvio()
+                        ObtenerCostoEnvio(),
+                        Modelo.DatoPagoSimulado
                     );
 
                     if (Resultado.Exitoso != true ||

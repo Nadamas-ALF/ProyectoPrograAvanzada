@@ -217,27 +217,22 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     Session["IdUsuario"]
                 );
 
-            int IdUsuarioConsulta =
-                IdUsuario ?? IdUsuarioSesion;
-
             /*
-             * Un usuario normal solamente puede consultar
-             * su propio perfil.
+             * La pantalla de administración de usuarios es
+             * exclusiva del rol Administrador. Un cliente que
+             * intente acceder aquí (directamente o por un enlace
+             * antiguo) se redirige a su propia vista de "Mi cuenta".
              */
-            if (!UsuarioEsAdministrador()
-                && IdUsuarioConsulta != IdUsuarioSesion)
+            if (!UsuarioEsAdministrador())
             {
-                TempData["MensajeError"] =
-                    "No tiene permisos para consultar ese usuario.";
-
                 return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = IdUsuarioSesion
-                    }
+                    "Editar",
+                    "Cuenta"
                 );
             }
+
+            int IdUsuarioConsulta =
+                IdUsuario ?? IdUsuarioSesion;
 
             try
             {
@@ -308,12 +303,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "No tiene permisos para modificar ese usuario.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = IdUsuarioSesion
-                    }
+                return RedireccionDespuesDeGuardar(
+                    IdUsuarioSesion
                 );
             }
 
@@ -367,18 +358,24 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     TempData["MensajeError"] =
                         "No fue posible consultar los datos actuales.";
 
-                    return RedirectToAction(
-                        "Detalle",
-                        new
-                        {
-                            IdUsuario = IdUsuarioSesion
-                        }
+                    return RedireccionDespuesDeGuardar(
+                        IdUsuarioSesion
                     );
                 }
             }
 
             if (!ModelState.IsValid)
             {
+                if (!UsuarioEsAdministrador())
+                {
+                    TempData["MensajeError"] =
+                        ObtenerPrimerErrorModelo();
+
+                    return RedireccionDespuesDeGuardar(
+                        Modelo.IdUsuario
+                    );
+                }
+
                 using (var Servicio = new UsuarioService())
                 {
                     CargarDatosVista(
@@ -429,12 +426,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     "No fue posible actualizar el usuario.";
             }
 
-            return RedirectToAction(
-                "Detalle",
-                new
-                {
-                    IdUsuario = Modelo.IdUsuario
-                }
+            return RedireccionDespuesDeGuardar(
+                Modelo.IdUsuario
             );
         }
 
@@ -466,12 +459,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "No tiene permisos para modificar esa contraseña.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = IdUsuarioSesion
-                    }
+                return RedireccionDespuesDeGuardar(
+                    IdUsuarioSesion
                 );
             }
 
@@ -484,12 +473,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "La nueva contraseña es obligatoria.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = Modelo.IdUsuario
-                    }
+                return RedireccionDespuesDeGuardar(
+                    Modelo.IdUsuario
                 );
             }
 
@@ -498,12 +483,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "La contraseña debe tener al menos 8 caracteres.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = Modelo.IdUsuario
-                    }
+                return RedireccionDespuesDeGuardar(
+                    Modelo.IdUsuario
                 );
             }
 
@@ -513,12 +494,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "Las contraseñas no coinciden.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = Modelo.IdUsuario
-                    }
+                return RedireccionDespuesDeGuardar(
+                    Modelo.IdUsuario
                 );
             }
 
@@ -544,12 +521,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     "No fue posible restablecer la contraseña.";
             }
 
-            return RedirectToAction(
-                "Detalle",
-                new
-                {
-                    IdUsuario = Modelo.IdUsuario
-                }
+            return RedireccionDespuesDeGuardar(
+                Modelo.IdUsuario
             );
         }
 
@@ -574,12 +547,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "Revise los datos de la dirección.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = Modelo.IdUsuario
-                    }
+                return RedireccionDespuesDeGuardar(
+                    Modelo.IdUsuario
                 );
             }
 
@@ -605,12 +574,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     "No fue posible agregar la dirección.";
             }
 
-            return RedirectToAction(
-                "Detalle",
-                new
-                {
-                    IdUsuario = Modelo.IdUsuario
-                }
+            return RedireccionDespuesDeGuardar(
+                Modelo.IdUsuario
             );
         }
 
@@ -631,12 +596,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 TempData["MensajeError"] =
                     "Revise los datos de la dirección.";
 
-                return RedirectToAction(
-                    "Detalle",
-                    new
-                    {
-                        IdUsuario = Modelo.IdUsuario
-                    }
+                return RedireccionDespuesDeGuardar(
+                    Modelo.IdUsuario
                 );
             }
 
@@ -662,12 +623,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     "No fue posible actualizar la dirección.";
             }
 
-            return RedirectToAction(
-                "Detalle",
-                new
-                {
-                    IdUsuario = Modelo.IdUsuario
-                }
+            return RedireccionDespuesDeGuardar(
+                Modelo.IdUsuario
             );
         }
 
@@ -707,12 +664,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
                     "No fue posible desactivar la dirección.";
             }
 
-            return RedirectToAction(
-                "Detalle",
-                new
-                {
-                    IdUsuario
-                }
+            return RedireccionDespuesDeGuardar(
+                IdUsuario
             );
         }
 
@@ -865,6 +818,26 @@ namespace ProyectoProgramacionAvanzada.Controllers
 
             return IdUsuario ==
                    IdUsuarioSesion;
+        }
+
+        private ActionResult RedireccionDespuesDeGuardar(
+            int IdUsuario)
+        {
+            if (UsuarioEsAdministrador())
+            {
+                return RedirectToAction(
+                    "Detalle",
+                    new
+                    {
+                        IdUsuario
+                    }
+                );
+            }
+
+            return RedirectToAction(
+                "Editar",
+                "Cuenta"
+            );
         }
 
         private ActionResult RedireccionAccesoNoAutorizado()

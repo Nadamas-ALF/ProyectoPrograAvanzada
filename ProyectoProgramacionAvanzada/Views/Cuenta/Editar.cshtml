@@ -1,0 +1,519 @@
+@model ProyectoProgramacionAvanzada.Models.UsuarioModel
+
+@using ProyectoProgramacionAvanzada.Models
+@using System
+@using System.Collections.Generic
+@using System.Web.Mvc
+
+@{
+    ViewBag.Title = "Editar mi cuenta | LEN";
+
+    List<DireccionModel> Direcciones =
+        ViewBag.Direcciones as List<DireccionModel>
+        ?? new List<DireccionModel>();
+
+    SelectList Provincias = ViewBag.Provincias as SelectList;
+}
+
+<section class="py-5">
+    <div class="container-lg">
+
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-6 fw-bold">Editar mi cuenta</h1>
+                <p class="text-muted m-0">
+                    Actualice sus datos personales, contraseña y direcciones de envío.
+                </p>
+            </div>
+            <div class="col-auto">
+                <a href="@Url.Action("Index", "Cuenta")" class="btn btn-outline-dark">
+                    Volver a mi cuenta
+                </a>
+            </div>
+        </div>
+
+        @if (TempData["MensajeExito"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["MensajeExito"]
+            </div>
+        }
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-warning" role="alert">
+                @Html.ValidationSummary(false, "", new { @class = "mb-0" })
+            </div>
+        }
+
+        <div class="row g-4">
+
+            @*Datos personales*@
+            <div class="col-lg-6">
+                <div class="border rounded p-4 h-100">
+                    <h2 class="h5 fw-bold pb-3">Mis datos</h2>
+
+                    @using (Html.BeginForm("ActualizarUsuario", "Usuario", FormMethod.Post, new { @class = "needs-validation" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(Modelo => Modelo.IdUsuario)
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Nombre, new { @class = "form-label" })
+                                @Html.TextBoxFor(Modelo => Modelo.Nombre, new { @class = "form-control", maxlength = "100" })
+                                @Html.ValidationMessageFor(Modelo => Modelo.Nombre, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Apellido, new { @class = "form-label" })
+                                @Html.TextBoxFor(Modelo => Modelo.Apellido, new { @class = "form-control", maxlength = "100" })
+                                @Html.ValidationMessageFor(Modelo => Modelo.Apellido, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Cedula, new { @class = "form-label" })
+                                @Html.TextBoxFor(Modelo => Modelo.Cedula, new { @class = "form-control", maxlength = "20" })
+                                @Html.ValidationMessageFor(Modelo => Modelo.Cedula, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                @Html.LabelFor(Modelo => Modelo.Telefono, new { @class = "form-label" })
+                                @Html.TextBoxFor(Modelo => Modelo.Telefono, new { @class = "form-control", maxlength = "20", type = "tel" })
+                                @Html.ValidationMessageFor(Modelo => Modelo.Telefono, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12">
+                                @Html.LabelFor(Modelo => Modelo.Email, new { @class = "form-label" })
+                                @Html.TextBoxFor(Modelo => Modelo.Email, new { @class = "form-control", maxlength = "150", type = "email" })
+                                @Html.ValidationMessageFor(Modelo => Modelo.Email, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="col-12 text-end">
+                                <button class="btn btn-dark" type="submit">Guardar cambios</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @*Contraseña*@
+            <div class="col-lg-6">
+                <div class="border rounded p-4 h-100">
+                    <h2 class="h5 fw-bold pb-3">Cambiar contraseña</h2>
+
+                    @using (Html.BeginForm("RestablecerContrasenna", "Usuario", FormMethod.Post, new { @class = "needs-validation" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label" for="Contrasenna">Nueva contraseña</label>
+                                <input class="form-control" id="Contrasenna" name="Contrasenna" type="password"
+                                       minlength="8" maxlength="255" autocomplete="new-password" required />
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label" for="ConfirmarContrasenna">Confirmar contraseña</label>
+                                <input class="form-control" id="ConfirmarContrasenna" name="ConfirmarContrasenna" type="password"
+                                       minlength="8" maxlength="255" autocomplete="new-password" required />
+                            </div>
+
+                            <div class="col-12">
+                                <p class="text-muted small m-0">
+                                    La contraseña anterior dejará de funcionar inmediatamente.
+                                </p>
+                            </div>
+
+                            <div class="col-12 text-end">
+                                <button class="btn btn-outline-dark" type="submit">Actualizar contraseña</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @*Direcciones*@
+            <div class="col-12">
+                <div class="border rounded p-4">
+                    <div class="d-flex justify-content-between align-items-center pb-3">
+                        <h2 class="h5 fw-bold m-0">Mis direcciones</h2>
+                        <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalAgregarDireccion">
+                            Agregar dirección
+                        </button>
+                    </div>
+
+                    @if (Direcciones.Count == 0)
+                    {
+                        <p class="text-muted m-0">
+                            Aún no tiene direcciones registradas. Agregue una para poder completar sus compras.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="row g-3">
+                            @foreach (DireccionModel Direccion in Direcciones)
+                            {
+                                <div class="col-md-6">
+                                    <div class="border rounded p-3 h-100">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <p class="m-0">
+                                                <span class="fw-bold">@Direccion.NombreDestinatario</span>
+                                                @if (Direccion.EsPrincipal)
+                                                {
+                                                    <span class="badge bg-dark ms-1">Principal</span>
+                                                }
+                                                @if (!string.Equals(Direccion.NombreEstado, "Activo", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    <span class="badge bg-secondary ms-1">Inactiva</span>
+                                                }
+                                                <br>
+                                                @Direccion.DireccionExacta<br>
+                                                <span class="text-muted">
+                                                    @Direccion.NombreDistrito, @Direccion.NombreCanton, @Direccion.NombreProvincia
+                                                    · Tel: @Direccion.TelefonoContacto
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                        <div class="pt-2 d-flex gap-2">
+                                            <button type="button" class="btn btn-outline-dark btn-sm"
+                                                    data-bs-toggle="modal" data-bs-target="#ModalEditarDireccion-@Direccion.IdDireccion">
+                                                Editar
+                                            </button>
+
+                                            @if (string.Equals(Direccion.NombreEstado, "Activo", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                using (Html.BeginForm("DesactivarDireccion", "Usuario", FormMethod.Post, new { @class = "d-inline" }))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="IdDireccion" value="@Direccion.IdDireccion" />
+                                                    <input type="hidden" name="IdUsuario" value="@Direccion.IdUsuario" />
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                            onclick="return confirm('¿Desea desactivar esta dirección?');">
+                                                        Desactivar
+                                                    </button>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@*Modal: agregar dirección*@
+<div class="modal fade" id="ModalAgregarDireccion" tabindex="-1" aria-labelledby="TituloModalAgregarDireccion" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            @using (Html.BeginForm("AgregarDireccion", "Usuario", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
+
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="TituloModalAgregarDireccion">Agregar dirección</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="AgregarNombreDestinatario">Nombre del destinatario</label>
+                            <input class="form-control" id="AgregarNombreDestinatario" name="NombreDestinatario" maxlength="150" required />
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="AgregarTelefonoContacto">Teléfono de contacto</label>
+                            <input class="form-control" id="AgregarTelefonoContacto" name="TelefonoContacto" type="tel" maxlength="20" required />
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="AgregarProvincia">Provincia</label>
+                            @Html.DropDownList("AgregarProvincia", Provincias, "Seleccione una provincia",
+                                new { @class = "form-select", id = "AgregarProvincia", required = "required" })
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="AgregarCanton">Cantón</label>
+                            <select class="form-select" id="AgregarCanton" disabled required>
+                                <option value="">Seleccione un cantón</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="AgregarDistrito">Distrito</label>
+                            <select class="form-select" id="AgregarDistrito" name="IdDistrito" disabled required>
+                                <option value="">Seleccione un distrito</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label" for="AgregarDireccionExacta">Dirección exacta</label>
+                            <textarea class="form-control" id="AgregarDireccionExacta" name="DireccionExacta" rows="3" maxlength="300" required></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label" for="AgregarReferencia">Referencia</label>
+                            <textarea class="form-control" id="AgregarReferencia" name="Referencia" rows="2" maxlength="300"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" id="AgregarEsPrincipal" name="EsPrincipal" type="checkbox" value="true" />
+                                <input name="EsPrincipal" type="hidden" value="false" />
+                                <label class="form-check-label" for="AgregarEsPrincipal">Establecer como dirección principal</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-dark">Guardar dirección</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@*Modales: editar dirección*@
+@foreach (DireccionModel Direccion in Direcciones)
+{
+    <div class="modal fade" id="ModalEditarDireccion-@Direccion.IdDireccion" tabindex="-1"
+         aria-labelledby="TituloModalEditarDireccion-@Direccion.IdDireccion" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                @using (Html.BeginForm("ActualizarDireccion", "Usuario", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="IdDireccion" value="@Direccion.IdDireccion" />
+                    <input type="hidden" name="IdUsuario" value="@Direccion.IdUsuario" />
+
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="TituloModalEditarDireccion-@Direccion.IdDireccion">Editar dirección</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Nombre del destinatario</label>
+                                <input class="form-control" name="NombreDestinatario" value="@Direccion.NombreDestinatario" maxlength="150" required />
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Teléfono de contacto</label>
+                                <input class="form-control" name="TelefonoContacto" value="@Direccion.TelefonoContacto" maxlength="20" required />
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Provincia</label>
+                                <select class="form-select editar-provincia" data-direccion="@Direccion.IdDireccion" required>
+                                    <option value="">Seleccione una provincia</option>
+                                    @if (Provincias != null)
+                                    {
+                                        foreach (SelectListItem Provincia in Provincias)
+                                        {
+                                            bool Seleccionada = Provincia.Value == Direccion.IdProvincia.ToString();
+                                            <option value="@Provincia.Value" selected="@Seleccionada">@Provincia.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Cantón</label>
+                                <select class="form-select editar-canton" data-direccion="@Direccion.IdDireccion"
+                                        data-seleccionado="@Direccion.IdCanton" required>
+                                    <option value="">Seleccione un cantón</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Distrito</label>
+                                <select class="form-select editar-distrito" name="IdDistrito" data-direccion="@Direccion.IdDireccion"
+                                        data-seleccionado="@Direccion.IdDistrito" required>
+                                    <option value="">Seleccione un distrito</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Dirección exacta</label>
+                                <textarea class="form-control" name="DireccionExacta" rows="3" maxlength="300" required>@Direccion.DireccionExacta</textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Referencia</label>
+                                <textarea class="form-control" name="Referencia" rows="2" maxlength="300">@Direccion.Referencia</textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check">
+                                    @if (Direccion.EsPrincipal)
+                                    {
+                                        <input class="form-check-input" id="EditarEsPrincipal-@Direccion.IdDireccion" name="EsPrincipal" type="checkbox" value="true" checked />
+                                    }
+                                    else
+                                    {
+                                        <input class="form-check-input" id="EditarEsPrincipal-@Direccion.IdDireccion" name="EsPrincipal" type="checkbox" value="true" />
+                                    }
+                                    <input name="EsPrincipal" type="hidden" value="false" />
+                                    <label class="form-check-label" for="EditarEsPrincipal-@Direccion.IdDireccion">
+                                        Establecer como dirección principal
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark">Guardar cambios</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const UrlCantones = '@Url.Action("ConsultarCantones", "Usuario")';
+            const UrlDistritos = '@Url.Action("ConsultarDistritos", "Usuario")';
+
+            async function CargarCantones(IdProvincia, SelectorCanton, IdCantonSeleccionado) {
+                SelectorCanton.innerHTML = '<option value="">Seleccione un cantón</option>';
+                SelectorCanton.disabled = true;
+
+                if (!IdProvincia) {
+                    return;
+                }
+
+                try {
+                    const Respuesta = await fetch(UrlCantones + "?IdProvincia=" + encodeURIComponent(IdProvincia));
+                    if (!Respuesta.ok) {
+                        throw new Error("No fue posible consultar los cantones.");
+                    }
+
+                    const Cantones = await Respuesta.json();
+
+                    Cantones.forEach(function (Canton) {
+                        const Opcion = document.createElement("option");
+                        Opcion.value = Canton.IdCanton;
+                        Opcion.textContent = Canton.NombreCanton;
+
+                        if (IdCantonSeleccionado && String(Canton.IdCanton) === String(IdCantonSeleccionado)) {
+                            Opcion.selected = true;
+                        }
+
+                        SelectorCanton.appendChild(Opcion);
+                    });
+
+                    SelectorCanton.disabled = false;
+                }
+                catch (Error) {
+                    console.error(Error);
+                    SelectorCanton.innerHTML = '<option value="">Error al cargar</option>';
+                }
+            }
+
+            async function CargarDistritos(IdCanton, SelectorDistrito, IdDistritoSeleccionado) {
+                SelectorDistrito.innerHTML = '<option value="">Seleccione un distrito</option>';
+                SelectorDistrito.disabled = true;
+
+                if (!IdCanton) {
+                    return;
+                }
+
+                try {
+                    const Respuesta = await fetch(UrlDistritos + "?IdCanton=" + encodeURIComponent(IdCanton));
+                    if (!Respuesta.ok) {
+                        throw new Error("No fue posible consultar los distritos.");
+                    }
+
+                    const Distritos = await Respuesta.json();
+
+                    Distritos.forEach(function (Distrito) {
+                        const Opcion = document.createElement("option");
+                        Opcion.value = Distrito.IdDistrito;
+                        Opcion.textContent = Distrito.NombreDistrito;
+
+                        if (IdDistritoSeleccionado && String(Distrito.IdDistrito) === String(IdDistritoSeleccionado)) {
+                            Opcion.selected = true;
+                        }
+
+                        SelectorDistrito.appendChild(Opcion);
+                    });
+
+                    SelectorDistrito.disabled = false;
+                }
+                catch (Error) {
+                    console.error(Error);
+                    SelectorDistrito.innerHTML = '<option value="">Error al cargar</option>';
+                }
+            }
+
+            const AgregarProvincia = document.getElementById("AgregarProvincia");
+            const AgregarCanton = document.getElementById("AgregarCanton");
+            const AgregarDistrito = document.getElementById("AgregarDistrito");
+
+            if (AgregarProvincia && AgregarCanton && AgregarDistrito) {
+                AgregarProvincia.addEventListener("change", async function () {
+                    await CargarCantones(this.value, AgregarCanton, null);
+                    AgregarDistrito.innerHTML = '<option value="">Seleccione un distrito</option>';
+                    AgregarDistrito.disabled = true;
+                });
+
+                AgregarCanton.addEventListener("change", async function () {
+                    await CargarDistritos(this.value, AgregarDistrito, null);
+                });
+            }
+
+            document.querySelectorAll(".editar-provincia").forEach(async function (SelectorProvincia) {
+                const IdDireccion = SelectorProvincia.dataset.direccion;
+
+                const SelectorCanton = document.querySelector('.editar-canton[data-direccion="' + IdDireccion + '"]');
+                const SelectorDistrito = document.querySelector('.editar-distrito[data-direccion="' + IdDireccion + '"]');
+
+                if (!SelectorCanton || !SelectorDistrito) {
+                    return;
+                }
+
+                const IdCantonSeleccionado = SelectorCanton.dataset.seleccionado;
+                const IdDistritoSeleccionado = SelectorDistrito.dataset.seleccionado;
+
+                await CargarCantones(SelectorProvincia.value, SelectorCanton, IdCantonSeleccionado);
+                await CargarDistritos(SelectorCanton.value, SelectorDistrito, IdDistritoSeleccionado);
+
+                SelectorProvincia.addEventListener("change", async function () {
+                    await CargarCantones(this.value, SelectorCanton, null);
+                    SelectorDistrito.innerHTML = '<option value="">Seleccione un distrito</option>';
+                    SelectorDistrito.disabled = true;
+                });
+
+                SelectorCanton.addEventListener("change", async function () {
+                    await CargarDistritos(this.value, SelectorDistrito, null);
+                });
+            });
+
+        });
+    </script>
+}

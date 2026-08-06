@@ -2,6 +2,7 @@
 using ProyectoProgramacionAvanzada.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -55,14 +56,19 @@ namespace ProyectoProgramacionAvanzada.Services
             int IdUsuario,
             int IdDireccion,
             int IdMetodoPago,
-            decimal CostoEnvio)
+            decimal CostoEnvio,
+            string DatoPagoSimulado)
         {
-            SP_ConfirmarCompra_Result Resultado = Contexto
-                .SP_ConfirmarCompra(
-                    IdUsuario,
-                    IdDireccion,
-                    IdMetodoPago,
-                    CostoEnvio
+            SP_ConfirmarCompra_Result Resultado = Contexto.Database
+                .SqlQuery<SP_ConfirmarCompra_Result>(
+                    "EXEC dbo.SP_ConfirmarCompra @IdUsuario, @IdDireccion, @IdMetodoPago, @CostoEnvio, @DatoPagoSimulado",
+                    new SqlParameter("@IdUsuario", IdUsuario),
+                    new SqlParameter("@IdDireccion", IdDireccion),
+                    new SqlParameter("@IdMetodoPago", IdMetodoPago),
+                    new SqlParameter("@CostoEnvio", CostoEnvio),
+                    new SqlParameter(
+                        "@DatoPagoSimulado",
+                        (object)DatoPagoSimulado ?? DBNull.Value)
                 )
                 .FirstOrDefault();
 
@@ -82,10 +88,11 @@ namespace ProyectoProgramacionAvanzada.Services
             int IdPedido,
             int IdUsuario)
         {
-            List<SP_ConsultarConfirmacionPedido_Result> Filas = Contexto
-                .SP_ConsultarConfirmacionPedido(
-                    IdPedido,
-                    IdUsuario
+            List<SP_ConsultarConfirmacionPedido_Result> Filas = Contexto.Database
+                .SqlQuery<SP_ConsultarConfirmacionPedido_Result>(
+                    "EXEC dbo.SP_ConsultarConfirmacionPedido @IdPedido, @IdUsuario",
+                    new SqlParameter("@IdPedido", IdPedido),
+                    new SqlParameter("@IdUsuario", IdUsuario)
                 )
                 .ToList();
 
@@ -106,6 +113,7 @@ namespace ProyectoProgramacionAvanzada.Services
                 Total = Encabezado.Total,
                 EstadoVisible = Encabezado.EstadoVisible,
                 NombreMetodoPago = Encabezado.NombreMetodoPago,
+                ComprobantePago = Encabezado.ComprobantePago,
                 NombreDestinatario = Encabezado.NombreDestinatario,
                 DireccionExacta = Encabezado.DireccionExacta,
                 NombreDistrito = Encabezado.NombreDistrito,

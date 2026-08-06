@@ -57,6 +57,52 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Editar()
+        {
+            int IdUsuario = (int)Session["IdUsuario"];
+
+            try
+            {
+                UsuarioModel Modelo;
+
+                using (var Servicio = new UsuarioService())
+                {
+                    Modelo = Servicio.ConsultarUsuarioPorId(IdUsuario);
+
+                    if (Modelo == null)
+                    {
+                        return RedirectToAction("Login", "Home");
+                    }
+
+                    ViewBag.Direcciones =
+                        Servicio.ConsultarDirecciones(IdUsuario);
+
+                    ViewBag.Provincias = new SelectList(
+                        Servicio.ConsultarProvincias(),
+                        "Value",
+                        "Text"
+                    );
+                }
+
+                return View(Modelo);
+            }
+            catch (Exception Excepcion)
+            {
+                RegistrarError(
+                    "CuentaController",
+                    "Editar",
+                    Excepcion,
+                    Session["NombreUsuario"] as string
+                );
+
+                TempData["MensajeError"] =
+                    "No fue posible cargar sus datos. Intente nuevamente.";
+
+                return RedirectToAction("Index");
+            }
+        }
+
         private void RegistrarError(
             string Origen,
             string Metodo,

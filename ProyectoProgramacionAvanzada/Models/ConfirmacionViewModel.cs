@@ -41,6 +41,8 @@ namespace ProyectoProgramacionAvanzada.Models
 
         public string NombreMetodoPago { get; set; }
 
+        public string ComprobantePago { get; set; }
+
         public string NombreDestinatario { get; set; }
 
         public string DireccionExacta { get; set; }

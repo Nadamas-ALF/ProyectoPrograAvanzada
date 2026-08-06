@@ -22,6 +22,7 @@ namespace ProyectoProgramacionAvanzada.EF
         public string NombreEstado { get; set; }
         public string EstadoVisible { get; set; }
         public string NombreMetodoPago { get; set; }
+        public string ComprobantePago { get; set; }
         public string NombreDestinatario { get; set; }
         public string DireccionExacta { get; set; }
         public string NombreDistrito { get; set; }

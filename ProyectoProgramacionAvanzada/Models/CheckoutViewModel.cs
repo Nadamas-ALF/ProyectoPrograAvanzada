@@ -22,6 +22,8 @@ namespace ProyectoProgramacionAvanzada.Models
 
         public int IdMetodoPagoSeleccionado { get; set; }
 
+        public string DatoPagoSimulado { get; set; }
+
         public decimal Subtotal { get; set; }
 
         public decimal CostoEnvio { get; set; }
