@@ -50,7 +50,7 @@
                         <span class="input-group-text">₡</span>
                         @Html.TextBoxFor(
                             Modelo => Modelo.Precio,
-                            new { @class = "form-control", type = "number", step = "0.01", min = "0" })
+                            new { @class = "form-control", type = "number", step = "0.01", min = "500" })
                     </div>
                     @Html.ValidationMessageFor(Modelo => Modelo.Precio, "", new { @class = "text-danger small" })
                 </div>
@@ -59,7 +59,7 @@
                     @Html.LabelFor(Modelo => Modelo.Stock, new { @class = "form-label" })
                     @Html.TextBoxFor(
                         Modelo => Modelo.Stock,
-                        new { @class = "form-control", type = "number", min = "0" })
+                        new { @class = "form-control", type = "number", min = "1" })
                     @Html.ValidationMessageFor(Modelo => Modelo.Stock, "", new { @class = "text-danger small" })
                 </div>
 

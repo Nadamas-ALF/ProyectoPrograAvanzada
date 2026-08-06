@@ -10,10 +10,19 @@
 namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class SP_Admin_ConsultarCategoriasActivas_Result
+    public partial class TB_variante_producto
     {
-        public int IdCategoria { get; set; }
-        public string NombreCategoria { get; set; }
+        public int id_variante { get; set; }
+        public int id_producto { get; set; }
+        public string color { get; set; }
+        public string talla { get; set; }
+        public string modelo { get; set; }
+        public int stock { get; set; }
+        public int id_estado { get; set; }
+    
+        public virtual TB_estado TB_estado { get; set; }
+        public virtual TB_producto TB_producto { get; set; }
     }
 }

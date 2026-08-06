@@ -254,6 +254,9 @@
     <Compile Include="EF\SP_Admin_ReporteVentasPorDia_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_AgregarFavorito_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_AgregarProductoCarrito_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -264,6 +267,12 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarCarrito_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarCatalogo_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarCategoriasCatalogo_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarConfirmacionPedido_Result.cs">
@@ -287,10 +296,19 @@
     <Compile Include="EF\SP_ConsultarEstados_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_ConsultarFavoritos_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_ConsultarHistorialPedidos_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_ConsultarImagenesCatalogo_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_ConsultarMetodosPago_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_ConsultarProductoDetalle_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarProvincias_Result.cs">
@@ -314,6 +332,9 @@
     <Compile Include="EF\SP_ConsultarUsuarios_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_ConsultarVariantesProducto_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_Dashboard_ConsultarActividadReciente_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -324,6 +345,9 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_DesactivarDireccionUsuario_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_EliminarFavorito_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_EliminarProductoCarrito_Result.cs">
@@ -371,6 +395,9 @@
     <Compile Include="EF\TB_factura.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\TB_favorito.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\TB_imagen_producto.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -393,6 +420,9 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\TB_usuario.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TB_variante_producto.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="Filtros\SesionRequeridaAttribute.cs" />
