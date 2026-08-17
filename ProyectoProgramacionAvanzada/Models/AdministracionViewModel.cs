@@ -50,12 +50,12 @@ namespace ProyectoProgramacionAvanzada.Models
         public string Descripcion { get; set; }
 
         [Required(ErrorMessage = "El precio es obligatorio.")]
-        [Range(0, 99999999.99, ErrorMessage = "El precio debe ser mayor o igual a cero.")]
+        [Range(500, 99999999.99, ErrorMessage = "El precio mínimo es de ₡500.")]
         [Display(Name = "Precio")]
         public decimal? Precio { get; set; }
 
         [Required(ErrorMessage = "El stock es obligatorio.")]
-        [Range(0, int.MaxValue, ErrorMessage = "El stock debe ser mayor o igual a cero.")]
+        [Range(1, int.MaxValue, ErrorMessage = "El stock mínimo es 1.")]
         [Display(Name = "Stock")]
         public int? Stock { get; set; }
 

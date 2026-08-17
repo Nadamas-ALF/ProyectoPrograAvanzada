@@ -11,9 +11,10 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_Admin_ConsultarCategoriasActivas_Result
+    public partial class SP_EliminarFavorito_Result
     {
-        public int IdCategoria { get; set; }
-        public string NombreCategoria { get; set; }
+        public Nullable<bool> Exitoso { get; set; }
+        public string Mensaje { get; set; }
+        public Nullable<int> IdGenerado { get; set; }
     }
 }

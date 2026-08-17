@@ -11,7 +11,7 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_Admin_ConsultarCategoriasActivas_Result
+    public partial class SP_ConsultarCategoriasCatalogo_Result
     {
         public int IdCategoria { get; set; }
         public string NombreCategoria { get; set; }

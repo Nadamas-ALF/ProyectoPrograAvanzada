@@ -11,9 +11,12 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_Admin_ConsultarCategoriasActivas_Result
+    public partial class SP_ConsultarVariantesProducto_Result
     {
-        public int IdCategoria { get; set; }
-        public string NombreCategoria { get; set; }
+        public int IdVariante { get; set; }
+        public string Color { get; set; }
+        public string Talla { get; set; }
+        public string Modelo { get; set; }
+        public int Stock { get; set; }
     }
 }

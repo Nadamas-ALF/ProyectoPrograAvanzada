@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BD_LENModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="TB_canton">
           <Key>
             <PropertyRef Name="id_canton" />
@@ -108,6 +108,15 @@
           <Property Name="total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="id_estado" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="TB_favorito">
+          <Key>
+            <PropertyRef Name="id_favorito" />
+          </Key>
+          <Property Name="id_favorito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="fecha_agregado" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="TB_imagen_producto">
           <Key>
             <PropertyRef Name="id_imagen" />
@@ -197,6 +206,18 @@
           <Property Name="fecha_registro" Type="datetime2" Precision="0" Nullable="false" />
           <Property Name="tiene_contrasenna_temporal" Type="bit" Nullable="false" />
           <Property Name="vigencia_contrasenna_temporal" Type="datetime2" Precision="0" />
+        </EntityType>
+        <EntityType Name="TB_variante_producto">
+          <Key>
+            <PropertyRef Name="id_variante" />
+          </Key>
+          <Property Name="id_variante" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="color" Type="nvarchar" MaxLength="50" />
+          <Property Name="talla" Type="nvarchar" MaxLength="50" />
+          <Property Name="modelo" Type="nvarchar" MaxLength="50" />
+          <Property Name="stock" Type="int" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_TB_canton_TB_provincia">
           <End Role="TB_provincia" Type="Self.TB_provincia" Multiplicity="1" />
@@ -366,6 +387,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TB_favorito_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_favorito" Type="Self.TB_favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_favorito">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_favorito_TB_usuario">
+          <End Role="TB_usuario" Type="Self.TB_usuario" Multiplicity="1" />
+          <End Role="TB_favorito" Type="Self.TB_favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_favorito">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TB_imagen_producto_TB_estado">
           <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
           <End Role="TB_imagen_producto" Type="Self.TB_imagen_producto" Multiplicity="*" />
@@ -522,6 +567,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TB_variante_producto_TB_estado">
+          <End Role="TB_estado" Type="Self.TB_estado" Multiplicity="1" />
+          <End Role="TB_variante_producto" Type="Self.TB_variante_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_variante_producto">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_variante_producto_TB_producto">
+          <End Role="TB_producto" Type="Self.TB_producto" Multiplicity="1" />
+          <End Role="TB_variante_producto" Type="Self.TB_variante_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_variante_producto">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="SP_ActualizarCantidadCarrito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
           <Parameter Name="IdProducto" Type="int" Mode="In" />
@@ -647,6 +716,10 @@
           <Parameter Name="FechaInicio" Type="date" Mode="In" />
           <Parameter Name="FechaFin" Type="date" Mode="In" />
         </Function>
+        <Function Name="SP_AgregarFavorito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="IdProducto" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_AgregarProductoCarrito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
           <Parameter Name="IdProducto" Type="int" Mode="In" />
@@ -657,6 +730,7 @@
           <Parameter Name="IdDireccion" Type="int" Mode="In" />
           <Parameter Name="IdMetodoPago" Type="int" Mode="In" />
           <Parameter Name="CostoEnvio" Type="decimal" Mode="In" />
+          <Parameter Name="DatoPagoSimulado" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_ConsultarCantonesPorProvincia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdProvincia" Type="int" Mode="In" />
@@ -664,6 +738,15 @@
         <Function Name="SP_ConsultarCarrito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_ConsultarCatalogo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Busqueda" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdCategoria" Type="int" Mode="In" />
+          <Parameter Name="Color" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdUsuarioActual" Type="int" Mode="In" />
+          <Parameter Name="Pagina" Type="int" Mode="In" />
+          <Parameter Name="TamanoPagina" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarCategoriasCatalogo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_ConsultarConfirmacionPedido" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdPedido" Type="int" Mode="In" />
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -684,12 +767,22 @@
         </Function>
         <Function Name="SP_ConsultarEstados" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_ConsultarEstadosUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_ConsultarFavoritos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_ConsultarHistorialPedidos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
           <Parameter Name="Pagina" Type="int" Mode="In" />
           <Parameter Name="TamanoPagina" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_ConsultarImagenesCatalogo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProducto" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_ConsultarMetodosPago" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_ConsultarProductoDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProducto" Type="int" Mode="In" />
+          <Parameter Name="IdUsuarioActual" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_ConsultarProvincias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_ConsultarResumenCheckout" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -705,17 +798,16 @@
         <Function Name="SP_ConsultarUsuarioRecuperacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="SP_ConsultarUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="SP_Dashboard_ConsultarActividadReciente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Cantidad" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_Dashboard_ConsultarResumen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="SP_Dashboard_ConsultarVentasMensuales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Anno" Type="int" Mode="In" />
+        <Function Name="SP_ConsultarVariantesProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProducto" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_DesactivarDireccionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdDireccion" Type="int" Mode="In" />
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_EliminarFavorito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="IdProducto" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_EliminarProductoCarrito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
@@ -751,16 +843,6 @@
           <Parameter Name="Email" Type="nvarchar" Mode="In" />
           <Parameter Name="Contrasenna" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="SP_RegistrarUsuarioAdministracion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
-          <Parameter Name="Apellido" Type="nvarchar" Mode="In" />
-          <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
-          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
-          <Parameter Name="Email" Type="nvarchar" Mode="In" />
-          <Parameter Name="Contrasenna" Type="nvarchar" Mode="In" />
-          <Parameter Name="IdRol" Type="int" Mode="In" />
-          <Parameter Name="IdEstado" Type="int" Mode="In" />
-        </Function>
         <Function Name="SP_RestablecerContrasennaUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
           <Parameter Name="Contrasenna" Type="nvarchar" Mode="In" />
@@ -776,6 +858,7 @@
           <EntitySet Name="TB_error" EntityType="Self.TB_error" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_estado" EntityType="Self.TB_estado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_factura" EntityType="Self.TB_factura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_favorito" EntityType="Self.TB_favorito" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_imagen_producto" EntityType="Self.TB_imagen_producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_metodo_pago" EntityType="Self.TB_metodo_pago" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_pago" EntityType="Self.TB_pago" Schema="dbo" store:Type="Tables" />
@@ -784,6 +867,7 @@
           <EntitySet Name="TB_provincia" EntityType="Self.TB_provincia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_rol" EntityType="Self.TB_rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TB_usuario" EntityType="Self.TB_usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_variante_producto" EntityType="Self.TB_variante_producto" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_TB_canton_TB_provincia" Association="Self.FK_TB_canton_TB_provincia">
             <End Role="TB_provincia" EntitySet="TB_provincia" />
             <End Role="TB_canton" EntitySet="TB_canton" />
@@ -840,6 +924,14 @@
             <End Role="TB_pedido" EntitySet="TB_pedido" />
             <End Role="TB_factura" EntitySet="TB_factura" />
           </AssociationSet>
+          <AssociationSet Name="FK_TB_favorito_TB_producto" Association="Self.FK_TB_favorito_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_favorito" EntitySet="TB_favorito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_favorito_TB_usuario" Association="Self.FK_TB_favorito_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_favorito" EntitySet="TB_favorito" />
+          </AssociationSet>
           <AssociationSet Name="FK_TB_imagen_producto_TB_estado" Association="Self.FK_TB_imagen_producto_TB_estado">
             <End Role="TB_estado" EntitySet="TB_estado" />
             <End Role="TB_imagen_producto" EntitySet="TB_imagen_producto" />
@@ -892,9 +984,16 @@
             <End Role="TB_rol" EntitySet="TB_rol" />
             <End Role="TB_usuario" EntitySet="TB_usuario" />
           </AssociationSet>
+          <AssociationSet Name="FK_TB_variante_producto_TB_estado" Association="Self.FK_TB_variante_producto_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_variante_producto" EntitySet="TB_variante_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_variante_producto_TB_producto" Association="Self.FK_TB_variante_producto_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_variante_producto" EntitySet="TB_variante_producto" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BD_LENModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1014,6 +1113,7 @@
           <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_pedido_TB_estado" FromRole="TB_estado" ToRole="TB_pedido" />
           <NavigationProperty Name="TB_producto" Relationship="Self.FK_TB_producto_TB_estado" FromRole="TB_estado" ToRole="TB_producto" />
           <NavigationProperty Name="TB_usuario" Relationship="Self.FK_TB_usuario_TB_estado" FromRole="TB_estado" ToRole="TB_usuario" />
+          <NavigationProperty Name="TB_variante_producto" Relationship="BD_LENModel.FK_TB_variante_producto_TB_estado" FromRole="TB_estado" ToRole="TB_variante_producto" />
         </EntityType>
         <EntityType Name="TB_factura">
           <Key>
@@ -1106,6 +1206,8 @@
           <NavigationProperty Name="TB_detalle_pedido" Relationship="Self.FK_TB_detalle_pedido_TB_producto" FromRole="TB_producto" ToRole="TB_detalle_pedido" />
           <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_producto_TB_estado" FromRole="TB_producto" ToRole="TB_estado" />
           <NavigationProperty Name="TB_imagen_producto" Relationship="Self.FK_TB_imagen_producto_TB_producto" FromRole="TB_producto" ToRole="TB_imagen_producto" />
+          <NavigationProperty Name="TB_favorito" Relationship="BD_LENModel.FK_TB_favorito_TB_producto" FromRole="TB_producto" ToRole="TB_favorito" />
+          <NavigationProperty Name="TB_variante_producto" Relationship="BD_LENModel.FK_TB_variante_producto_TB_producto" FromRole="TB_producto" ToRole="TB_variante_producto" />
         </EntityType>
         <EntityType Name="TB_provincia">
           <Key>
@@ -1144,6 +1246,7 @@
           <NavigationProperty Name="TB_estado" Relationship="Self.FK_TB_usuario_TB_estado" FromRole="TB_usuario" ToRole="TB_estado" />
           <NavigationProperty Name="TB_pedido" Relationship="Self.FK_TB_pedido_TB_usuario" FromRole="TB_usuario" ToRole="TB_pedido" />
           <NavigationProperty Name="TB_rol" Relationship="Self.FK_TB_usuario_TB_rol" FromRole="TB_usuario" ToRole="TB_rol" />
+          <NavigationProperty Name="TB_favorito" Relationship="BD_LENModel.FK_TB_favorito_TB_usuario" FromRole="TB_usuario" ToRole="TB_favorito" />
         </EntityType>
         <Association Name="FK_TB_canton_TB_provincia">
           <End Role="TB_provincia" Type="Self.TB_provincia" Multiplicity="1" />
@@ -1651,22 +1754,22 @@
             <Parameter Name="Stock" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_CambiarEstadoCategoria" ReturnType="Collection(BD_LENModel.SP_Admin_CambiarEstadoCategoria_Result)">
-            <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
+          <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_CambiarEstadoProducto" ReturnType="Collection(BD_LENModel.SP_Admin_CambiarEstadoProducto_Result)">
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarBajoStock" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarBajoStock_Result)">
-            <Parameter Name="StockMinimo" Mode="In" Type="Int32" />
+          <Parameter Name="StockMinimo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarCategorias" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarCategorias_Result)" />
           <FunctionImport Name="SP_Admin_ConsultarCategoriasActivas" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarCategoriasActivas_Result)" />
           <FunctionImport Name="SP_Admin_ConsultarDetallePedido" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarDetallePedido_Result)">
-            <Parameter Name="IdPedido" Mode="In" Type="Int32" />
+          <Parameter Name="IdPedido" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarEstadosPedido" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarEstadosPedido_Result)" />
           <FunctionImport Name="SP_Admin_ConsultarImagenesProducto" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarImagenesProducto_Result)">
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarPedidos" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarPedidos_Result)">
             <Parameter Name="Busqueda" Mode="In" Type="String" />
@@ -1677,7 +1780,7 @@
             <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarProductoPorId" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarProductoPorId_Result)">
-            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ConsultarProductos" ReturnType="Collection(BD_LENModel.SP_Admin_ConsultarProductos_Result)">
             <Parameter Name="Busqueda" Mode="In" Type="String" />
@@ -1686,7 +1789,7 @@
             <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_EliminarImagenProducto" ReturnType="Collection(BD_LENModel.SP_Admin_EliminarImagenProducto_Result)">
-            <Parameter Name="IdImagen" Mode="In" Type="Int32" />
+          <Parameter Name="IdImagen" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_InsertarCategoria" ReturnType="Collection(BD_LENModel.SP_Admin_InsertarCategoria_Result)">
             <Parameter Name="NombreCategoria" Mode="In" Type="String" />
@@ -1706,7 +1809,7 @@
             <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_MarcarImagenPrincipal" ReturnType="Collection(BD_LENModel.SP_Admin_MarcarImagenPrincipal_Result)">
-            <Parameter Name="IdImagen" Mode="In" Type="Int32" />
+          <Parameter Name="IdImagen" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Admin_ReporteProductosMasVendidos" ReturnType="Collection(BD_LENModel.SP_Admin_ReporteProductosMasVendidos_Result)">
             <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
@@ -1731,12 +1834,13 @@
             <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
             <Parameter Name="IdMetodoPago" Mode="In" Type="Int32" />
             <Parameter Name="CostoEnvio" Mode="In" Type="Decimal" />
+            <Parameter Name="DatoPagoSimulado" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarCantonesPorProvincia" ReturnType="Collection(BD_LENModel.SP_ConsultarCantonesPorProvincia_Result)">
-            <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
+          <Parameter Name="IdProvincia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarCarrito" ReturnType="Collection(BD_LENModel.SP_ConsultarCarrito_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarConfirmacionPedido" ReturnType="Collection(BD_LENModel.SP_ConsultarConfirmacionPedido_Result)">
             <Parameter Name="IdPedido" Mode="In" Type="Int32" />
@@ -1747,14 +1851,14 @@
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarDireccionesUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionesUsuario_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarDireccionPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarDireccionPorId_Result)">
             <Parameter Name="IdDireccion" Mode="In" Type="Int32" />
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarDistritosPorCanton" ReturnType="Collection(BD_LENModel.SP_ConsultarDistritosPorCanton_Result)">
-            <Parameter Name="IdCanton" Mode="In" Type="Int32" />
+          <Parameter Name="IdCanton" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarEstados" ReturnType="Collection(BD_LENModel.SP_ConsultarEstados_Result)" />
           <FunctionImport Name="SP_ConsultarEstadosUsuario" ReturnType="Collection(BD_LENModel.SP_ConsultarEstadosUsuario_Result)" />
@@ -1771,13 +1875,13 @@
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarRoles" ReturnType="Collection(BD_LENModel.SP_ConsultarRoles_Result)" />
           <FunctionImport Name="SP_ConsultarUsuarioInicioSesion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioInicioSesion_Result)">
-            <Parameter Name="Email" Mode="In" Type="String" />
+          <Parameter Name="Email" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarUsuarioPorId" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioPorId_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarUsuarioRecuperacion" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarioRecuperacion_Result)">
-            <Parameter Name="Email" Mode="In" Type="String" />
+          <Parameter Name="Email" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ConsultarUsuarios" ReturnType="Collection(BD_LENModel.SP_ConsultarUsuarios_Result)" />
           <FunctionImport Name="SP_Dashboard_ConsultarActividadReciente" ReturnType="Collection(BD_LENModel.SP_Dashboard_ConsultarActividadReciente_Result)">
@@ -1805,7 +1909,7 @@
             <Parameter Name="EsPrincipal" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerOCrearCarritoActivo" ReturnType="Collection(Int32)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_RegistrarError">
             <Parameter Name="Origen" Mode="In" Type="String" />
@@ -1838,6 +1942,54 @@
           <FunctionImport Name="SP_RestablecerContrasennaUsuario" ReturnType="Collection(BD_LENModel.SP_RestablecerContrasennaUsuario_Result)">
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
             <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="TB_favorito" EntityType="BD_LENModel.TB_favorito" />
+          <EntitySet Name="TB_variante_producto" EntityType="BD_LENModel.TB_variante_producto" />
+          <AssociationSet Name="FK_TB_variante_producto_TB_estado" Association="BD_LENModel.FK_TB_variante_producto_TB_estado">
+            <End Role="TB_estado" EntitySet="TB_estado" />
+            <End Role="TB_variante_producto" EntitySet="TB_variante_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_favorito_TB_producto" Association="BD_LENModel.FK_TB_favorito_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_favorito" EntitySet="TB_favorito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_favorito_TB_usuario" Association="BD_LENModel.FK_TB_favorito_TB_usuario">
+            <End Role="TB_usuario" EntitySet="TB_usuario" />
+            <End Role="TB_favorito" EntitySet="TB_favorito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_variante_producto_TB_producto" Association="BD_LENModel.FK_TB_variante_producto_TB_producto">
+            <End Role="TB_producto" EntitySet="TB_producto" />
+            <End Role="TB_variante_producto" EntitySet="TB_variante_producto" />
+          </AssociationSet>
+          <FunctionImport Name="SP_AgregarFavorito" ReturnType="Collection(BD_LENModel.SP_AgregarFavorito_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarCatalogo" ReturnType="Collection(BD_LENModel.SP_ConsultarCatalogo_Result)">
+            <Parameter Name="Busqueda" Mode="In" Type="String" />
+            <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
+            <Parameter Name="Color" Mode="In" Type="String" />
+            <Parameter Name="IdUsuarioActual" Mode="In" Type="Int32" />
+            <Parameter Name="Pagina" Mode="In" Type="Int32" />
+            <Parameter Name="TamanoPagina" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarCategoriasCatalogo" ReturnType="Collection(BD_LENModel.SP_ConsultarCategoriasCatalogo_Result)" />
+          <FunctionImport Name="SP_ConsultarFavoritos" ReturnType="Collection(BD_LENModel.SP_ConsultarFavoritos_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarImagenesCatalogo" ReturnType="Collection(BD_LENModel.SP_ConsultarImagenesCatalogo_Result)">
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarProductoDetalle" ReturnType="Collection(BD_LENModel.SP_ConsultarProductoDetalle_Result)">
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuarioActual" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarVariantesProducto" ReturnType="Collection(BD_LENModel.SP_ConsultarVariantesProducto_Result)">
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_EliminarFavorito" ReturnType="Collection(BD_LENModel.SP_EliminarFavorito_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SP_ActualizarCantidadCarrito_Result">
@@ -2263,6 +2415,137 @@
         <ComplexType Name="SP_RestablecerContrasennaUsuario_Result">
           <Property Type="Boolean" Name="Exitoso" Nullable="true" />
           <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="26" />
+        </ComplexType>
+        <EntityType Name="TB_favorito">
+          <Key>
+            <PropertyRef Name="id_favorito" />
+          </Key>
+          <Property Name="id_favorito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="fecha_agregado" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="TB_producto" Relationship="BD_LENModel.FK_TB_favorito_TB_producto" FromRole="TB_favorito" ToRole="TB_producto" />
+          <NavigationProperty Name="TB_usuario" Relationship="BD_LENModel.FK_TB_favorito_TB_usuario" FromRole="TB_favorito" ToRole="TB_usuario" />
+        </EntityType>
+        <EntityType Name="TB_variante_producto">
+          <Key>
+            <PropertyRef Name="id_variante" />
+          </Key>
+          <Property Name="id_variante" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="talla" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="modelo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="stock" Type="Int32" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TB_estado" Relationship="BD_LENModel.FK_TB_variante_producto_TB_estado" FromRole="TB_variante_producto" ToRole="TB_estado" />
+          <NavigationProperty Name="TB_producto" Relationship="BD_LENModel.FK_TB_variante_producto_TB_producto" FromRole="TB_variante_producto" ToRole="TB_producto" />
+        </EntityType>
+        <Association Name="FK_TB_variante_producto_TB_estado">
+          <End Type="BD_LENModel.TB_estado" Role="TB_estado" Multiplicity="1" />
+          <End Type="BD_LENModel.TB_variante_producto" Role="TB_variante_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_estado">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="TB_variante_producto">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_favorito_TB_producto">
+          <End Type="BD_LENModel.TB_producto" Role="TB_producto" Multiplicity="1" />
+          <End Type="BD_LENModel.TB_favorito" Role="TB_favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_favorito">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_favorito_TB_usuario">
+          <End Type="BD_LENModel.TB_usuario" Role="TB_usuario" Multiplicity="1" />
+          <End Type="BD_LENModel.TB_favorito" Role="TB_favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="TB_favorito">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_variante_producto_TB_producto">
+          <End Type="BD_LENModel.TB_producto" Role="TB_producto" Multiplicity="1" />
+          <End Type="BD_LENModel.TB_variante_producto" Role="TB_variante_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="TB_variante_producto">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="SP_AgregarFavorito_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="22" />
+          <Property Type="Int32" Name="IdGenerado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarCatalogo_Result">
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="Decimal" Name="Precio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="IdCategoria" Nullable="false" />
+          <Property Type="String" Name="NombreCategoria" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
+          <Property Type="Boolean" Name="EsFavorito" Nullable="true" />
+          <Property Type="Int32" Name="TotalFilas" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarCategoriasCatalogo_Result">
+          <Property Type="Int32" Name="IdCategoria" Nullable="false" />
+          <Property Type="String" Name="NombreCategoria" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarFavoritos_Result">
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="Decimal" Name="Precio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="NombreCategoria" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="RutaImagen" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarImagenesCatalogo_Result">
+          <Property Type="Int32" Name="IdImagen" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="RutaImagen" Nullable="false" MaxLength="255" />
+          <Property Type="Boolean" Name="EsPrincipal" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarProductoDetalle_Result">
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="Decimal" Name="Precio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="Stock" Nullable="false" />
+          <Property Type="Boolean" Name="EsPiezaUnica" Nullable="false" />
+          <Property Type="Int32" Name="IdCategoria" Nullable="false" />
+          <Property Type="String" Name="NombreCategoria" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreEstado" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="EsFavorito" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_ConsultarVariantesProducto_Result">
+          <Property Type="Int32" Name="IdVariante" Nullable="false" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Talla" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Modelo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Stock" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SP_EliminarFavorito_Result">
+          <Property Type="Boolean" Name="Exitoso" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="39" />
+          <Property Type="Int32" Name="IdGenerado" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3032,53 +3315,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_ConsultarUsuarios" FunctionName="BD_LENModel.Store.SP_ConsultarUsuarios">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarUsuarios_Result">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
-                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Dashboard_ConsultarActividadReciente" FunctionName="BD_LENModel.Store.SP_Dashboard_ConsultarActividadReciente">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_Dashboard_ConsultarActividadReciente_Result">
-                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
-                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Dashboard_ConsultarResumen" FunctionName="BD_LENModel.Store.SP_Dashboard_ConsultarResumen">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_Dashboard_ConsultarResumen_Result">
-                <ScalarProperty Name="TotalVentas" ColumnName="TotalVentas" />
-                <ScalarProperty Name="TotalPedidos" ColumnName="TotalPedidos" />
-                <ScalarProperty Name="TotalClientesActivos" ColumnName="TotalClientesActivos" />
-                <ScalarProperty Name="TotalProductosAgotados" ColumnName="TotalProductosAgotados" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Dashboard_ConsultarVentasMensuales" FunctionName="BD_LENModel.Store.SP_Dashboard_ConsultarVentasMensuales">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_Dashboard_ConsultarVentasMensuales_Result">
-                <ScalarProperty Name="NumeroMes" ColumnName="NumeroMes" />
-                <ScalarProperty Name="NombreMes" ColumnName="NombreMes" />
-                <ScalarProperty Name="TotalVentas" ColumnName="TotalVentas" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_DesactivarDireccionUsuario" FunctionName="BD_LENModel.Store.SP_DesactivarDireccionUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_DesactivarDireccionUsuario_Result">
@@ -3115,19 +3351,124 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_RegistrarUsuarioAdministracion" FunctionName="BD_LENModel.Store.SP_RegistrarUsuarioAdministracion">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_LENModel.SP_RegistrarUsuarioAdministracion_Result">
-                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_RestablecerContrasennaUsuario" FunctionName="BD_LENModel.Store.SP_RestablecerContrasennaUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_LENModel.SP_RestablecerContrasennaUsuario_Result">
                 <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
                 <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="TB_favorito">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_favorito">
+              <MappingFragment StoreEntitySet="TB_favorito">
+                <ScalarProperty Name="fecha_agregado" ColumnName="fecha_agregado" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="id_favorito" ColumnName="id_favorito" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_variante_producto">
+            <EntityTypeMapping TypeName="BD_LENModel.TB_variante_producto">
+              <MappingFragment StoreEntitySet="TB_variante_producto">
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="modelo" ColumnName="modelo" />
+                <ScalarProperty Name="talla" ColumnName="talla" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="id_variante" ColumnName="id_variante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_AgregarFavorito" FunctionName="BD_LENModel.Store.SP_AgregarFavorito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_AgregarFavorito_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdGenerado" ColumnName="IdGenerado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarCatalogo" FunctionName="BD_LENModel.Store.SP_ConsultarCatalogo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCatalogo_Result">
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="NombreCategoria" ColumnName="NombreCategoria" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+                <ScalarProperty Name="EsFavorito" ColumnName="EsFavorito" />
+                <ScalarProperty Name="TotalFilas" ColumnName="TotalFilas" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarCategoriasCatalogo" FunctionName="BD_LENModel.Store.SP_ConsultarCategoriasCatalogo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarCategoriasCatalogo_Result">
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="NombreCategoria" ColumnName="NombreCategoria" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarFavoritos" FunctionName="BD_LENModel.Store.SP_ConsultarFavoritos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarFavoritos_Result">
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="NombreCategoria" ColumnName="NombreCategoria" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarImagenesCatalogo" FunctionName="BD_LENModel.Store.SP_ConsultarImagenesCatalogo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarImagenesCatalogo_Result">
+                <ScalarProperty Name="IdImagen" ColumnName="IdImagen" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="RutaImagen" ColumnName="RutaImagen" />
+                <ScalarProperty Name="EsPrincipal" ColumnName="EsPrincipal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarProductoDetalle" FunctionName="BD_LENModel.Store.SP_ConsultarProductoDetalle">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarProductoDetalle_Result">
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="NombreProducto" ColumnName="NombreProducto" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="EsPiezaUnica" ColumnName="EsPiezaUnica" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="NombreCategoria" ColumnName="NombreCategoria" />
+                <ScalarProperty Name="NombreEstado" ColumnName="NombreEstado" />
+                <ScalarProperty Name="EsFavorito" ColumnName="EsFavorito" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ConsultarVariantesProducto" FunctionName="BD_LENModel.Store.SP_ConsultarVariantesProducto">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_ConsultarVariantesProducto_Result">
+                <ScalarProperty Name="IdVariante" ColumnName="IdVariante" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Talla" ColumnName="Talla" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_EliminarFavorito" FunctionName="BD_LENModel.Store.SP_EliminarFavorito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_LENModel.SP_EliminarFavorito_Result">
+                <ScalarProperty Name="Exitoso" ColumnName="Exitoso" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdGenerado" ColumnName="IdGenerado" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
