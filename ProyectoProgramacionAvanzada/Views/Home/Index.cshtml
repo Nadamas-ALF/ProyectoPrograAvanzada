@@ -1,63 +1,83 @@
 ﻿@model ProyectoProgramacionAvanzada.Models.PortadaViewModel
 
-<!-- Loader 4 -->
-<div class="search-box bg-dark position-relative">
-    <div class="search-wrap">
-        <div class="close-button">
-            <svg class="close" style="fill: white;">
-                <use xlink:href="#close"></use>
-            </svg>
-        </div>
-        <form id="search-form" class="text-lg-center text-md-left pt-3" action="@Url.Action("Index", "Catalogo")" method="get">
-            <input type="text" name="busqueda" class="search-input" placeholder="Buscar accesorios...">
-            <svg class="search">
-                <use xlink:href="#search"></use>
-            </svg>
-        </form>
-    </div>
-</div>
+<section id="len-hero" class="len-hero">
+    <div class="container-lg">
+        <h1 class="visually-hidden">LEN Accesorios — charms y accesorios para bolso</h1>
 
-@*Carrusel de productos destacados (bandera administrada por el módulo de productos).*@
+        <img src="~/Content/Images/logo.jpeg"
+             alt="LEN — Modern Bag Charm"
+             class="len-hero-logo"
+             width="815" height="476">
+
+        <hr class="len-hero-separador">
+
+        <p class="len-hero-lema">
+            Charms y accesorios para bolso, hechos para acompañarte.
+            Envíos a todo Costa Rica.
+        </p>
+
+        <a href="@Url.Action("Index", "Catalogo")" class="len-hero-cta">Ver catálogo</a>
+    </div>
+</section>
+
+
 @if (Model.Destacados.Count > 0)
 {
-    <section id="intro" class="position-relative mt-4">
+    <section id="intro" class="len-seccion position-relative">
         <div class="container-lg">
-            <div class="swiper main-swiper">
-                <div class="swiper-wrapper">
-                    @foreach (var Destacado in Model.Destacados)
-                    {
-                        <div class="swiper-slide">
-                            <a href="@Url.Action("Detalle", "Catalogo", new { id = Destacado.IdProducto })"
-                               class="hero-slide card d-flex flex-row align-items-end border-0 large text-decoration-none"
-                               aria-label="Ver detalle de @Destacado.NombreProducto">
-                                <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Destacado.RutaImagen) ? "Content/Images/logo.jpeg" : Destacado.RutaImagen))"
-                                     alt="@Destacado.NombreProducto"
-                                     class="hero-imagen">
-                                <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
-                                    <p class="text-uppercase light m-0">@Destacado.NombreCategoria</p>
-                                    <h2 class="card-title display-4 light">@Destacado.NombreProducto</h2>
-                                    <span class="fs-4 fw-bold light d-block">@string.Format("₡{0:N2}", Destacado.Precio)</span>
-                                    <span class="text-uppercase light mt-3 d-inline-block text-hover fw-bold light-border">Ver producto</span>
-                                </div>
-                            </a>
-                        </div>
-                    }
+            <div class="portada-carrusel">
+                <div class="swiper portada-swiper">
+                    <div class="swiper-wrapper">
+                        @foreach (var Destacado in Model.Destacados)
+                        {
+                            <div class="swiper-slide">
+                                <a href="@Url.Action("Detalle", "Catalogo", new { id = Destacado.IdProducto })"
+                                   class="hero-slide text-decoration-none"
+                                   aria-label="Ver detalle de @Destacado.NombreProducto">
+                                    <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Destacado.RutaImagen) ? "Content/Images/logo.jpeg" : Destacado.RutaImagen))"
+                                         alt="@Destacado.NombreProducto"
+                                         class="hero-imagen">
+                                    <div class="len-hero-info">
+                                        <p class="len-hero-categoria">@Destacado.NombreCategoria</p>
+                                        <h2 class="len-hero-nombre">@Destacado.NombreProducto</h2>
+                                        <span class="len-hero-precio">@string.Format("₡{0:N2}", Destacado.Precio)</span>
+                                        <span class="len-hero-enlace">Ver producto</span>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
+
+                <button type="button" class="portada-flecha portada-flecha-anterior" aria-label="Producto anterior">
+                    <svg aria-hidden="true" focusable="false">
+                        <use xlink:href="#arrow-right"></use>
+                    </svg>
+                </button>
+                <button type="button" class="portada-flecha portada-flecha-siguiente" aria-label="Producto siguiente">
+                    <svg aria-hidden="true" focusable="false">
+                        <use xlink:href="#arrow-right"></use>
+                    </svg>
+                </button>
             </div>
-            <div class="swiper-pagination"></div>
+
+            <div class="swiper-pagination portada-paginacion"></div>
         </div>
     </section>
 }
 
 @*Productos reales del catálogo (SP_ConsultarCatalogo vía CatalogoService)*@
-<section id="featured-products" class="product-store">
+<section id="featured-products" class="product-store len-seccion">
     <div class="container-md">
 
         @Html.AntiForgeryToken()
         <div id="alerta-carrito" class="alert d-none" role="alert"></div>
 
-        <div class="display-header d-flex align-items-center justify-content-between">
-            <h2 class="section-title text-uppercase">Nuestros accesorios</h2>
+        <div class="display-header d-flex align-items-end justify-content-between">
+            <div>
+                <h2 class="section-title len-seccion-titulo text-uppercase m-0">Nuestros accesorios</h2>
+                <p class="len-seccion-bajada">Piezas hechas a mano para tu bolso, tu llavero y tu día a día.</p>
+            </div>
             <div class="btn-right">
                 <a href="@Url.Action("Index", "Catalogo")" class="d-inline-block text-uppercase text-hover fw-bold">Ver todo</a>
             </div>
@@ -73,7 +93,7 @@
             }
             else
             {
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
                     @foreach (var Producto in Model.Catalogo.Productos)
                     {
                         <div class="col mb-4">
@@ -81,7 +101,8 @@
                                 <div class="card-img">
                                     <img src="@Url.Content("~/" + (string.IsNullOrEmpty(Producto.RutaImagen) ? "Content/Images/logo.jpeg" : Producto.RutaImagen))"
                                          alt="@Producto.NombreProducto"
-                                         class="product-image img-fluid img-producto">
+                                         class="product-image img-fluid img-producto"
+                                         loading="lazy">
                                     @if (!Producto.Disponible)
                                     {
                                         <span class="badge bg-secondary position-absolute top-0 start-0 m-2">Agotado</span>
@@ -112,11 +133,15 @@
                                     </div>
                                     <!-- cart-concern -->
                                 </div>
-                                <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                                    <h3 class="card-title fs-6 fw-normal m-0">
+                                <div class="card-detail len-card-detalle">
+                                    @if (!string.IsNullOrWhiteSpace(Producto.NombreCategoria))
+                                    {
+                                        <p class="len-card-categoria">@Producto.NombreCategoria</p>
+                                    }
+                                    <h3 class="len-card-nombre">
                                         <a href="@Url.Action("Detalle", "Catalogo", new { id = Producto.IdProducto })">@Producto.NombreProducto</a>
                                     </h3>
-                                    <span class="card-price fw-bold">@string.Format("₡{0:N2}", Producto.Precio)</span>
+                                    <span class="len-card-precio">@string.Format("₡{0:N2}", Producto.Precio)</span>
                                 </div>
                             </div>
                         </div>
@@ -127,28 +152,34 @@
     </div>
 </section>
 
-<section id="collection-products" class="py-2 my-2 py-md-5 my-md-5">
+<section id="collection-products" class="len-seccion pb-5 mb-md-4">
     <div class="container-md">
         <div class="row">
             <div class="col-lg-6 col-md-6 mb-4">
-                <div class="collection-card card border-0 d-flex flex-row align-items-end jarallax-keep-img">
-                    <img src="~/Content/Images/snicker.jpeg" alt="product-item" class="border-rounded-10 img-fluid jarallax-img">
-                    <div class="card-detail p-3 m-3 p-lg-5 m-lg-5">
-                        <h3 class="card-title display-3">
-                            <a href="@Url.Action("Index", "Catalogo")">Minimal Collection</a>
+                <div class="len-coleccion-card">
+                    <img src="~/Content/Images/snicker.jpeg"
+                         alt="Pulsera de charms en colores pastel con dijes de oso, macaron y control de videojuego"
+                         class="len-coleccion-imagen"
+                         loading="lazy">
+                    <div class="len-coleccion-info">
+                        <h3 class="len-coleccion-titulo">
+                            <a href="@Url.Action("Index", "Catalogo")">Charms para bolso</a>
                         </h3>
-                        <a href="@Url.Action("Index", "Catalogo")" class="text-uppercase mt-3 d-inline-block text-hover fw-bold">Ver catálogo</a>
+                        <a href="@Url.Action("Index", "Catalogo")" class="len-coleccion-enlace">Ver catálogo</a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="collection-card card border-0 d-flex flex-row jarallax-keep-img">
-                    <img src="~/Content/Images/pato.jpeg" alt="product-item" class="border-rounded-10 img-fluid jarallax-img">
-                    <div class="card-detail p-3 m-3 p-lg-5 m-lg-5">
-                        <h3 class="card-title display-3">
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="len-coleccion-card">
+                    <img src="~/Content/Images/pato.jpeg"
+                         alt="Llavero de patito con cadena dorada colgando de un bolso"
+                         class="len-coleccion-imagen"
+                         loading="lazy">
+                    <div class="len-coleccion-info">
+                        <h3 class="len-coleccion-titulo">
                             <a href="@Url.Action("Index", "Catalogo")">Colección LEN</a>
                         </h3>
-                        <a href="@Url.Action("Index", "Catalogo")" class="text-uppercase mt-3 d-inline-block text-hover fw-bold">Ver catálogo</a>
+                        <a href="@Url.Action("Index", "Catalogo")" class="len-coleccion-enlace">Ver catálogo</a>
                     </div>
                 </div>
             </div>
@@ -157,6 +188,7 @@
 </section>
 
 @section Scripts {
+    <script src="@Url.Content("~/Scripts/portada.js")"></script>
     <script src="@Url.Content("~/Scripts/carrito.js")"></script>
     <script>
         $(function () {

@@ -1,33 +1,292 @@
-﻿/* ============================================================
-   =De ALF=
-   len.css — Estilos propios de la tienda LEN.
-   Complementa la plantilla stylish (no la modifica).
-   ============================================================ */
+﻿
+
+
+:root {
+    --len-crema: #faf6ef;
+    --len-crema-borde: rgba(184, 149, 90, 0.22);
+    --len-dorado: #b8955a;
+    --len-dorado-oscuro: #8c6d3c;
+    --len-texto-suave: #6f6659;
+}
+
+
+.len-hero {
+    padding: 4rem 0 3.5rem;
+    text-align: center;
+    background: var(--len-crema);
+    border-bottom: 1px solid var(--len-crema-borde);
+}
+
+.len-hero-logo {
+    display: block;
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    margin: 0 auto;
+    mix-blend-mode: multiply;
+}
+
+.len-hero-separador {
+    width: 68px;
+    height: 1px;
+    margin: 1.75rem auto 1.25rem;
+    background: var(--len-dorado);
+    border: 0;
+    opacity: 0.6;
+}
+
+.len-hero-lema {
+    max-width: 34rem;
+    margin: 0 auto;
+    color: var(--len-texto-suave);
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.len-hero-cta {
+    display: inline-block;
+    margin-top: 1.75rem;
+    padding: 0.7rem 2.1rem;
+    color: var(--len-dorado-oscuro);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid var(--len-dorado);
+    border-radius: 2rem;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+    .len-hero-cta:hover,
+    .len-hero-cta:focus {
+        color: #fff;
+        background: var(--len-dorado);
+        border-color: var(--len-dorado);
+    }
+
+@media (max-width: 767px) {
+    .len-hero {
+        padding: 2.5rem 0 2.25rem;
+    }
+
+    .len-hero-logo {
+        max-width: 300px;
+    }
+
+    .len-hero-lema {
+        font-size: 0.98rem;
+    }
+}
+
+
+
+.portada-carrusel {
+    position: relative;
+}
 
 /* Carrusel del hero: alturas contenidas, imagen siempre cover. */
 .hero-slide {
+    position: relative;
     display: block;
     overflow: hidden;
     border-radius: 10px;
+}
+
+
+#intro .hero-slide {
+    min-height: 0;
 }
 
 .hero-imagen {
     width: 100%;
     height: 440px;
     object-fit: cover;
+    transition: transform 0.6s var(--custom-easing, ease);
+}
+
+.hero-slide:hover .hero-imagen {
+    transform: scale(1.04);
+}
+
+.len-hero-info {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 3rem 1.75rem 1.5rem;
+    color: #fff;
+    background: linear-gradient(to top, rgba(17, 17, 17, 0.82) 0%, rgba(17, 17, 17, 0.45) 55%, rgba(17, 17, 17, 0) 100%);
+}
+
+.len-hero-categoria {
+    margin: 0 0 0.35rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.len-hero-nombre {
+    margin: 0 0 0.4rem;
+    color: #fff;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.len-hero-precio {
+    display: block;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.len-hero-enlace {
+    display: inline-block;
+    margin-top: 0.9rem;
+    padding-bottom: 2px;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.hero-slide:hover .len-hero-enlace {
+    border-bottom-color: #fff;
+}
+
+.portada-flecha {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    color: var(--len-dorado-oscuro);
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid var(--len-crema-borde);
+    border-radius: 50%;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+    .portada-flecha:hover,
+    .portada-flecha:focus {
+        color: #fff;
+        background: var(--len-dorado);
+        border-color: var(--len-dorado);
+    }
+
+    .portada-flecha svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .portada-flecha.swiper-button-disabled {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .portada-flecha.swiper-button-lock {
+        display: none;
+    }
+
+.portada-flecha-anterior {
+    left: 14px;
+}
+
+    .portada-flecha-anterior svg {
+        transform: rotate(180deg);
+    }
+
+.portada-flecha-siguiente {
+    right: 14px;
+}
+
+#intro .portada-paginacion {
+    --swiper-pagination-color: var(--len-dorado);
+    position: relative;
+    margin-top: 2rem;
 }
 
 @media (max-width: 991px) {
+
+    #intro .swiper-wrapper {
+        flex-direction: row;
+        gap: 0;
+    }
+
     .hero-imagen {
         height: 340px;
+    }
+
+    .len-hero-nombre {
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 575px) {
     .hero-imagen {
-        height: 240px;
+        height: 260px;
+    }
+
+    .len-hero-info {
+        padding: 2.5rem 1.15rem 1.15rem;
+    }
+
+    .len-hero-nombre {
+        font-size: 1.25rem;
+    }
+
+    .portada-flecha {
+        width: 38px;
+        height: 38px;
+    }
+
+    .portada-flecha-anterior {
+        left: 8px;
+    }
+
+    .portada-flecha-siguiente {
+        right: 8px;
     }
 }
+
+
+
+.len-seccion {
+    padding-top: 3.5rem;
+}
+
+.len-seccion-titulo {
+    color: var(--bs-black, #111);
+}
+
+.len-seccion-bajada {
+    margin: 0.5rem 0 0;
+    color: var(--len-texto-suave);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 767px) {
+    .len-seccion {
+        padding-top: 2.25rem;
+    }
+}
+
+/* ============================================================
+   Tarjetas de producto.
+   ============================================================ */
 
 /* Imágenes de producto con proporción uniforme (tarjetas). */
 .img-producto {
@@ -41,6 +300,102 @@
     width: 64px;
     height: 64px;
     object-fit: cover;
+}
+
+
+.len-card-detalle {
+    margin-top: 0.9rem;
+}
+
+.len-card-categoria {
+    margin: 0 0 0.15rem;
+    color: var(--len-texto-suave);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.len-card-nombre {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+    .len-card-nombre a {
+        text-decoration: none;
+    }
+
+.len-card-precio {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--bs-black, #111);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+
+.len-coleccion-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.len-coleccion-imagen {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    transition: transform 0.6s var(--custom-easing, ease);
+}
+
+.len-coleccion-card:hover .len-coleccion-imagen {
+    transform: scale(1.04);
+}
+
+.len-coleccion-info {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 3rem 1.75rem 1.5rem;
+    color: #fff;
+    background: linear-gradient(to top, rgba(17, 17, 17, 0.8) 0%, rgba(17, 17, 17, 0.4) 55%, rgba(17, 17, 17, 0) 100%);
+}
+
+.len-coleccion-titulo {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+    .len-coleccion-titulo a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+.len-coleccion-enlace {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding-bottom: 2px;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 575px) {
+    .len-coleccion-imagen {
+        height: 260px;
+    }
+
+    .len-coleccion-titulo {
+        font-size: 1.35rem;
+    }
 }
 
 /* ============================================================
@@ -94,7 +449,6 @@
     opacity: 0.7;
 }
 
-/* Evita que la página de atrás se desplace con el visor abierto. */
 body.len-visor-abierto {
     overflow: hidden;
 }
