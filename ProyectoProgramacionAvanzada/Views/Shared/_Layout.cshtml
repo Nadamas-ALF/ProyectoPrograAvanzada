@@ -138,7 +138,7 @@
                     <div class="col">
                         <ul class="d-flex justify-content-end gap-3 list-unstyled m-0">
                             <li>
-                                <a href="#">Contacto</a>
+                                <a href="https://www.instagram.com/lenaccessories.cr" target="_blank" rel="noopener">Contacto</a>
                             </li>
                             <li>
                                 <a href="@Url.Action("Index", "Carrito")">Carrito</a>
@@ -236,7 +236,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="search-item border-0" data-bs-toggle="collapse" data-bs-target="#search-box" aria-label="Abrir búsqueda">
+                            <a href="#" class="search-item border-0" aria-label="Abrir búsqueda">
                                 <svg class="search" width="24" height="24">
                                     <use xlink:href="#search"></use>
                                 </svg>
@@ -250,6 +250,22 @@
     </header>
 
 
+    <div class="search-box bg-dark position-relative">
+        <div class="search-wrap">
+            <div class="close-button">
+                <svg class="close" style="fill: white;">
+                    <use xlink:href="#close"></use>
+                </svg>
+            </div>
+            <form id="search-form" class="text-lg-center text-md-left pt-3" action="@Url.Action("Index", "Catalogo")" method="get">
+                <input type="text" name="busqueda" class="search-input" placeholder="Buscar accesorios...">
+                <svg class="search">
+                    <use xlink:href="#search"></use>
+                </svg>
+            </form>
+        </div>
+    </div>
+
     @RenderBody()
 
 
@@ -259,28 +275,16 @@
             <div class="row">
                 <div class="col-lg-2 pb-3">
                     <div class="footer-menu">
-                        <h5 class="widget-title pb-2">Información</h5>
+                        <h5 class="widget-title pb-2">Tienda</h5>
                         <ul class="menu-list list-unstyled">
                             <li class="pb-2">
-                                <a href="#">Rastrear pedido</a>
+                                <a href="@Url.Action("Index", "Catalogo")">Catálogo</a>
                             </li>
                             <li class="pb-2">
-                                <a href="index.html">Nuestro blog</a>
+                                <a href="@(Session["IdUsuario"] == null ? Url.Action("Login", "Home") : Url.Action("Index", "Favorito"))">Mis favoritos</a>
                             </li>
                             <li class="pb-2">
-                                <a href="#">Política de privacidad</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="#">Envíos</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="#">Contáctenos</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="#">Ayuda</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="#">Comunidad</a>
+                                <a href="@Url.Action("Index", "Carrito")">Carrito</a>
                             </li>
                         </ul>
                     </div>
@@ -289,23 +293,23 @@
 
                 <div class="col-lg-2 pb-3">
                     <div class="footer-menu">
-                        <h5 class="widget-title pb-2">Populares</h5>
+                        <h5 class="widget-title pb-2">Mi cuenta</h5>
                         <ul class="menu-list list-unstyled">
-                            <li class="pb-2">
-                                <a href="#">Ofertas</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="#">Nuevos productos</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="#">Más vendidos</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
-                            </li>
-                            <li class="pb-2">
-                                <a href="@Url.Action("Index", "Carrito")">Carrito</a>
-                            </li>
+                            @if (Session["IdUsuario"] == null)
+                            {
+                                <li class="pb-2">
+                                    <a href="@Url.Action("Login", "Home")">Iniciar sesión</a>
+                                </li>
+                                <li class="pb-2">
+                                    <a href="@Url.Action("Registro", "Home")">Crear cuenta</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="pb-2">
+                                    <a href="@Url.Action("Index", "Cuenta")">Mis datos</a>
+                                </li>
+                            }
                             <li class="pb-2">
                                 <a href="@Url.Action("Historial", "Pedido")">Mis pedidos</a>
                             </li>
@@ -320,7 +324,9 @@
                             <span>Tienda en línea </span>
                             <span>LEN Accesories, Costa Rica.</span>
                             <span class="text-hover fw-bold light-border">
-                                <a href="mailto:https://www.instagram.com/lenaccessories.cr">https://www.instagram.com/lenaccessories.cr</a>
+                                <a href="https://www.instagram.com/lenaccessories.cr" target="_blank" rel="noopener">
+                                    @@lenaccessories.cr
+                                </a>
                             </span>
                         </div>
                     </div>
@@ -329,7 +335,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <p>© Derechos reservados Stylish 2023.</p>
+                    <p>© @DateTime.Now.Year LEN Accesorios. Todos los derechos reservados.</p>
                 </div>
                 <div class="col-md-6 text-lg-end">
                     <p>

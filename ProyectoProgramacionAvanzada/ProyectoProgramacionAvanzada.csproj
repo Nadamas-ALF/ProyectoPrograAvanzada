@@ -511,6 +511,7 @@
     <Content Include="Scripts\carrito.js" />
     <Content Include="Scripts\checkout.js" />
     <Content Include="Scripts\visor-imagen.js" />
+    <Content Include="Scripts\portada.js" />
     <Content Include="Views\Categoria\Index.cshtml" />
     <Content Include="Views\PedidoAdmin\Detalle.cshtml" />
     <Content Include="Views\PedidoAdmin\Index.cshtml" />
