@@ -2857,3 +2857,106 @@ BEGIN
     ORDER BY P.nombre_producto;
 END;
 GO
+
+
+ /* ============================================================
+   CONSULTAR PAGOS
+   ============================================================ */
+
+CREATE OR ALTER PROCEDURE dbo.SP_Admin_ConsultarPagos
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        PG.id_pago AS IdPago,
+        PG.id_pedido AS IdPedido,
+
+        CONCAT(
+            U.nombre,
+            N' ',
+            U.apellido
+        ) AS NombreCliente,
+
+        U.email AS EmailCliente,
+
+        MP.nombre_metodo AS NombreMetodoPago,
+
+        PG.monto AS Monto,
+
+        PG.fecha_pago AS FechaPago,
+
+        PG.comprobante AS Comprobante,
+
+        E.nombre_estado AS NombreEstado
+
+    FROM dbo.TB_pago AS PG
+
+    INNER JOIN dbo.TB_pedido AS PE
+        ON PE.id_pedido = PG.id_pedido
+
+    INNER JOIN dbo.TB_usuario AS U
+        ON U.id_usuario = PE.id_usuario
+
+    INNER JOIN dbo.TB_metodo_pago AS MP
+        ON MP.id_metodo_pago = PG.id_metodo_pago
+
+    INNER JOIN dbo.TB_estado AS E
+        ON E.id_estado = PG.id_estado
+
+    ORDER BY
+        PG.fecha_pago DESC,
+        PG.id_pago DESC;
+END;
+GO
+
+
+ /* ============================================================
+   CONSULTAR RESUMEN DE PAGOS
+   ============================================================ */
+
+
+CREATE OR ALTER PROCEDURE dbo.SP_Admin_ConsultarResumenPagos
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+
+        (
+            SELECT COUNT(*)
+            FROM dbo.TB_pago
+        ) AS TotalPagos,
+
+        CAST(
+            ISNULL(
+                (
+                    SELECT SUM(monto)
+                    FROM dbo.TB_pago
+                ),
+                0
+            )
+            AS DECIMAL(18,2)
+        ) AS TotalRecaudado,
+
+        (
+            SELECT COUNT(*)
+            FROM dbo.TB_pago
+            WHERE CAST(fecha_pago AS DATE)
+                = CAST(GETDATE() AS DATE)
+        ) AS PagosHoy,
+
+        CAST(
+            ISNULL(
+                (
+                    SELECT SUM(monto)
+                    FROM dbo.TB_pago
+                    WHERE CAST(fecha_pago AS DATE)
+                        = CAST(GETDATE() AS DATE)
+                ),
+                0
+            )
+            AS DECIMAL(18,2)
+        ) AS RecaudadoHoy;
+END;
+GO

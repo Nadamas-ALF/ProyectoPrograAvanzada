@@ -153,6 +153,7 @@
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\FavoritoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PagoController.cs" />
     <Compile Include="Controllers\PedidoAdminController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
@@ -221,6 +222,9 @@
     <Compile Include="EF\SP_Admin_ConsultarImagenesProducto_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\SP_Admin_ConsultarPagos_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\SP_Admin_ConsultarPedidos_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -228,6 +232,9 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_Admin_ConsultarProductos_Result.cs">
+      <DependentUpon>BD_LEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SP_Admin_ConsultarResumenPagos_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_Admin_EliminarImagenProducto_Result.cs">
@@ -254,9 +261,6 @@
     <Compile Include="EF\SP_Admin_ReporteVentasPorDia_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\SP_AgregarFavorito_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\SP_AgregarProductoCarrito_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -267,12 +271,6 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarCarrito_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EF\SP_ConsultarCatalogo_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EF\SP_ConsultarCategoriasCatalogo_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarConfirmacionPedido_Result.cs">
@@ -296,19 +294,10 @@
     <Compile Include="EF\SP_ConsultarEstados_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\SP_ConsultarFavoritos_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\SP_ConsultarHistorialPedidos_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\SP_ConsultarImagenesCatalogo_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\SP_ConsultarMetodosPago_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EF\SP_ConsultarProductoDetalle_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_ConsultarProvincias_Result.cs">
@@ -332,9 +321,6 @@
     <Compile Include="EF\SP_ConsultarUsuarios_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\SP_ConsultarVariantesProducto_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\SP_Dashboard_ConsultarActividadReciente_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -345,9 +331,6 @@
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_DesactivarDireccionUsuario_Result.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EF\SP_EliminarFavorito_Result.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\SP_EliminarProductoCarrito_Result.cs">
@@ -395,9 +378,6 @@
     <Compile Include="EF\TB_factura.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\TB_favorito.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\TB_imagen_producto.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
@@ -422,9 +402,6 @@
     <Compile Include="EF\TB_usuario.cs">
       <DependentUpon>BD_LEN.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\TB_variante_producto.cs">
-      <DependentUpon>BD_LEN.tt</DependentUpon>
-    </Compile>
     <Compile Include="Filtros\SesionRequeridaAttribute.cs" />
     <Compile Include="Filtros\SoloAdministradorAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -438,6 +415,7 @@
     <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\DetallePedidoViewModel.cs" />
     <Compile Include="Models\DireccionModel.cs" />
+    <Compile Include="Models\PagoViewModel.cs" />
     <Compile Include="Models\PortadaViewModel.cs" />
     <Compile Include="Models\CuentaViewModel.cs" />
     <Compile Include="Models\FacturaAdminViewModel.cs" />
@@ -452,6 +430,7 @@
     <Compile Include="Services\DashboardService.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\FavoritoService.cs" />
+    <Compile Include="Services\PagoService.cs" />
     <Compile Include="Services\PedidoAdminService.cs" />
     <Compile Include="Services\PortadaService.cs" />
     <Compile Include="Services\FacturaAdminService.cs" />
@@ -546,6 +525,7 @@
     <Content Include="Views\Catalogo\_MenuCategorias.cshtml" />
     <Content Include="Views\Favorito\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Pago\AdministracionPagos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

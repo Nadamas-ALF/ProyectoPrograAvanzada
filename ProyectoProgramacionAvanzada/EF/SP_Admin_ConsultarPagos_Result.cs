@@ -11,10 +11,16 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_RegistrarUsuario_Result
+    public partial class SP_Admin_ConsultarPagos_Result
     {
-        public Nullable<bool> Exitoso { get; set; }
-        public string Mensaje { get; set; }
-        public Nullable<int> IdUsuario { get; set; }
+        public int IdPago { get; set; }
+        public int IdPedido { get; set; }
+        public string NombreCliente { get; set; }
+        public string EmailCliente { get; set; }
+        public string NombreMetodoPago { get; set; }
+        public decimal Monto { get; set; }
+        public System.DateTime FechaPago { get; set; }
+        public string Comprobante { get; set; }
+        public string NombreEstado { get; set; }
     }
 }

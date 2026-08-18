@@ -11,10 +11,11 @@ namespace ProyectoProgramacionAvanzada.EF
 {
     using System;
     
-    public partial class SP_RegistrarUsuario_Result
+    public partial class SP_Admin_ConsultarResumenPagos_Result
     {
-        public Nullable<bool> Exitoso { get; set; }
-        public string Mensaje { get; set; }
-        public Nullable<int> IdUsuario { get; set; }
+        public Nullable<int> TotalPagos { get; set; }
+        public Nullable<decimal> TotalRecaudado { get; set; }
+        public Nullable<int> PagosHoy { get; set; }
+        public Nullable<decimal> RecaudadoHoy { get; set; }
     }
 }

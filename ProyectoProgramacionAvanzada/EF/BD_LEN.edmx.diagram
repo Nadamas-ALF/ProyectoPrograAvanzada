@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1b8d89cbbe1b4fd396cfeab7387e0117" Name="Diagram1">
+      <Diagram DiagramId="48e8586bbcc144f69cdc109802ae905d" Name="Diagram1">
         <EntityTypeShape EntityType="BD_LENModel.TB_canton" Width="1.5" PointX="1.5" PointY="7.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BD_LENModel.TB_carrito" Width="1.5" PointX="3" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BD_LENModel.TB_categoria" Width="1.5" PointX="3" PointY="14.625" IsExpanded="true" />
@@ -50,12 +50,6 @@
         <AssociationConnector Association="BD_LENModel.FK_TB_pago_TB_pedido" ManuallyRouted="false" />
         <AssociationConnector Association="BD_LENModel.FK_TB_pedido_TB_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="BD_LENModel.FK_TB_usuario_TB_rol" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="BD_LENModel.TB_favorito" Width="1.5" PointX="10.25" PointY="18.875" />
-        <EntityTypeShape EntityType="BD_LENModel.TB_variante_producto" Width="1.5" PointX="8.5" PointY="7.25" />
-        <AssociationConnector Association="BD_LENModel.FK_TB_variante_producto_TB_estado" />
-        <AssociationConnector Association="BD_LENModel.FK_TB_favorito_TB_producto" />
-        <AssociationConnector Association="BD_LENModel.FK_TB_favorito_TB_usuario" />
-        <AssociationConnector Association="BD_LENModel.FK_TB_variante_producto_TB_producto" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
